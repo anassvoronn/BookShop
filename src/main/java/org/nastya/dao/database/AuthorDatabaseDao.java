@@ -14,6 +14,23 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public Author findById(int id) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement stmt = conn.prepareStatement("SELECT id, name, date_of_birth, gender, country FROM authors WHERE id = ?")) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Author author = new Author();
+                    author.setId(rs.getInt("id"));
+                    author.setName(rs.getString("name"));
+                    author.setBirthDate(rs.getString("date_of_birth"));
+                    author.setGender(rs.getString("gender"));
+                    author.setCountry(rs.getString("country"));
+                    return author;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Find by id failed", e);
+        }
         return null;
     }
 
@@ -29,7 +46,6 @@ public class AuthorDatabaseDao implements AuthorDao {
                 author.setBirthDate(rs.getString("date_of_birth"));
                 author.setGender(rs.getString("gender"));
                 author.setCountry(rs.getString("country"));
-
             }
         } catch (SQLException e) {
             throw new RuntimeException("Find all failed", e);
@@ -39,6 +55,19 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public int insert(Author author) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement stmt = conn.prepareStatement("INSERT INTO authors (name, date_of_birth, gender, country) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, author.setName());
+            stmt.setString(2, author.setBirthDate());
+            stmt.setString(3, author.setGender());
+            stmt.setString(4, author.setCountry());
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating author failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Insert failed", e);
+        }
         return 0;
     }
 
