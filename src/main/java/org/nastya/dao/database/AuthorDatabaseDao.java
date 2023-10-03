@@ -4,6 +4,8 @@ import org.nastya.dao.AuthorDao;
 import org.nastya.entity.Author;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorDatabaseDao implements AuthorDao {
@@ -22,7 +24,8 @@ public class AuthorDatabaseDao implements AuthorDao {
                     Author author = new Author();
                     author.setId(rs.getInt("id"));
                     author.setName(rs.getString("name"));
-                    author.setBirthDate(rs.getString("date_of_birth"));
+                    LocalDate localDate = LocalDate.parse("date_of_birth");
+                    author.setBirthDate(localDate);
                     author.setGender(rs.getString("gender"));
                     author.setCountry(rs.getString("country"));
                     return author;
@@ -36,6 +39,7 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public List<Author> findAll() {
+        List<Author> authorList = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(QUERY)) {
@@ -43,32 +47,40 @@ public class AuthorDatabaseDao implements AuthorDao {
                 Author author = new Author();
                 author.setId(rs.getInt("id"));
                 author.setName(rs.getString("name"));
-                author.setBirthDate(rs.getString("date_of_birth"));
+                LocalDate localDate = LocalDate.parse("date_of_birth");
+                author.setBirthDate(localDate);
                 author.setGender(rs.getString("gender"));
                 author.setCountry(rs.getString("country"));
+                authorList.add(author);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Find all failed", e);
         }
-        return null;
+        return authorList;
     }
 
     @Override
     public int insert(Author author) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement("INSERT INTO authors (name, date_of_birth, gender, country) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, author.setName());
-            stmt.setString(2, author.setBirthDate());
-            stmt.setString(3, author.setGender());
-            stmt.setString(4, author.setCountry());
+            stmt.setString(1, author.getName());
+            LocalDate date = author.getBirthDate();
+            stmt.setDate(2, Date.valueOf(date));
+            stmt.setString(3, author.getGender());
+            stmt.setString(4, author.getCountry());
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating author failed, no rows affected.");
             }
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("Inserting author failed, no ID obtained.");
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Insert failed", e);
         }
-        return 0;
     }
 
     @Override
@@ -83,6 +95,11 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public void deleteAll() {
-
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate("DELETE FROM authors");
+        } catch (SQLException e) {
+            throw new RuntimeException("Delete all failed", e);
+        }
     }
 }

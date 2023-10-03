@@ -1,10 +1,12 @@
 package org.nastya.entity;
 
+import java.time.LocalDate;
+
 public class Author {
 
     private int id;
     private String name;
-    private String birthDate;
+    private LocalDate birthDate;
     private String country;
     private String gender;
 
@@ -31,11 +33,31 @@ public class Author {
         this.gender = gender;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getGender() {
+        return gender;
     }
 }
