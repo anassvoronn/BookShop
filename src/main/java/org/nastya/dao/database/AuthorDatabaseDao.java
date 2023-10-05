@@ -85,12 +85,30 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public void save(Author author) {
-
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement stmt = conn.prepareStatement("INSERT INTO authors (id, name, date_of_birth, gender, country) VALUES (?, ?, ?, ?, ?)")) {
+            stmt.setInt(1, author.getId());
+            stmt.setString(2, author.getName());
+            LocalDate date = author.getBirthDate();
+            stmt.setString(3, String.valueOf(date));
+            stmt.setString(4, author.getGender());
+            stmt.setString(5, author.getCountry());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Save failed", e);
+        }
     }
 
     @Override
     public void deleteById(int id) {
-
+        String deleteQuery = "DELETE FROM authors WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement stmt = conn.prepareStatement(deleteQuery)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Delete by id failed", e);
+        }
     }
 
     @Override
