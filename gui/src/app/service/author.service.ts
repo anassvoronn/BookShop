@@ -1,0 +1,27 @@
+import {Injectable} from '@angular/core';
+import {Author} from "../entity/author.model";
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
+
+@Injectable({
+    providedIn: 'root'
+})
+export class AuthorService {
+    private apiUrl: string = "/book-shop/api/author";
+
+    constructor(private http: HttpClient) {
+    }
+
+    getAllAuthors(): Observable<Author[]> {
+        return this.http.get<Author[]>(this.apiUrl);
+    }
+
+    addAuthor(author: Author): void {
+    }
+
+    updateAuthor(id: number, updatedAuthor: Author): void {
+    }
+
+    deleteAuthor(id: number): void {
+    }
+}
