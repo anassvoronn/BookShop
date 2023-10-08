@@ -49,7 +49,7 @@ class AuthorDatabaseDaoTest {
     @Test
     void findAll() {
         List<Author> authors = authorDao.findAll();
-        assertTrue(authors.isEmpty(), "No authors should be returned");
+        assertFalse(authors.isEmpty(), "");
     }
 
     @Test
@@ -57,6 +57,15 @@ class AuthorDatabaseDaoTest {
         int idToDelete = 1;
         authorDao.deleteById(idToDelete);
         assertNull(authorDao.findById(idToDelete), "Author should be deleted");
+    }
+
+    @Test
+    void save() {
+        Author author = authorDao.findById(2);
+        author.setBirthDate(LocalDate.of(1990, 3, 3));
+        authorDao.save(author);
+        Author updatedAuthor = authorDao.findById(2);
+        assertEquals(LocalDate.of(1990, 3, 3), updatedAuthor.getBirthDate());
     }
 
     private void insertAuthorToDatabase(String name, String birthDate, String gender, String country) {

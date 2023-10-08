@@ -12,22 +12,35 @@ public class AuthorDatabaseDao implements AuthorDao {
     static final String DB_URL = "jdbc:postgresql://localhost/postgres";
     static final String USER = "postgres";
     static final String PASS = "vampyrrr9712";
-    static final String QUERY = "SELECT id, name, date_of_birth, gender, country FROM authors";
+
+    static final String ID = "id";
+    static final String NAME = "name";
+    static final String DATE_OF_BIRTH = "date_of_birth";
+    static final String GENDER = "gender";
+    static final String COUNTRY = "country";
+
+    static final String SELECT = "SELECT id, name, date_of_birth, gender, country FROM authors";
+    static final String REQUEST_BY_ID = "SELECT id, name, date_of_birth, gender, country FROM authors WHERE id = ?";
+    static final String INSERT = "INSERT INTO authors (name, date_of_birth, gender, country) VALUES (?, ?, ?, ?)";
+    static final String DELETION_BY_ID = "DELETE FROM authors WHERE id = ?";
+    static final String DELETE_FROM_AUTHORS = "DELETE FROM authors";
+    static final String UPDATE = "UPDATE authors SET name = ?, date_of_birth = ?, gender = ?, country = ? WHERE id = ?";
 
     @Override
     public Author findById(int id) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement stmt = conn.prepareStatement("SELECT id, name, date_of_birth, gender, country FROM authors WHERE id = ?")) {
+             PreparedStatement stmt = conn.prepareStatement(REQUEST_BY_ID)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Author author = new Author();
-                    author.setId(rs.getInt("id"));
-                    author.setName(rs.getString("name"));
-                    LocalDate localDate = LocalDate.parse("date_of_birth");
-                    author.setBirthDate(localDate);
-                    author.setGender(rs.getString("gender"));
-                    author.setCountry(rs.getString("country"));
+                    author.setId(rs.getInt(ID));
+                    author.setName(rs.getString(NAME));
+                    LocalDate date = rs.getDate(DATE_OF_BIRTH).toLocalDate();
+                    author.setBirthDate(date);
+                    author.setGender(rs.getString(GENDER));
+                    author.setCountry(rs.getString(COUNTRY));
+
                     return author;
                 }
             }
@@ -42,15 +55,15 @@ public class AuthorDatabaseDao implements AuthorDao {
         List<Author> authorList = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(QUERY)) {
+             ResultSet rs = stmt.executeQuery(SELECT)) {
             while (rs.next()) {
                 Author author = new Author();
-                author.setId(rs.getInt("id"));
-                author.setName(rs.getString("name"));
-                LocalDate localDate = LocalDate.parse("date_of_birth");
-                author.setBirthDate(localDate);
-                author.setGender(rs.getString("gender"));
-                author.setCountry(rs.getString("country"));
+                author.setId(rs.getInt(ID));
+                author.setName(rs.getString(NAME));
+                LocalDate date = rs.getDate(DATE_OF_BIRTH).toLocalDate();
+                author.setBirthDate(date);
+                author.setGender(rs.getString(GENDER));
+                author.setCountry(rs.getString(COUNTRY));
                 authorList.add(author);
             }
         } catch (SQLException e) {
@@ -62,7 +75,7 @@ public class AuthorDatabaseDao implements AuthorDao {
     @Override
     public int insert(Author author) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement stmt = conn.prepareStatement("INSERT INTO authors (name, date_of_birth, gender, country) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, author.getName());
             LocalDate date = author.getBirthDate();
             stmt.setDate(2, Date.valueOf(date));
@@ -86,13 +99,12 @@ public class AuthorDatabaseDao implements AuthorDao {
     @Override
     public void save(Author author) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement stmt = conn.prepareStatement("INSERT INTO authors (id, name, date_of_birth, gender, country) VALUES (?, ?, ?, ?, ?)")) {
-            stmt.setInt(1, author.getId());
-            stmt.setString(2, author.getName());
-            LocalDate date = author.getBirthDate();
-            stmt.setString(3, String.valueOf(date));
-            stmt.setString(4, author.getGender());
-            stmt.setString(5, author.getCountry());
+             PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
+            stmt.setString(1, author.getName());
+            stmt.setString(2, String.valueOf(author.getBirthDate()));
+            stmt.setString(3, author.getGender());
+            stmt.setString(4, author.getCountry());
+            stmt.setInt(5, author.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Save failed", e);
@@ -101,9 +113,8 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public void deleteById(int id) {
-        String deleteQuery = "DELETE FROM authors WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement stmt = conn.prepareStatement(deleteQuery)) {
+             PreparedStatement stmt = conn.prepareStatement(DELETION_BY_ID)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -115,7 +126,7 @@ public class AuthorDatabaseDao implements AuthorDao {
     public void deleteAll() {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate("DELETE FROM authors");
+            stmt.executeUpdate(DELETE_FROM_AUTHORS);
         } catch (SQLException e) {
             throw new RuntimeException("Delete all failed", e);
         }
