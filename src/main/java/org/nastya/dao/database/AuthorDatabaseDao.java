@@ -2,12 +2,14 @@ package org.nastya.dao.database;
 
 import org.nastya.dao.AuthorDao;
 import org.nastya.entity.Author;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class AuthorDatabaseDao implements AuthorDao {
     static final String DB_URL = "jdbc:postgresql://localhost/postgres";
     static final String USER = "postgres";
@@ -214,5 +216,20 @@ public class AuthorDatabaseDao implements AuthorDao {
         } catch (SQLException e) {
             throw new RuntimeException("Delete all failed", e);
         }
+    }
+
+    @Override
+    public int getBiggestId() {
+        return 0;
+    }
+
+    @Override
+    public int getCountByGender(String gender) {
+        return 0;
+    }
+
+    @Override
+    public int getCount() {
+        return 0;
     }
 }

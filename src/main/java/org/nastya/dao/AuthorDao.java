@@ -27,4 +27,10 @@ public interface AuthorDao {
     void deleteAllByGender(String gender);
 
     void deleteAll();
+
+    int getBiggestId();
+
+    int getCountByGender(String gender);
+
+    int getCount();
 }
