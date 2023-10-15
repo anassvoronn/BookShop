@@ -9,11 +9,11 @@ public interface AuthorDao {
     Author findById(int id);
 
     List<Author> findByName(String name);
-    
+
     List<Author> findByGender(String gender);
 
     List<Author> findByGenderAndByBirthDate(String gender, String birthDate);
-    
+
     List<Author> findByGenderOrByCountry(String gender, String country);
 
     List<Author> findAll();
@@ -23,8 +23,8 @@ public interface AuthorDao {
     void save(Author author);
 
     void deleteById(int id);
-    
-    void deleteAllByGender(int id);
+
+    void deleteAllByGender(String gender);
 
     void deleteAll();
 }

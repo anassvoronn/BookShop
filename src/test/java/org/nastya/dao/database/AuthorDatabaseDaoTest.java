@@ -47,9 +47,28 @@ class AuthorDatabaseDaoTest {
     }
 
     @Test
+    void findByName() {
+        List<Author> authors = authorDao.findByName("Александр Пушкин");
+        assertEquals(1, authors.size());
+        for (Author author : authors) {
+            assertEquals("Александр Пушкин", author.getName());
+        }
+    }
+
+    @Test
+    void findByGender() {
+        List<Author> authors = authorDao.findByGender("Женский");
+        assertEquals(4, authors.size());
+        for (Author author : authors) {
+            assertEquals("Женский", author.getGender());
+        }
+    }
+
+    @Test
     void findAll() {
         List<Author> authors = authorDao.findAll();
-        assertFalse(authors.isEmpty(), "");
+        assertFalse(authors.isEmpty(), "Authors list has to be not empty");
+        assertEquals(10, authors.size());
     }
 
     @Test
@@ -81,5 +100,23 @@ class AuthorDatabaseDaoTest {
         author.setGender(gender);
         author.setCountry(country);
         return author;
+    }
+
+    @Test
+    public void FindByGenderOrByCountry() {
+        List<Author> authors = authorDao.findByGenderOrByCountry("Мужской", "Россия");
+        assertEquals(6, authors.size());
+        assertEquals("Мужской", authors.get(0).getGender());
+        assertEquals("Россия", authors.get(0).getCountry());
+    }
+
+    @Test
+    public void FindByGenderAndByBirthDate() {
+        List<Author> authors = authorDao.findByGenderAndByBirthDate("Женский", "1926-04-28");
+        assertEquals(1, authors.size());
+        assertEquals("Харпер Ли", authors.get(0).getName());
+        assertEquals("1926-04-28", String.valueOf(authors.get(0).getBirthDate()));
+        assertEquals("Женский", authors.get(0).getGender());
+        assertEquals("США", authors.get(0).getCountry());
     }
 }
