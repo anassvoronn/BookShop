@@ -96,11 +96,13 @@ class AuthorDatabaseDaoTest {
 
     @Test
     void save() {
-        // Author author = authorDao.findByName("Эмели Бронте"); //поменять на лист
-        //author.setBirthDate(LocalDate.of(1990, 3, 3));
-        // authorDao.save(author);
-        // Author updatedAuthor = authorDao.findById(author.getId());
-        //  assertEquals(LocalDate.of(1990, 3, 3), updatedAuthor.getBirthDate());
+        List<Author> authors = authorDao.findByName("Эмели Бронте");
+        for (Author author : authors) {
+            author.setBirthDate(LocalDate.of(1990, 3, 3));
+            authorDao.save(author);
+            Author updatedAuthor = authorDao.findById(author.getId());
+            assertEquals(LocalDate.of(1990, 3, 3), updatedAuthor.getBirthDate());
+        }
     }
 
     private void insertAuthorToDatabase(String name, String birthDate, String gender, String country) {

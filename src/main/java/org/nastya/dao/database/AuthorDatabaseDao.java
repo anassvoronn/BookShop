@@ -30,8 +30,11 @@ public class AuthorDatabaseDao implements AuthorDao {
     static final String SELECT_BY_NAME = "SELECT * FROM authors WHERE name=?";
     static final String SELECT_BY_GENDER = "SELECT * FROM authors WHERE gender=?";
     static final String SELECT_BY_GENDER_AND_BIRTH_DATE = "SELECT * FROM authors WHERE gender=? AND date_of_birth = ?";
-    static final String DELETE_BY_GENDER = "DELETE FROM authors WHERE gender = ?;";
+    static final String DELETE_BY_GENDER = "DELETE FROM authors WHERE gender = ?";
     static final String SELECT_BY_GENDER_OR_COUNTRY = "SELECT * FROM authors WHERE gender = ? OR country = ?";
+    static final String COUNT_BY_GENDER = "SELECT COUNT(*) FROM authors WHERE gender = ?";
+    static final String GET_BIGGEST_ID = "SELECT MAX(id) FROM authors";
+    public static final String COUNT_FROM_AUTHORS = "SELECT COUNT(*) FROM authors";
 
     @Override
     public Author findById(int id) {
@@ -220,16 +223,46 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public int getBiggestId() {
-        return 0;
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery(GET_BIGGEST_ID);
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                throw new SQLException("Error retrieving biggest id.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Get biggest id failed", e);
+        }
     }
 
     @Override
     public int getCountByGender(String gender) {
-        return 0;
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement stmt = conn.prepareStatement(COUNT_BY_GENDER)) {
+            stmt.setString(1, gender);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                throw new SQLException("Error retrieving count by gender.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Get count by gender failed", e);
+        }
     }
 
     @Override
     public int getCount() {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement()) {
+            ResultSet resultSet = stmt.executeQuery(COUNT_FROM_AUTHORS);
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting count", e);
+        }
         return 0;
     }
 }
