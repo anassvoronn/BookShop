@@ -8,7 +8,7 @@ public class Author {
     private String name;
     private LocalDate birthDate;
     private String country;
-    private String gender;
+    private Gender gender;
 
     @Override
     public String toString() {
@@ -29,7 +29,7 @@ public class Author {
         this.country = country;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -61,7 +61,7 @@ public class Author {
         return country;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 }

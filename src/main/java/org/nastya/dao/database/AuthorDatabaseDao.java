@@ -2,6 +2,7 @@ package org.nastya.dao.database;
 
 import org.nastya.dao.AuthorDao;
 import org.nastya.entity.Author;
+import org.nastya.entity.Gender;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -70,11 +71,11 @@ public class AuthorDatabaseDao implements AuthorDao {
     }
 
     @Override
-    public List<Author> findByGender(String gender) {
+    public List<Author> findByGender(Gender gender) {
         List<Author> authors = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER)) {
-            stmt.setString(1, gender);
+            stmt.setString(1, gender.name());
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Author author = bindAuthor(rs);
@@ -88,11 +89,11 @@ public class AuthorDatabaseDao implements AuthorDao {
     }
 
     @Override
-    public List<Author> findByGenderAndByBirthDate(String gender, String birthDate) {
+    public List<Author> findByGenderAndByBirthDate(Gender gender, String birthDate) {
         List<Author> authors = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER_AND_BIRTH_DATE)) {
-            stmt.setString(1, gender);
+            stmt.setString(1, gender.name());
             stmt.setDate(2, Date.valueOf(birthDate));
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -106,11 +107,11 @@ public class AuthorDatabaseDao implements AuthorDao {
     }
 
     @Override
-    public List<Author> findByGenderOrByCountry(String gender, String country) {
+    public List<Author> findByGenderOrByCountry(Gender gender, String country) {
         List<Author> authors = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER_OR_COUNTRY)) {
-            stmt.setString(1, gender);
+            stmt.setString(1, gender.name());
             stmt.setString(2, country);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -145,7 +146,7 @@ public class AuthorDatabaseDao implements AuthorDao {
         author.setName(rs.getString(NAME));
         LocalDate date = rs.getDate(DATE_OF_BIRTH).toLocalDate();
         author.setBirthDate(date);
-        author.setGender(rs.getString(GENDER));
+        author.setGender(Gender.valueOf(rs.getString(GENDER)));
         author.setCountry(rs.getString(COUNTRY));
         return author;
     }
@@ -157,7 +158,7 @@ public class AuthorDatabaseDao implements AuthorDao {
             stmt.setString(1, author.getName());
             LocalDate date = author.getBirthDate();
             stmt.setDate(2, Date.valueOf(date));
-            stmt.setString(3, author.getGender());
+            stmt.setString(3, author.getGender().name());
             stmt.setString(4, author.getCountry());
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -181,7 +182,7 @@ public class AuthorDatabaseDao implements AuthorDao {
             stmt.setString(1, author.getName());
             LocalDate date = author.getBirthDate();
             stmt.setDate(2, Date.valueOf(date));
-            stmt.setString(3, author.getGender());
+            stmt.setString(3, author.getGender().name());
             stmt.setString(4, author.getCountry());
             stmt.setInt(5, author.getId());
             stmt.executeUpdate();
@@ -202,10 +203,10 @@ public class AuthorDatabaseDao implements AuthorDao {
     }
 
     @Override
-    public void deleteAllByGender(String gender) {
+    public void deleteAllByGender(Gender gender) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(DELETE_BY_GENDER)) {
-            stmt.setString(1, gender);
+            stmt.setString(1, gender.name());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Delete all by gender failed", e);
@@ -238,10 +239,10 @@ public class AuthorDatabaseDao implements AuthorDao {
     }
 
     @Override
-    public int getCountByGender(String gender) {
+    public int getCountByGender(Gender gender) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(COUNT_BY_GENDER)) {
-            stmt.setString(1, gender);
+            stmt.setString(1, gender.name());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);
