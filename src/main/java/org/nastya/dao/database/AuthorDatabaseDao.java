@@ -21,20 +21,20 @@ public class AuthorDatabaseDao implements AuthorDao {
     static final String GENDER = "gender";
     static final String COUNTRY = "country";
 
-    static final String SELECT = "SELECT id, name, date_of_birth, gender, country FROM authors";
-    static final String REQUEST_BY_ID = "SELECT id, name, date_of_birth, gender, country FROM authors WHERE id = ?";
-    static final String INSERT = "INSERT INTO authors (name, date_of_birth, gender, country) VALUES (?, ?, ?, ?)";
-    static final String DELETION_BY_ID = "DELETE FROM authors WHERE id = ?";
-    static final String DELETE_FROM_AUTHORS = "DELETE FROM authors";
-    static final String UPDATE = "UPDATE authors SET name = ?, date_of_birth = ?, gender = ?, country = ? WHERE id = ?";
-    static final String SELECT_BY_NAME = "SELECT * FROM authors WHERE name=?";
-    static final String SELECT_BY_GENDER = "SELECT * FROM authors WHERE gender=?";
-    static final String SELECT_BY_GENDER_AND_BIRTH_DATE = "SELECT * FROM authors WHERE gender=? AND date_of_birth = ?";
-    static final String DELETE_BY_GENDER = "DELETE FROM authors WHERE gender = ?";
-    static final String SELECT_BY_GENDER_OR_COUNTRY = "SELECT * FROM authors WHERE gender = ? OR country = ?";
-    static final String COUNT_BY_GENDER = "SELECT COUNT(*) FROM authors WHERE gender = ?";
-    static final String GET_BIGGEST_ID = "SELECT MAX(id) FROM authors";
-    public static final String COUNT_FROM_AUTHORS = "SELECT COUNT(*) FROM authors";
+    private static final String SELECT = "SELECT id, name, date_of_birth, gender, country FROM authors";
+    private static final String REQUEST_BY_ID = "SELECT id, name, date_of_birth, gender, country FROM authors WHERE id = ?";
+    private static final String INSERT = "INSERT INTO authors (name, date_of_birth, gender, country) VALUES (?, ?, ?, ?)";
+    private static final String DELETION_BY_ID = "DELETE FROM authors WHERE id = ?";
+    private static final String DELETE_FROM_AUTHORS = "DELETE FROM authors";
+    private static final String UPDATE = "UPDATE authors SET name = ?, date_of_birth = ?, gender = ?, country = ? WHERE id = ?";
+    private static final String SELECT_BY_NAME = "SELECT * FROM authors WHERE name=?";
+    private static final String SELECT_BY_GENDER = "SELECT * FROM authors WHERE gender=?";
+    private static final String SELECT_BY_GENDER_AND_BIRTH_DATE = "SELECT * FROM authors WHERE gender=? AND date_of_birth = ?";
+    private static final String DELETE_BY_GENDER = "DELETE FROM authors WHERE gender = ?";
+    private static final String SELECT_BY_GENDER_OR_COUNTRY = "SELECT * FROM authors WHERE gender = ? OR country = ?";
+    private static final String COUNT_BY_GENDER = "SELECT COUNT(*) FROM authors WHERE gender = ?";
+    private static final String GET_BIGGEST_ID = "SELECT MAX(id) FROM authors";
+    private static final String COUNT_FROM_AUTHORS = "SELECT COUNT(*) FROM authors";
 
     @Override
     public Author findById(int id) {
@@ -179,7 +179,8 @@ public class AuthorDatabaseDao implements AuthorDao {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
             stmt.setString(1, author.getName());
-            stmt.setString(2, String.valueOf(author.getBirthDate()));
+            LocalDate date = author.getBirthDate();
+            stmt.setDate(2, Date.valueOf(date));
             stmt.setString(3, author.getGender());
             stmt.setString(4, author.getCountry());
             stmt.setInt(5, author.getId());

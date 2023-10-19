@@ -132,9 +132,37 @@ class AuthorDatabaseDaoTest {
     public void findByGenderAndByBirthDate() {
         List<Author> authors = authorDao.findByGenderAndByBirthDate("Женский", "1926-04-28");
         assertEquals(1, authors.size());
-        assertEquals("Харпер Ли", authors.get(0).getName());
-        assertEquals("1926-04-28", String.valueOf(authors.get(0).getBirthDate()));
-        assertEquals("Женский", authors.get(0).getGender());
-        assertEquals("США", authors.get(0).getCountry());
+        Author author = authors.get(0);
+        assertEquals("Харпер Ли", author.getName());
+        assertEquals("1926-04-28", author.getBirthDateAsString());
+        assertEquals("Женский", author.getGender());
+        assertEquals("США", author.getCountry());
+    }
+
+    @Test
+    public void findByGenderAndByBirthDate_nothingFound() {
+        List<Author> authors = authorDao.findByGenderAndByBirthDate("Женский", "1926-04-21");
+        assertEquals(0, authors.size());
+    }
+
+    @Test
+    public void findByGenderAndByBirthDate_found2Authors() {
+        insertAuthorToDatabase("Джейн Остин", "1926-04-28", "Женский", "Англия");
+
+        List<Author> authors = authorDao.findByGenderAndByBirthDate("Женский", "1926-04-28");
+
+        assertEquals(2, authors.size());
+
+        Author author1 = authors.get(0);
+        assertEquals("Харпер Ли", author1.getName());
+        assertEquals("1926-04-28", author1.getBirthDateAsString());
+        assertEquals("Женский", author1.getGender());
+        assertEquals("США", author1.getCountry());
+
+        Author author2 = authors.get(1);
+        assertEquals("Джейн Остин", author2.getName());
+        assertEquals("1926-04-28", author2.getBirthDateAsString());
+        assertEquals("Женский", author2.getGender());
+        assertEquals("Англия", author2.getCountry());
     }
 }

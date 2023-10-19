@@ -53,6 +53,10 @@ public class Author {
         return birthDate;
     }
 
+    public String getBirthDateAsString() {
+        return String.valueOf(birthDate);
+    }
+
     public String getCountry() {
         return country;
     }
