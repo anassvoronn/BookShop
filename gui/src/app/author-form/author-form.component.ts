@@ -22,7 +22,14 @@ export class AuthorFormComponent implements OnInit {
         this.route.paramMap.subscribe((params) => {
             if (params.has('id')) {
                 this.authorId = params.get('id');
-                this.authorService.getById(this.authorId);
+                this.authorService.getById(this.authorId).subscribe(author => {
+                    this.authorForm.setValue({
+                        name: author.name + "%%%%",
+                        gender: author.country,
+                        birthDate: author.birthDate,
+                        country: author.gender
+                    });
+                })
             }
         });
 
