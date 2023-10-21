@@ -7,7 +7,7 @@ public class Author {
     private int id;
     private String name;
     private LocalDate birthDate;
-    private String country;
+    private Country country;
     private Gender gender;
 
     @Override
@@ -25,7 +25,7 @@ public class Author {
         this.id = id;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(Country country) {
         this.country = country;
     }
 
@@ -57,7 +57,7 @@ public class Author {
         return String.valueOf(birthDate);
     }
 
-    public String getCountry() {
+    public Country getCountry() {
         return country;
     }
 
