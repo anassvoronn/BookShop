@@ -16,6 +16,10 @@ export class AuthorService {
         return this.http.get<Author[]>(this.apiUrl);
     }
 
+    getById(authorId: string | null) {
+        return this.http.get<Author>(this.apiUrl + "/" + authorId);
+    }
+
     addAuthor(author: Author): void {
     }
 

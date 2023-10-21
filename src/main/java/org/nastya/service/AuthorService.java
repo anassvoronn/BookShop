@@ -15,4 +15,8 @@ public class AuthorService {
     public List<Author> findAll() {
         return authorDao.findAll();
     }
+
+    public Author findById(int id) {
+        return authorDao.findById(id);
+    }
 }

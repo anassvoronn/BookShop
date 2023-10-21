@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
+import {AuthorService} from "../service/author.service";
 
 @Component({
     selector: 'app-author-form',
@@ -12,13 +13,16 @@ export class AuthorFormComponent implements OnInit {
     authorForm!: FormGroup;
     authorId!: string | null;
 
-    constructor(private formBuilder: FormBuilder, private route: ActivatedRoute) {
+    constructor(private formBuilder: FormBuilder, 
+                private route: ActivatedRoute,
+                private authorService: AuthorService) {
     }
 
     ngOnInit(): void {
         this.route.paramMap.subscribe((params) => {
             if (params.has('id')) {
                 this.authorId = params.get('id');
+                this.authorService.getById(this.authorId);
             }
         });
 
