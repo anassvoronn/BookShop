@@ -2,6 +2,7 @@ package org.nastya.dao.database;
 
 import org.nastya.dao.AuthorDao;
 import org.nastya.entity.Author;
+import org.nastya.entity.Country;
 import org.nastya.entity.Gender;
 import org.springframework.stereotype.Repository;
 
@@ -107,12 +108,12 @@ public class AuthorDatabaseDao implements AuthorDao {
     }
 
     @Override
-    public List<Author> findByGenderOrByCountry(Gender gender, String country) {
+    public List<Author> findByGenderOrByCountry(Gender gender, Country country) {
         List<Author> authors = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER_OR_COUNTRY)) {
             stmt.setString(1, gender.name());
-            stmt.setString(2, country);
+            stmt.setString(2, country.name());
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Author author = bindAuthor(rs);
@@ -147,7 +148,7 @@ public class AuthorDatabaseDao implements AuthorDao {
         LocalDate date = rs.getDate(DATE_OF_BIRTH).toLocalDate();
         author.setBirthDate(date);
         author.setGender(Gender.valueOf(rs.getString(GENDER)));
-        author.setCountry(rs.getString(COUNTRY));
+        author.setCountry(Country.valueOf(rs.getString(COUNTRY)));
         return author;
     }
 
@@ -159,7 +160,7 @@ public class AuthorDatabaseDao implements AuthorDao {
             LocalDate date = author.getBirthDate();
             stmt.setDate(2, Date.valueOf(date));
             stmt.setString(3, author.getGender().name());
-            stmt.setString(4, author.getCountry());
+            stmt.setString(4, author.getCountry().name());
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating author failed, no rows affected.");
@@ -183,7 +184,7 @@ public class AuthorDatabaseDao implements AuthorDao {
             LocalDate date = author.getBirthDate();
             stmt.setDate(2, Date.valueOf(date));
             stmt.setString(3, author.getGender().name());
-            stmt.setString(4, author.getCountry());
+            stmt.setString(4, author.getCountry().name());
             stmt.setInt(5, author.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {

@@ -5,12 +5,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nastya.dao.AuthorDao;
 import org.nastya.entity.Author;
+import org.nastya.entity.Country;
 import org.nastya.entity.Gender;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.nastya.entity.Country.ENGLAND;
+import static org.nastya.entity.Country.RUSSIA;
+import static org.nastya.entity.Country.UKRAINE;
+import static org.nastya.entity.Country.USA;
 import static org.nastya.entity.Gender.FEMALE;
 import static org.nastya.entity.Gender.MALE;
 
@@ -20,16 +27,16 @@ class AuthorDatabaseDaoTest {
     @BeforeEach
     void setUp() {
         authorDao = new AuthorDatabaseDao();
-        insertAuthorToDatabase("Александр Грин", "1880-08-23", MALE, "Россия");
-        insertAuthorToDatabase("Александр Пушкин", "1799-06-06", MALE, "Россия");
-        insertAuthorToDatabase("Владимир Маяковский", "1893-07-19", MALE, "Россия");
-        insertAuthorToDatabase("Джейн Остин", "1775-12-16", FEMALE, "Англия");
-        insertAuthorToDatabase("Марк Твен", "1835-11-30", MALE, "США");
-        insertAuthorToDatabase("Эмели Бронте", "1818-07-30", FEMALE, "Англия");
-        insertAuthorToDatabase("Фёдор Достоевский", "1821-11-11", MALE, "Россия");
-        insertAuthorToDatabase("Агата Кристи", "1890-09-15", FEMALE, "Англия");
-        insertAuthorToDatabase("Харпер Ли", "1926-04-28", FEMALE, "США");
-        insertAuthorToDatabase("Михаил Булгаков", "1891-05-15", MALE, "Украина");
+        insertAuthorToDatabase("Александр Грин", "1880-08-23", MALE, RUSSIA);
+        insertAuthorToDatabase("Александр Пушкин", "1799-06-06", MALE, RUSSIA);
+        insertAuthorToDatabase("Владимир Маяковский", "1893-07-19", MALE, RUSSIA);
+        insertAuthorToDatabase("Джейн Остин", "1775-12-16", FEMALE, ENGLAND);
+        insertAuthorToDatabase("Марк Твен", "1835-11-30", MALE, USA);
+        insertAuthorToDatabase("Эмели Бронте", "1818-07-30", FEMALE, ENGLAND);
+        insertAuthorToDatabase("Фёдор Достоевский", "1821-11-11", MALE, RUSSIA);
+        insertAuthorToDatabase("Агата Кристи", "1890-09-15", FEMALE, ENGLAND);
+        insertAuthorToDatabase("Харпер Ли", "1926-04-28", FEMALE, USA);
+        insertAuthorToDatabase("Михаил Булгаков", "1891-05-15", MALE, UKRAINE);
     }
 
     @AfterEach
@@ -42,7 +49,7 @@ class AuthorDatabaseDaoTest {
         List<Author> authors = authorDao.findAll();
         assertEquals(10, authors.size());
 
-        Author author = createAuthor("Александр Грин", "1880-08-25", MALE, "Россия");
+        Author author = createAuthor("Александр Грин", "1880-08-25", MALE, RUSSIA);
         authorDao.insert(author);
 
         authors = authorDao.findAll();
@@ -66,7 +73,7 @@ class AuthorDatabaseDaoTest {
 
     @Test
     void findByName_found2Authors() {
-        insertAuthorToDatabase("Александр Пушкин", "1799-10-06", MALE, "США");
+        insertAuthorToDatabase("Александр Пушкин", "1799-10-06", MALE, USA);
         List<Author> authors = authorDao.findByName("Александр Пушкин");
         assertEquals(2, authors.size());
         for (Author author : authors) {
@@ -108,12 +115,12 @@ class AuthorDatabaseDaoTest {
         }
     }
 
-    private void insertAuthorToDatabase(String name, String birthDate, Gender gender, String country) {
+    private void insertAuthorToDatabase(String name, String birthDate, Gender gender, Country country) {
         Author author = createAuthor(name, birthDate, gender, country);
         authorDao.insert(author);
     }
 
-    private Author createAuthor(String name, String birthDate, Gender gender, String country) {
+    private Author createAuthor(String name, String birthDate, Gender gender, Country country) {
         Author author = new Author();
         author.setName(name);
         LocalDate date = LocalDate.parse(birthDate);
@@ -125,10 +132,10 @@ class AuthorDatabaseDaoTest {
 
     @Test
     public void findByGenderOrByCountry() {
-        List<Author> authors = authorDao.findByGenderOrByCountry(MALE, "Россия");
+        List<Author> authors = authorDao.findByGenderOrByCountry(MALE, RUSSIA);
         assertEquals(6, authors.size());
         assertEquals(MALE, authors.get(0).getGender());
-        assertEquals("Россия", authors.get(0).getCountry());
+        assertEquals(RUSSIA, authors.get(0).getCountry());
     }
 
     @Test
@@ -139,7 +146,7 @@ class AuthorDatabaseDaoTest {
         assertEquals("Харпер Ли", author.getName());
         assertEquals("1926-04-28", author.getBirthDateAsString());
         assertEquals(FEMALE, author.getGender());
-        assertEquals("США", author.getCountry());
+        assertEquals(USA, author.getCountry());
     }
 
     @Test
@@ -150,7 +157,7 @@ class AuthorDatabaseDaoTest {
 
     @Test
     public void findByGenderAndByBirthDate_found2Authors() {
-        insertAuthorToDatabase("Джейн Остин", "1926-04-28", FEMALE, "Англия");
+        insertAuthorToDatabase("Джейн Остин", "1926-04-28", FEMALE, ENGLAND);
 
         List<Author> authors = authorDao.findByGenderAndByBirthDate(FEMALE, "1926-04-28");
 
@@ -160,12 +167,52 @@ class AuthorDatabaseDaoTest {
         assertEquals("Харпер Ли", author1.getName());
         assertEquals("1926-04-28", author1.getBirthDateAsString());
         assertEquals(FEMALE, author1.getGender());
-        assertEquals("США", author1.getCountry());
+        assertEquals(USA, author1.getCountry());
 
         Author author2 = authors.get(1);
         assertEquals("Джейн Остин", author2.getName());
         assertEquals("1926-04-28", author2.getBirthDateAsString());
         assertEquals(FEMALE, author2.getGender());
-        assertEquals("Англия", author2.getCountry());
+        assertEquals(ENGLAND, author2.getCountry());
+    }
+
+    @Test
+    public void deleteAllByGender() {
+        List<Author> authors = authorDao.findByGender(MALE);
+        authorDao.deleteAllByGender(MALE);
+        assertEquals(0, authors.size());
+    }
+
+    @Test
+    public void getCountByGender() {
+        int count = authorDao.getCountByGender(FEMALE);
+        assertEquals(4, count);
+    }
+
+    @Test
+    public void getCount() {
+        int count = authorDao.getCount();
+        List<Author> authors = authorDao.findAll();
+        assertEquals(count, authors.size());
+    }
+
+    @Test
+    public void getCount_() {
+        insertAuthorToDatabase("Джейн Остин", "1775-12-16", FEMALE, ENGLAND);
+        insertAuthorToDatabase("Марк Твен", "1835-11-30", MALE, USA);
+        insertAuthorToDatabase("Эмели Бронте", "1818-07-30", FEMALE, ENGLAND);
+
+        int count = authorDao.getCount();
+        List<Author> authors = authorDao.findAll();
+        assertEquals(count, authors.size());
+    }
+
+    @Test
+    public void getBiggestId() {
+        List<Author> authors = authorDao.findByName("Михаил Булгаков");
+        for (Author author : authors) {
+            int biggestId = authorDao.getBiggestId();
+            assertEquals(biggestId, author.getId());
+        }
     }
 }
