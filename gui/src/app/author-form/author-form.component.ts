@@ -13,7 +13,7 @@ export class AuthorFormComponent implements OnInit {
     authorForm!: FormGroup;
     authorId!: string | null;
 
-    constructor(private formBuilder: FormBuilder, 
+    constructor(private formBuilder: FormBuilder,
                 private route: ActivatedRoute,
                 private authorService: AuthorService) {
     }
@@ -24,10 +24,10 @@ export class AuthorFormComponent implements OnInit {
                 this.authorId = params.get('id');
                 this.authorService.getById(this.authorId).subscribe(author => {
                     this.authorForm.setValue({
-                        name: author.name + "%%%%",
-                        gender: author.country,
+                        name: author.name,
+                        gender: author.gender,
                         birthDate: author.birthDate,
-                        country: author.gender
+                        country: author.country
                     });
                 })
             }
