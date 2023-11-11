@@ -26,6 +26,10 @@
                            required>
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
+                  <input matInput [matDatepicker]="picker" placeholder="Date of Death" formControlName="deathDate"
+                         required>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field class="full-width">
                     <input matInput placeholder="Country" formControlName="country" required>

@@ -20,6 +20,7 @@ public class AuthorDatabaseDao implements AuthorDao {
     static final String ID = "id";
     static final String NAME = "name";
     static final String DATE_OF_BIRTH = "date_of_birth";
+    static final String DATE_OF_DEATH = "date_of_death";
     static final String GENDER = "gender";
     static final String COUNTRY = "country";
 
@@ -37,6 +38,7 @@ public class AuthorDatabaseDao implements AuthorDao {
     private static final String COUNT_BY_GENDER = "SELECT COUNT(*) FROM authors WHERE gender = ?";
     private static final String GET_BIGGEST_ID = "SELECT MAX(id) FROM authors";
     private static final String COUNT_FROM_AUTHORS = "SELECT COUNT(*) FROM authors";
+    public static final String ADD_COLUMN_DEATH_DATE = "ALTER TABLE authors ADD COLUMN death_date DATE";
 
     @Override
     public Author findById(int id) {
@@ -147,6 +149,8 @@ public class AuthorDatabaseDao implements AuthorDao {
         author.setName(rs.getString(NAME));
         LocalDate date = rs.getDate(DATE_OF_BIRTH).toLocalDate();
         author.setBirthDate(date);
+        LocalDate dateOfDeath = rs.getDate(DATE_OF_DEATH).toLocalDate();
+        author.setBirthDate(dateOfDeath);
         author.setGender(Gender.valueOf(rs.getString(GENDER)));
         author.setCountry(Country.valueOf(rs.getString(COUNTRY)));
         return author;
@@ -267,5 +271,15 @@ public class AuthorDatabaseDao implements AuthorDao {
             throw new RuntimeException("Error getting count", e);
         }
         return 0;
+    }
+
+    @Override
+    public void addAColumnWithDateOfDeath() {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(ADD_COLUMN_DEATH_DATE);
+        } catch (SQLException e) {
+            throw new RuntimeException("Add error", e);
+        }
     }
 }
