@@ -20,16 +20,16 @@ public class AuthorDatabaseDao implements AuthorDao {
     static final String ID = "id";
     static final String NAME = "name";
     static final String DATE_OF_BIRTH = "date_of_birth";
-    static final String DATE_OF_DEATH = "date_of_death";
+    static final String DATE_OF_DEATH = "death_date";
     static final String GENDER = "gender";
     static final String COUNTRY = "country";
 
-    private static final String SELECT = "SELECT id, name, date_of_birth, gender, country FROM authors";
-    private static final String REQUEST_BY_ID = "SELECT id, name, date_of_birth, gender, country FROM authors WHERE id = ?";
-    private static final String INSERT = "INSERT INTO authors (name, date_of_birth, gender, country) VALUES (?, ?, ?, ?)";
+    private static final String SELECT = "SELECT id, name, date_of_birth, death_date, gender, country FROM authors";
+    private static final String REQUEST_BY_ID = "SELECT id, name, date_of_birth, death_date, gender, country FROM authors WHERE id = ?";
+    private static final String INSERT = "INSERT INTO authors (name, date_of_birth, death_date, gender, country) VALUES (?, ?, ?, ?, ?)";
     private static final String DELETION_BY_ID = "DELETE FROM authors WHERE id = ?";
     private static final String DELETE_FROM_AUTHORS = "DELETE FROM authors";
-    private static final String UPDATE = "UPDATE authors SET name = ?, date_of_birth = ?, gender = ?, country = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE authors SET name = ?, date_of_birth = ?, death_date = ?, gender = ?, country = ? WHERE id = ?";
     private static final String SELECT_BY_NAME = "SELECT * FROM authors WHERE name=?";
     private static final String SELECT_BY_GENDER = "SELECT * FROM authors WHERE gender=?";
     private static final String SELECT_BY_GENDER_AND_BIRTH_DATE = "SELECT * FROM authors WHERE gender=? AND date_of_birth = ?";
@@ -38,7 +38,6 @@ public class AuthorDatabaseDao implements AuthorDao {
     private static final String COUNT_BY_GENDER = "SELECT COUNT(*) FROM authors WHERE gender = ?";
     private static final String GET_BIGGEST_ID = "SELECT MAX(id) FROM authors";
     private static final String COUNT_FROM_AUTHORS = "SELECT COUNT(*) FROM authors";
-    public static final String ADD_COLUMN_DEATH_DATE = "ALTER TABLE authors ADD COLUMN death_date DATE";
 
     @Override
     public Author findById(int id) {
@@ -150,7 +149,7 @@ public class AuthorDatabaseDao implements AuthorDao {
         LocalDate date = rs.getDate(DATE_OF_BIRTH).toLocalDate();
         author.setBirthDate(date);
         LocalDate dateOfDeath = rs.getDate(DATE_OF_DEATH).toLocalDate();
-        author.setBirthDate(dateOfDeath);
+        author.setDeathDate(dateOfDeath);
         author.setGender(Gender.valueOf(rs.getString(GENDER)));
         author.setCountry(Country.valueOf(rs.getString(COUNTRY)));
         return author;
@@ -163,8 +162,10 @@ public class AuthorDatabaseDao implements AuthorDao {
             stmt.setString(1, author.getName());
             LocalDate date = author.getBirthDate();
             stmt.setDate(2, Date.valueOf(date));
-            stmt.setString(3, author.getGender().name());
-            stmt.setString(4, author.getCountry().name());
+            LocalDate deathDate = author.getDeathDate();
+            stmt.setDate(3, Date.valueOf(deathDate));
+            stmt.setString(4, author.getGender().name());
+            stmt.setString(5, author.getCountry().name());
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating author failed, no rows affected.");
@@ -187,9 +188,11 @@ public class AuthorDatabaseDao implements AuthorDao {
             stmt.setString(1, author.getName());
             LocalDate date = author.getBirthDate();
             stmt.setDate(2, Date.valueOf(date));
-            stmt.setString(3, author.getGender().name());
-            stmt.setString(4, author.getCountry().name());
-            stmt.setInt(5, author.getId());
+            LocalDate deathDate = author.getDeathDate();
+            stmt.setDate(3, Date.valueOf(deathDate));
+            stmt.setString(4, author.getGender().name());
+            stmt.setString(5, author.getCountry().name());
+            stmt.setInt(6, author.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Save failed", e);
@@ -271,15 +274,5 @@ public class AuthorDatabaseDao implements AuthorDao {
             throw new RuntimeException("Error getting count", e);
         }
         return 0;
-    }
-
-    @Override
-    public void addAColumnWithDateOfDeath() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(ADD_COLUMN_DEATH_DATE);
-        } catch (SQLException e) {
-            throw new RuntimeException("Add error", e);
-        }
     }
 }

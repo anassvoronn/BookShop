@@ -7,6 +7,7 @@ public class Author {
     private int id;
     private String name;
     private LocalDate birthDate;
+    private LocalDate deathDate;
     private Country country;
     private Gender gender;
 
@@ -16,6 +17,7 @@ public class Author {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", birthDate='" + birthDate + '\'' +
+                ", deathDate='" + deathDate + '\'' +
                 ", country='" + country + '\'' +
                 ", gender='" + gender + '\'' +
                 '}';
@@ -35,6 +37,10 @@ public class Author {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public void setDeathDate(LocalDate deathDate) {
+        this.deathDate = deathDate;
     }
 
     public void setName(String name) {
@@ -63,5 +69,9 @@ public class Author {
 
     public Gender getGender() {
         return gender;
+    }
+
+    public LocalDate getDeathDate() {
+        return deathDate;
     }
 }

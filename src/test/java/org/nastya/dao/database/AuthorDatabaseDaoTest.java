@@ -126,7 +126,7 @@ class AuthorDatabaseDaoTest {
         LocalDate date = LocalDate.parse(birthDate);
         author.setBirthDate(date);
         LocalDate dateOfDeath = LocalDate.parse(deathDate);
-        author.setBirthDate(dateOfDeath);
+        author.setDeathDate(dateOfDeath);
         author.setGender(gender);
         author.setCountry(country);
         return author;

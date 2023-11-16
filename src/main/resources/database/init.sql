@@ -17,3 +17,5 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.authors
     OWNER to postgres;
+
+ALTER TABLE authors ADD COLUMN death_date DATE;
