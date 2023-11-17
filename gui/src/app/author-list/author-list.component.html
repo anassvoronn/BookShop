@@ -12,12 +12,12 @@
 
         <ng-container matColumnDef="birthDate">
             <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
-            <td mat-cell *matCellDef="let author">{{ author.date_of_birth | date }}</td>
+            <td mat-cell *matCellDef="let author">{{ author.birthDate | date }}</td>
         </ng-container>
 
       <ng-container matColumnDef="deathDate">
         <th mat-header-cell *matHeaderCellDef>Date of Death</th>
-        <td mat-cell *matCellDef="let author">{{ author.date_of_death | date }}</td>
+        <td mat-cell *matCellDef="let author">{{ author.deathDate | date }}</td>
       </ng-container>
 
         <ng-container matColumnDef="country">
