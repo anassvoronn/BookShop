@@ -181,7 +181,9 @@ class AuthorDatabaseDaoTest {
     @Test
     public void deleteAllByGender() {
         List<Author> authors = authorDao.findByGender(MALE);
+        assertEquals(6, authors.size());
         authorDao.deleteAllByGender(MALE);
+        authors = authorDao.findByGender(MALE);
         assertEquals(0, authors.size());
     }
 
