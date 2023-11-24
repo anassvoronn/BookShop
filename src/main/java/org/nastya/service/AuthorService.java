@@ -13,7 +13,13 @@ public class AuthorService {
     private AuthorDao authorDao;
 
     public List<Author> findAll() {
-        return authorDao.findAll();
+        List<Integer> age = authorDao.getAuthorsAge();
+        List<Author> authors = authorDao.findAll();
+        for (int i = 0; i < authors.size(); i++) {
+            Author author = authors.get(i);
+            author.setAge(age.get(i));
+        }
+        return authors;
     }
 
     public Author findById(int id) {

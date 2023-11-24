@@ -10,6 +10,7 @@ public class Author {
     private LocalDate deathDate;
     private Country country;
     private Gender gender;
+    private int age;
 
     @Override
     public String toString() {
@@ -47,6 +48,10 @@ public class Author {
         this.name = name;
     }
 
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     public int getId() {
         return id;
     }
@@ -73,5 +78,9 @@ public class Author {
 
     public LocalDate getDeathDate() {
         return deathDate;
+    }
+
+    public int getAge() {
+        return age;
     }
 }
