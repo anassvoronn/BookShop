@@ -9,7 +9,7 @@ import {AuthorService} from "../service/author.service";
 })
 export class AuthorListComponent implements OnInit {
     authors: Author[] = [];
-    displayedColumns: string[] = ['name', 'gender', 'birthDate', 'deathDate', 'country', 'actions'];
+    displayedColumns: string[] = ['name', 'gender', 'birthDate', 'deathDate', 'country', 'age', 'actions'];
 
     constructor(private authorService: AuthorService) {
     }

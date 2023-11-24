@@ -28,7 +28,8 @@ export class AuthorFormComponent implements OnInit {
                         gender: author.gender,
                         birthDate: author.birthDate,
                         deathDate: author.deathDate,
-                        country: author.country
+                        country: author.country,
+                        age: author.age
                     });
                 })
             }
@@ -40,6 +41,7 @@ export class AuthorFormComponent implements OnInit {
             birthDate: ['', Validators.required],
             deathDate: ['', Validators.required],
             country: ['', Validators.required],
+            age: ['', Validators.required]
         });
     }
 

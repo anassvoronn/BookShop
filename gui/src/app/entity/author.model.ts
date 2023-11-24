@@ -5,14 +5,16 @@ export class Author {
     private readonly _birthDate: Date;
     private readonly _deathDate: Date;
     private readonly _country: string;
+    private readonly _age: number;
 
-    constructor(id: number, name: string, gender: string, birthDate: Date, deathDate: Date, country: string) {
+    constructor(id: number, name: string, gender: string, birthDate: Date, deathDate: Date, country: string, age: number) {
         this._id = id;
         this._name = name;
         this._gender = gender;
         this._birthDate = birthDate;
         this._deathDate = deathDate;
         this._country = country;
+        this._age = age;
     }
 
     get id(): number {
@@ -37,5 +39,9 @@ export class Author {
 
     get country(): string {
         return this._country;
+    }
+
+    get age(): number {
+        return this._age;
     }
 }
