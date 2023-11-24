@@ -126,14 +126,10 @@ class AuthorDatabaseDaoTest {
         if (birthDate != null) {
             LocalDate date = LocalDate.parse(birthDate);
             author.setBirthDate(date);
-        } else {
-            author.setBirthDate(null);
         }
         if (deathDate != null) {
             LocalDate dateOfDeath = LocalDate.parse(deathDate);
             author.setDeathDate(dateOfDeath);
-        } else {
-            author.setDeathDate(null);
         }
         author.setGender(gender);
         author.setCountry(country);

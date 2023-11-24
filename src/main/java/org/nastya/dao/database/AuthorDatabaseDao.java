@@ -151,7 +151,6 @@ public class AuthorDatabaseDao implements AuthorDao {
             LocalDate date = birthDate.toLocalDate();
             author.setBirthDate(date);
         }
-
         Date deathDate = rs.getDate(DATE_OF_DEATH);
         if (deathDate != null) {
             LocalDate dateOfDeath = deathDate.toLocalDate();
