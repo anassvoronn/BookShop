@@ -146,10 +146,16 @@ public class AuthorDatabaseDao implements AuthorDao {
         Author author = new Author();
         author.setId(rs.getInt(ID));
         author.setName(rs.getString(NAME));
-        LocalDate date = rs.getDate(DATE_OF_BIRTH).toLocalDate();
-        author.setBirthDate(date);
-        LocalDate dateOfDeath = rs.getDate(DATE_OF_DEATH).toLocalDate();
-        author.setDeathDate(dateOfDeath);
+        Date birthDate = rs.getDate(DATE_OF_BIRTH);
+        if (birthDate != null) {
+            LocalDate date = birthDate.toLocalDate();
+            author.setBirthDate(date);
+        }
+        Date deathDate = rs.getDate(DATE_OF_DEATH);
+        if (deathDate != null) {
+            LocalDate dateOfDeath = deathDate.toLocalDate();
+            author.setDeathDate(dateOfDeath);
+        }
         author.setGender(Gender.valueOf(rs.getString(GENDER)));
         author.setCountry(Country.valueOf(rs.getString(COUNTRY)));
         return author;
@@ -160,10 +166,19 @@ public class AuthorDatabaseDao implements AuthorDao {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, author.getName());
-            LocalDate date = author.getBirthDate();
-            stmt.setDate(2, Date.valueOf(date));
+            LocalDate birthDate = author.getBirthDate();
+            if (birthDate != null) {
+                stmt.setDate(2, Date.valueOf(birthDate));
+            } else {
+                stmt.setNull(2, Types.DATE);
+            }
+
             LocalDate deathDate = author.getDeathDate();
-            stmt.setDate(3, Date.valueOf(deathDate));
+            if (deathDate != null) {
+                stmt.setDate(3, Date.valueOf(deathDate));
+            } else {
+                stmt.setNull(3, Types.DATE);
+            }
             stmt.setString(4, author.getGender().name());
             stmt.setString(5, author.getCountry().name());
             int affectedRows = stmt.executeUpdate();

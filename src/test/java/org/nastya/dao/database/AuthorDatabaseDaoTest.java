@@ -29,14 +29,14 @@ class AuthorDatabaseDaoTest {
         authorDao = new AuthorDatabaseDao();
         insertAuthorToDatabase("Александр Грин", "1880-08-23", "1932-07-08", MALE, RUSSIA);
         insertAuthorToDatabase("Александр Пушкин", "1799-06-06", "1837-02-10", MALE, RUSSIA);
-        insertAuthorToDatabase("Владимир Маяковский", "1893-07-19", "1930-04-14", MALE, RUSSIA);
+        insertAuthorToDatabase("Владимир Маяковский", "1893-07-19", null, MALE, RUSSIA);
         insertAuthorToDatabase("Джейн Остин", "1775-12-16", "1817-07-18", FEMALE, ENGLAND);
-        insertAuthorToDatabase("Марк Твен", "1835-11-30", "1910-04-21", MALE, USA);
+        insertAuthorToDatabase("Марк Твен", "1835-11-30", null, MALE, USA);
         insertAuthorToDatabase("Эмели Бронте", "1818-07-30", "1855-03-31", FEMALE, ENGLAND);
-        insertAuthorToDatabase("Фёдор Достоевский", "1821-11-11", "1881-02-09", MALE, RUSSIA);
+        insertAuthorToDatabase("Фёдор Достоевский", null, "1881-02-09", MALE, RUSSIA);
         insertAuthorToDatabase("Агата Кристи", "1890-09-15", "1976-01-12", FEMALE, ENGLAND);
         insertAuthorToDatabase("Харпер Ли", "1926-04-28", "2016-02-19", FEMALE, USA);
-        insertAuthorToDatabase("Михаил Булгаков", "1891-05-15", "1940-03-10", MALE, UKRAINE);
+        insertAuthorToDatabase("Михаил Булгаков", null, "1940-03-10", MALE, UKRAINE);
     }
 
     @AfterEach
@@ -123,10 +123,14 @@ class AuthorDatabaseDaoTest {
     private Author createAuthor(String name, String birthDate, String deathDate, Gender gender, Country country) {
         Author author = new Author();
         author.setName(name);
-        LocalDate date = LocalDate.parse(birthDate);
-        author.setBirthDate(date);
-        LocalDate dateOfDeath = LocalDate.parse(deathDate);
-        author.setDeathDate(dateOfDeath);
+        if (birthDate != null) {
+            LocalDate date = LocalDate.parse(birthDate);
+            author.setBirthDate(date);
+        }
+        if (deathDate != null) {
+            LocalDate dateOfDeath = LocalDate.parse(deathDate);
+            author.setDeathDate(dateOfDeath);
+        }
         author.setGender(gender);
         author.setCountry(country);
         return author;
