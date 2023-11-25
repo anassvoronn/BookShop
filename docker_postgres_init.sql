@@ -1,6 +1,7 @@
 -- Table: public.authors
 
 -- DROP TABLE IF EXISTS public.authors;
+CREATE SEQUENCE authors_id_seq START 101;
 
 CREATE TABLE IF NOT EXISTS public.authors
 (
