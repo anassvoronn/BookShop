@@ -39,7 +39,7 @@ public class AuthorDatabaseDao implements AuthorDao {
     private static final String COUNT_BY_GENDER = "SELECT COUNT(*) FROM authors WHERE gender = ?";
     private static final String GET_BIGGEST_ID = "SELECT MAX(id) FROM authors";
     private static final String COUNT_FROM_AUTHORS = "SELECT COUNT(*) FROM authors";
-    private static final String AGE_FROM_AUTHORS = "SELECT DATE_PART('year', AGE(death_date, date_of_birth)) AS age FROM authors;";
+    private static final String AGE_FROM_AUTHORS = "SELECT COALESCE(DATE_PART('year', AGE(death_date, date_of_birth)), DATE_PART('year', AGE(CURRENT_DATE, date_of_birth))) AS age FROM authors;";
 
     @Override
     public Author findById(int id) {
