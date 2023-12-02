@@ -26,15 +26,13 @@ public class AuthorService {
     }
 
     private int calculateAge(LocalDate dateOfBirth, LocalDate deathDate) {
-        if (dateOfBirth != null) {
-            if (deathDate != null) {
-                return Period.between(dateOfBirth, deathDate).getYears();
-            } else {
-                return Period.between(dateOfBirth, LocalDate.now()).getYears();
-            }
-        } else {
+        if (dateOfBirth == null) {
             return 0;
         }
+        if (deathDate == null) {
+            return Period.between(dateOfBirth, LocalDate.now()).getYears();
+        }
+        return Period.between(dateOfBirth, deathDate).getYears();
     }
 
     public Author findById(int id) {
