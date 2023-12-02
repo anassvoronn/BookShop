@@ -1,6 +1,7 @@
 package org.nastya.service;
 
 import org.nastya.dao.AuthorDao;
+import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.entity.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,16 +14,19 @@ import java.util.List;
 public class AuthorService {
     @Autowired
     private AuthorDao authorDao;
+    @Autowired
+    private AuthorMapper authorMapper;
 
-    public List<Author> findAll() {
+    public List<AuthorListItemDTO> findAll() {
         List<Author> authors = authorDao.findAll();
-        for (Author author : authors) {
-            LocalDate birthDate = author.getBirthDate();
-            LocalDate deathDate = author.getDeathDate();
+        List<AuthorListItemDTO> dtos = authorMapper.map(authors);
+        for (AuthorListItemDTO authorDto : dtos) {
+            LocalDate birthDate = authorDto.getBirthDate();
+            LocalDate deathDate = authorDto.getDeathDate();
             int ages = calculateAge(birthDate, deathDate);
-            author.setAge(ages);
+            authorDto.setAge(ages);
         }
-        return authors;
+        return dtos;
     }
 
     private int calculateAge(LocalDate dateOfBirth, LocalDate deathDate) {

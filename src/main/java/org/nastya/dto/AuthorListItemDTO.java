@@ -1,19 +1,22 @@
-package org.nastya.entity;
+package org.nastya.dto;
+
+import org.nastya.entity.Country;
+import org.nastya.entity.Gender;
 
 import java.time.LocalDate;
 
-public class Author {
-
+public class AuthorListItemDTO {
     private int id;
     private String name;
     private LocalDate birthDate;
     private LocalDate deathDate;
     private Country country;
     private Gender gender;
+    private int age;
 
     @Override
     public String toString() {
-        return "Author{" +
+        return "AuthorListItemDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", birthDate='" + birthDate + '\'' +
@@ -47,6 +50,10 @@ public class Author {
         this.name = name;
     }
 
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     public int getId() {
         return id;
     }
@@ -73,5 +80,9 @@ public class Author {
 
     public LocalDate getDeathDate() {
         return deathDate;
+    }
+
+    public int getAge() {
+        return age;
     }
 }

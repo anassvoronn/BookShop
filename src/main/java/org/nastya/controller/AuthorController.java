@@ -1,5 +1,6 @@
 package org.nastya.controller;
 
+import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.entity.Author;
 import org.nastya.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class AuthorController {
     private AuthorService authorService;
 
     @GetMapping
-    public List<Author> getAllUsers() {
+    public List<AuthorListItemDTO> getAllUsers() {
         return authorService.findAll();
     }
 
