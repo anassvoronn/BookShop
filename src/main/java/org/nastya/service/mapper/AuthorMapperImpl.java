@@ -12,7 +12,7 @@ import java.util.List;
 public class AuthorMapperImpl implements AuthorMapper {
 
     @Override
-    public AuthorListItemDTO map(Author author) {
+    public AuthorListItemDTO mapToAuthorListItemDTO(Author author) {
         AuthorListItemDTO dto = new AuthorListItemDTO();
         dto.setId(author.getId());
         dto.setBirthDate(author.getBirthDate());
@@ -22,10 +22,10 @@ public class AuthorMapperImpl implements AuthorMapper {
     }
 
     @Override
-    public List<AuthorListItemDTO> map(List<Author> authors) {
+    public List<AuthorListItemDTO> mapToAuthorListItemDTO(List<Author> authors) {
         List<AuthorListItemDTO> dtos = new ArrayList<>();
         for (Author author : authors) {
-            AuthorListItemDTO dto = map(author);
+            AuthorListItemDTO dto = mapToAuthorListItemDTO(author);
             dtos.add(dto);
         }
         return dtos;

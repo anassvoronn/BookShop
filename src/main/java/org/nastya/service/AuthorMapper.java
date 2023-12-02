@@ -6,7 +6,7 @@ import org.nastya.entity.Author;
 import java.util.List;
 
 public interface AuthorMapper {
-    AuthorListItemDTO map(Author author);
+    AuthorListItemDTO mapToAuthorListItemDTO(Author author);
 
-    List<AuthorListItemDTO> map(List<Author> authors);
+    List<AuthorListItemDTO> mapToAuthorListItemDTO(List<Author> authors);
 }

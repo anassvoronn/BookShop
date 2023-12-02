@@ -19,7 +19,7 @@ public class AuthorService {
 
     public List<AuthorListItemDTO> findAll() {
         List<Author> authors = authorDao.findAll();
-        List<AuthorListItemDTO> dtos = authorMapper.map(authors);
+        List<AuthorListItemDTO> dtos = authorMapper.mapToAuthorListItemDTO(authors);
         for (AuthorListItemDTO authorDto : dtos) {
             LocalDate birthDate = authorDto.getBirthDate();
             LocalDate deathDate = authorDto.getDeathDate();
