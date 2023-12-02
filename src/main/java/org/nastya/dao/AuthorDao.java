@@ -35,6 +35,4 @@ public interface AuthorDao {
     int getCountByGender(Gender gender);
 
     int getCount();
-
-    List<Integer> getAuthorsAge();
 }

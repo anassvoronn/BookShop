@@ -5,6 +5,8 @@ import org.nastya.entity.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Service
@@ -13,13 +15,24 @@ public class AuthorService {
     private AuthorDao authorDao;
 
     public List<Author> findAll() {
-        List<Integer> age = authorDao.getAuthorsAge();
         List<Author> authors = authorDao.findAll();
-        for (int i = 0; i < authors.size(); i++) {
-            Author author = authors.get(i);
-            author.setAge(age.get(i));
+        for (Author author : authors) {
+            LocalDate birthDate = author.getBirthDate();
+            LocalDate deathDate = author.getDeathDate();
+            int ages = calculateAge(birthDate, deathDate);
+            author.setAge(ages);
         }
         return authors;
+    }
+
+    private int calculateAge(LocalDate dateOfBirth, LocalDate deathDate) {
+        if (dateOfBirth == null) {
+            return 0;
+        }
+        if (deathDate == null) {
+            return Period.between(dateOfBirth, LocalDate.now()).getYears();
+        }
+        return Period.between(dateOfBirth, deathDate).getYears();
     }
 
     public Author findById(int id) {

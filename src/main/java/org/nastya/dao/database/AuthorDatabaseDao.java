@@ -39,7 +39,6 @@ public class AuthorDatabaseDao implements AuthorDao {
     private static final String COUNT_BY_GENDER = "SELECT COUNT(*) FROM authors WHERE gender = ?";
     private static final String GET_BIGGEST_ID = "SELECT MAX(id) FROM authors";
     private static final String COUNT_FROM_AUTHORS = "SELECT COUNT(*) FROM authors";
-    private static final String AGE_FROM_AUTHORS = "SELECT DATE_PART('year', AGE(death_date, date_of_birth)) AS age FROM authors;";
 
     @Override
     public Author findById(int id) {
@@ -291,21 +290,5 @@ public class AuthorDatabaseDao implements AuthorDao {
             throw new RuntimeException("Error getting count", e);
         }
         return 0;
-    }
-
-    @Override
-    public List<Integer> getAuthorsAge() {
-        List<Integer> age = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             Statement stmt = conn.createStatement()) {
-            ResultSet resultSet = stmt.executeQuery(AGE_FROM_AUTHORS);
-            while (resultSet.next()) {
-                int ages = resultSet.getInt(AGE);
-                age.add(ages);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting ages", e);
-        }
-        return age;
     }
 }
