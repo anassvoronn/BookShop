@@ -66,10 +66,6 @@ public class AuthorListItemDTO {
         return birthDate;
     }
 
-    public String getBirthDateAsString() {
-        return String.valueOf(birthDate);
-    }
-
     public Country getCountry() {
         return country;
     }

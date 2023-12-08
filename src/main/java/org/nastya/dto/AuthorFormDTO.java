@@ -66,10 +66,6 @@ public class AuthorFormDTO {
         return birthDate;
     }
 
-    public String getBirthDateAsString() {
-        return String.valueOf(birthDate);
-    }
-
     public Country getCountry() {
         return country;
     }

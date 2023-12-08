@@ -42,11 +42,11 @@ public class AuthorService {
 
     public AuthorFormDTO findById(int id) {
         Author author = authorDao.findById(id);
-        AuthorFormDTO dtos = authorMapper.mapToAuthorFormDTO(author);
-        LocalDate birthDate = dtos.getBirthDate();
-        LocalDate deathDate = dtos.getDeathDate();
+        AuthorFormDTO dto = authorMapper.mapToAuthorFormDTO(author);
+        LocalDate birthDate = dto.getBirthDate();
+        LocalDate deathDate = dto.getDeathDate();
         int ages = calculateAge(birthDate, deathDate);
-        dtos.setAge(ages);
-        return dtos;
+        dto.setAge(ages);
+        return dto;
     }
 }

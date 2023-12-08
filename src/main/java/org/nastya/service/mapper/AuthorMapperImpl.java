@@ -6,8 +6,6 @@ import org.nastya.entity.Author;
 import org.nastya.service.AuthorMapper;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
