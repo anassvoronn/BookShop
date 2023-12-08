@@ -1,5 +1,6 @@
 package org.nastya.service.mapper;
 
+import org.nastya.dto.AuthorFormDTO;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.entity.Author;
 import org.nastya.service.AuthorMapper;
@@ -15,8 +16,10 @@ public class AuthorMapperImpl implements AuthorMapper {
     public AuthorListItemDTO mapToAuthorListItemDTO(Author author) {
         AuthorListItemDTO dto = new AuthorListItemDTO();
         dto.setId(author.getId());
+        dto.setName(author.getName());
         dto.setBirthDate(author.getBirthDate());
         dto.setDeathDate(author.getDeathDate());
+        dto.setGender(author.getGender());
         dto.setCountry(author.getCountry());
         return dto;
     }
@@ -29,5 +32,17 @@ public class AuthorMapperImpl implements AuthorMapper {
             dtos.add(dto);
         }
         return dtos;
+    }
+
+    @Override
+    public AuthorFormDTO mapToAuthorFormDTO(Author author) {
+        AuthorFormDTO dto = new AuthorFormDTO();
+        dto.setId(author.getId());
+        dto.setName(author.getName());
+        dto.setBirthDate(author.getBirthDate());
+        dto.setDeathDate(author.getDeathDate());
+        dto.setGender(author.getGender());
+        dto.setCountry(author.getCountry());
+        return dto;
     }
 }

@@ -1,6 +1,7 @@
 package org.nastya.service;
 
 import org.nastya.dao.AuthorDao;
+import org.nastya.dto.AuthorFormDTO;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.entity.Author;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,13 @@ public class AuthorService {
         return Period.between(dateOfBirth, deathDate).getYears();
     }
 
-    public Author findById(int id) {
-        return authorDao.findById(id);
+    public AuthorFormDTO findById(int id) {
+        Author author = authorDao.findById(id);
+        AuthorFormDTO dto = authorMapper.mapToAuthorFormDTO(author);
+        LocalDate birthDate = dto.getBirthDate();
+        LocalDate deathDate = dto.getDeathDate();
+        int ages = calculateAge(birthDate, deathDate);
+        dto.setAge(ages);
+        return dto;
     }
 }

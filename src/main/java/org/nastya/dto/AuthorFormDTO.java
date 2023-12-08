@@ -5,7 +5,7 @@ import org.nastya.entity.Gender;
 
 import java.time.LocalDate;
 
-public class AuthorListItemDTO {
+public class AuthorFormDTO {
     private int id;
     private String name;
     private LocalDate birthDate;
@@ -16,7 +16,7 @@ public class AuthorListItemDTO {
 
     @Override
     public String toString() {
-        return "AuthorListItemDTO{" +
+        return "AuthorFormDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", birthDate='" + birthDate + '\'' +
