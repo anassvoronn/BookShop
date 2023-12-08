@@ -1,5 +1,6 @@
 package org.nastya.controller;
 
+import org.nastya.dto.AuthorFormDTO;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.entity.Author;
 import org.nastya.service.AuthorService;
@@ -23,7 +24,7 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public Author getById(@PathVariable int id) {
+    public AuthorFormDTO getById(@PathVariable int id) {
         return authorService.findById(id);
     }
 }
