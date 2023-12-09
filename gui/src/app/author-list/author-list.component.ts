@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Author} from "../entity/author.model";
 import {AuthorService} from "../service/author.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
     selector: 'app-author-list',
@@ -11,7 +12,9 @@ export class AuthorListComponent implements OnInit {
     authors: Author[] = [];
     displayedColumns: string[] = ['name', 'gender', 'birthDate', 'deathDate', 'country', 'age', 'actions'];
 
-    constructor(private authorService: AuthorService) {
+    constructor(
+        private authorService: AuthorService, 
+        private snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -24,6 +27,18 @@ export class AuthorListComponent implements OnInit {
     }
 
     deleteAuthor(id: number): void {
-        this.authorService.deleteAuthor(id);
+        this.authorService.deleteAuthor(id).subscribe(
+            () => {
+                this.snackBar.open('Author deleted successfully', 'Close', {
+                    duration: 15000, // Set the duration for which the message will be displayed
+                });
+                this.ngOnInit();
+            },
+            error => {
+                this.snackBar.open('Error deleting author: ' + error.message, 'Close', {
+                    duration: 15000,
+                });
+            }
+        );
     }
 }
