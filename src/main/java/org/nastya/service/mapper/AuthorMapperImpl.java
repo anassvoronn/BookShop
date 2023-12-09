@@ -4,6 +4,9 @@ import org.nastya.dto.AuthorFormDTO;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.entity.Author;
 import org.nastya.service.AuthorMapper;
+import org.nastya.service.AuthorService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,9 +14,11 @@ import java.util.List;
 
 @Component
 public class AuthorMapperImpl implements AuthorMapper {
+    private static final Logger log = LoggerFactory.getLogger(AuthorService.class);
 
     @Override
     public AuthorListItemDTO mapToAuthorListItemDTO(Author author) {
+        log.info("Mapping author '{}' with name '{}' to AuthorListItemDTO", author.getId(), author.getName());
         AuthorListItemDTO dto = new AuthorListItemDTO();
         dto.setId(author.getId());
         dto.setName(author.getName());
@@ -26,6 +31,7 @@ public class AuthorMapperImpl implements AuthorMapper {
 
     @Override
     public List<AuthorListItemDTO> mapToAuthorListItemDTO(List<Author> authors) {
+        log.info("Mapping '{}' authors to AuthorListItemDTO", authors.size());
         List<AuthorListItemDTO> dtos = new ArrayList<>();
         for (Author author : authors) {
             AuthorListItemDTO dto = mapToAuthorListItemDTO(author);
@@ -36,6 +42,7 @@ public class AuthorMapperImpl implements AuthorMapper {
 
     @Override
     public AuthorFormDTO mapToAuthorFormDTO(Author author) {
+        log.info("Mapping author '{}' with name '{}' to AuthorFormDTO", author.getId(), author.getName());
         AuthorFormDTO dto = new AuthorFormDTO();
         dto.setId(author.getId());
         dto.setName(author.getName());
