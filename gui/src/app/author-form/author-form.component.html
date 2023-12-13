@@ -37,7 +37,12 @@
           <input matInput placeholder="Country" formControlName="country" required>
         </mat-form-field>
         <mat-form-field class="full-width">
-          <input matInput placeholder="Age" formControlName="age" required>
+          <span *ngIf="authorForm.get('age')?.value == 0 ; else elseBlockForEmptyAge">
+            <input matInput placeholder="Age" required>
+          </span>
+          <ng-template #elseBlockForEmptyAge>
+            <input matInput placeholder="Age" formControlName="age" required>
+          </ng-template>
         </mat-form-field>
       </form>
     </mat-card-content>
