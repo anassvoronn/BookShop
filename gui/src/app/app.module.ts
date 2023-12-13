@@ -16,6 +16,7 @@ import {MatNativeDateModule} from "@angular/material/core";
 import {MatButtonModule} from "@angular/material/button";
 import {MatTableModule} from "@angular/material/table";
 import {HttpClientModule} from "@angular/common/http";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
     declarations: [
@@ -38,6 +39,7 @@ import {HttpClientModule} from "@angular/common/http";
         MatDatepickerModule,
         MatNativeDateModule,
         MatButtonModule,
+        MatSnackBarModule,
     ],
     providers: [],
     bootstrap: [AppComponent]
