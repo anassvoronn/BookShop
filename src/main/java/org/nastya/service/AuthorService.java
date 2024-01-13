@@ -4,6 +4,7 @@ import org.nastya.dao.AuthorDao;
 import org.nastya.dto.AuthorFormDTO;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.entity.Author;
+import org.nastya.service.exception.AuthorNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,20 +50,20 @@ public class AuthorService {
         return Period.between(dateOfBirth, deathDate).getYears();
     }
 
-    public AuthorFormDTO findById(int id) {
+    public AuthorFormDTO findById(int id) throws AuthorNotFoundException {
         Author author = authorDao.findById(id);
-        if (author != null) {
-            log.info("Found author '{}' with id '{}'", author.getName(), author.getId());
-            AuthorFormDTO dto = authorMapper.mapToAuthorFormDTO(author);
-            LocalDate birthDate = dto.getBirthDate();
-            LocalDate deathDate = dto.getDeathDate();
-            int ages = calculateAge(birthDate, deathDate);
-            dto.setAge(ages);
-            log.info("Calculated age '{}' for author '{}' with id '{}'",
-                    dto.getAge(), dto.getName(), dto.getId());
-            return dto;
-        } else {
-           return null;
+        if (author == null) {
+            log.info("Author with id '{}' was not found", id);
+            throw new AuthorNotFoundException("There is no author with this id " + id);
         }
+        log.info("Found author '{}' with id '{}'", author.getName(), author.getId());
+        AuthorFormDTO dto = authorMapper.mapToAuthorFormDTO(author);
+        LocalDate birthDate = dto.getBirthDate();
+        LocalDate deathDate = dto.getDeathDate();
+        int ages = calculateAge(birthDate, deathDate);
+        dto.setAge(ages);
+        log.info("Calculated age '{}' for author '{}' with id '{}'",
+                dto.getAge(), dto.getName(), dto.getId());
+        return dto;
     }
 }
