@@ -66,4 +66,14 @@ public class AuthorService {
                 dto.getAge(), dto.getName(), dto.getId());
         return dto;
     }
+
+    public void deleteAuthor(int authorId) throws AuthorNotFoundException{
+        Author author = authorDao.findById(authorId);
+        if (author == null) {
+            log.info("Author with id '{}' was not found", authorId);
+            throw new AuthorNotFoundException("There is no author with this id " + authorId);
+        }
+        authorDao.deleteById(authorId);
+        log.info("Deleted author '{}' with id '{}'", author.getName(), author.getId());
+    }
 }

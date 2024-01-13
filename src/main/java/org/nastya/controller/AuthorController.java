@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,5 +38,18 @@ public class AuthorController {
             log.error("No author found with ID: {}", id, e);
             return ResponseEntity.noContent().build();
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAuthor(@PathVariable int id) {
+        log.info("Deleting author by id '{}'", id);
+        try {
+            authorService.deleteAuthor(id);
+        } catch (AuthorNotFoundException e) {
+            log.error("No author found with ID: {}", id, e);
+            return ResponseEntity.ok("Author not found");
+        }
+        log.info("Author '{}' deleted successfully", id);
+        return ResponseEntity.ok("Author deleted successfully");
     }
 }
