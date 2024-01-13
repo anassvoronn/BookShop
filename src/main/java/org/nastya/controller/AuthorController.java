@@ -3,6 +3,7 @@ package org.nastya.controller;
 import org.nastya.dto.AuthorFormDTO;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.service.AuthorService;
+import org.nastya.service.exception.AuthorNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,12 @@ public class AuthorController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAuthor(@PathVariable int id) {
         log.info("Deleting author by id '{}'", id);
-        authorService.deleteAuthor(id);
+        try {
+            authorService.deleteAuthor(id);
+        } catch (AuthorNotFoundException e) {
+            log.error("No author found with ID: {}", id, e);
+            return ResponseEntity.ok("Author not found");
+        }
         log.info("Author '{}' deleted successfully", id);
         return ResponseEntity.ok("Author deleted successfully");
     }
