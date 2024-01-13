@@ -7,6 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,9 +29,14 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public AuthorFormDTO getById(@PathVariable int id) {
+    public ResponseEntity<AuthorFormDTO> getById(@PathVariable int id) {
         log.info("Getting a author by its id '{}'", id);
-        return authorService.findById(id);
+        try {
+            return ResponseEntity.ok(authorService.findById(id));
+        } catch (AuthorNotFoundException e) {
+            log.error("No author found with ID: {}", id, e);
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @DeleteMapping("/{id}")
