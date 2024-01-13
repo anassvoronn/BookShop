@@ -13,7 +13,7 @@ export class AuthorListComponent implements OnInit {
     displayedColumns: string[] = ['name', 'gender', 'birthDate', 'deathDate', 'country', 'age', 'actions'];
 
     constructor(
-        private authorService: AuthorService, 
+        private authorService: AuthorService,
         private snackBar: MatSnackBar) {
     }
 
@@ -28,8 +28,8 @@ export class AuthorListComponent implements OnInit {
 
     deleteAuthor(id: number): void {
         this.authorService.deleteAuthor(id).subscribe(
-            () => {
-                this.snackBar.open('Author deleted successfully', 'Close', {
+            (responseText: string) => {
+                this.snackBar.open(responseText, 'Close', {
                     duration: 15000, // Set the duration for which the message will be displayed
                 });
                 this.ngOnInit();

@@ -26,7 +26,9 @@ export class AuthorService {
     updateAuthor(id: number, updatedAuthor: Author): void {
     }
 
-    deleteAuthor(authorId: number): Observable<void> {
-        return this.http.delete<void>(this.apiUrl + "/" + authorId);
+    deleteAuthor(authorId: number): Observable<string> {
+        return this.http.delete<string>(this.apiUrl + "/" + authorId,
+            {responseType: 'text' as 'json'}
+        );
     }
 }
