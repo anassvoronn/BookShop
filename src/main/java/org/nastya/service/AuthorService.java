@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuthorService {
@@ -60,5 +61,15 @@ public class AuthorService {
         log.info("Calculated age '{}' for author '{}' with id '{}'",
                 dto.getAge(), dto.getName(), dto.getId());
         return dto;
+    }
+
+    public void deleteAuthor(int authorId) {
+        Author author = authorDao.findById(authorId);
+        if (author != null) {
+            authorDao.deleteById(authorId);
+            log.info("Deleted author '{}' with id '{}'", author.getName(), author.getId());
+        } else {
+            log.warn("Author with id '{}' not found for deletion", authorId);
+        }
     }
 }

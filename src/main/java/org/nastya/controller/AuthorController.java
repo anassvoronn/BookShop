@@ -6,10 +6,8 @@ import org.nastya.service.AuthorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +28,13 @@ public class AuthorController {
     public AuthorFormDTO getById(@PathVariable int id) {
         log.info("Getting a author by its id '{}'", id);
         return authorService.findById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAuthor(@PathVariable int id) {
+        log.info("Deleting author by id '{}'", id);
+        authorService.deleteAuthor(id);
+        log.info("Author '{}' deleted successfully", id);
+        return ResponseEntity.ok("Author deleted successfully");
     }
 }
