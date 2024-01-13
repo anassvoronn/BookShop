@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/author")
@@ -29,6 +30,11 @@ public class AuthorController {
     @GetMapping("/{id}")
     public AuthorFormDTO getById(@PathVariable int id) {
         log.info("Getting a author by its id '{}'", id);
-        return authorService.findById(id);
+        AuthorFormDTO author = authorService.findById(id);
+        if (author == null) {
+            log.info("No author found with ID: {}", id);
+            throw new NoSuchElementException("No author found with ID: " + id);
+        }
+        return author;
     }
 }

@@ -51,14 +51,18 @@ public class AuthorService {
 
     public AuthorFormDTO findById(int id) {
         Author author = authorDao.findById(id);
-        log.info("Found author '{}' with id '{}'", author.getName(), author.getId());
-        AuthorFormDTO dto = authorMapper.mapToAuthorFormDTO(author);
-        LocalDate birthDate = dto.getBirthDate();
-        LocalDate deathDate = dto.getDeathDate();
-        int ages = calculateAge(birthDate, deathDate);
-        dto.setAge(ages);
-        log.info("Calculated age '{}' for author '{}' with id '{}'",
-                dto.getAge(), dto.getName(), dto.getId());
-        return dto;
+        if (author != null) {
+            log.info("Found author '{}' with id '{}'", author.getName(), author.getId());
+            AuthorFormDTO dto = authorMapper.mapToAuthorFormDTO(author);
+            LocalDate birthDate = dto.getBirthDate();
+            LocalDate deathDate = dto.getDeathDate();
+            int ages = calculateAge(birthDate, deathDate);
+            dto.setAge(ages);
+            log.info("Calculated age '{}' for author '{}' with id '{}'",
+                    dto.getAge(), dto.getName(), dto.getId());
+            return dto;
+        } else {
+           return null;
+        }
     }
 }
