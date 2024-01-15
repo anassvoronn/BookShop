@@ -23,7 +23,13 @@ export class AuthorService {
     addAuthor(author: Author): void {
     }
 
-    updateAuthor(id: number, updatedAuthor: Author): void {
+    updateAuthor(updatedAuthor: Author): Observable<string> {
+        return this.http.put<string>(this.apiUrl, updatedAuthor.toJsonString(),
+            {
+              responseType: 'text' as 'json',
+              headers: {'Content-Type': 'application/json'}
+            }
+        );
     }
 
     deleteAuthor(authorId: number): Observable<string> {

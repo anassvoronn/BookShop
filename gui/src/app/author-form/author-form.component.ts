@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
+import {Author} from "../entity/author.model";
+import {MatSnackBar} from "@angular/material/snack-bar";
 import {AuthorService} from "../service/author.service";
 
 @Component({
@@ -15,7 +17,8 @@ export class AuthorFormComponent implements OnInit {
 
     constructor(private formBuilder: FormBuilder,
                 private route: ActivatedRoute,
-                private authorService: AuthorService) {
+                private authorService: AuthorService,
+                private snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -47,7 +50,29 @@ export class AuthorFormComponent implements OnInit {
 
     updateAuthor() {
         if (this.authorForm.valid) {
-            // Handle author creation logic here
+            this.authorService.updateAuthor(
+                new Author(
+                    Number(this.authorId) ?? 0,
+                    this.authorForm.controls['name']!.value,
+                    this.authorForm.controls['gender']!.value,
+                    this.authorForm.controls['birthDate']!.value,
+                    this.authorForm.controls['deathDate']!.value,
+                    this.authorForm.controls['country']!.value,
+                    this.authorForm.controls['age']!.value
+                )
+            ).subscribe(
+                         (responseText: string) => {
+                             this.snackBar.open(responseText, 'Close', {
+                                 duration: 15000, // Set the duration for which the message will be displayed
+                             });
+                             this.ngOnInit();
+                         },
+                         error => {
+                             this.snackBar.open('Error updating author: ' + error.message, 'Close', {
+                                 duration: 15000,
+                             });
+                         }
+                     );
         }
     }
 }
