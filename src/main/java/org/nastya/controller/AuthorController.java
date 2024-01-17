@@ -56,14 +56,16 @@ public class AuthorController {
     }
 
     @PutMapping
-    public void updateAuthor(@RequestBody AuthorFormDTO authorFormDTO) {
+    public ResponseEntity<String> updateAuthor(@RequestBody AuthorFormDTO authorFormDTO) {
         log.info("Updating author with id '{}'", authorFormDTO.getId());
         try {
             authorService.updateAuthor(authorFormDTO);
             log.info("Author '{}' updated successfully", authorFormDTO.getId());
         } catch (AuthorNotFoundException e) {
             log.error("No author found with ID: {}", authorFormDTO.getId(), e);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found", e);
+            return ResponseEntity.ok("Author not found");
         }
+        log.info("Author '{}' updated", authorFormDTO.getId());
+        return ResponseEntity.ok("Author updated");
     }
 }
