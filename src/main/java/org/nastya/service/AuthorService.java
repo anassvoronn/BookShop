@@ -67,7 +67,7 @@ public class AuthorService {
         return dto;
     }
 
-    public void deleteAuthor(int authorId) throws AuthorNotFoundException{
+    public void deleteAuthor(int authorId) throws AuthorNotFoundException {
         Author author = authorDao.findById(authorId);
         if (author == null) {
             log.info("Author with id '{}' was not found", authorId);
@@ -75,5 +75,20 @@ public class AuthorService {
         }
         authorDao.deleteById(authorId);
         log.info("Deleted author '{}' with id '{}'", author.getName(), author.getId());
+    }
+
+    public void updateAuthor(AuthorFormDTO authorFormDTO) throws AuthorNotFoundException {
+        Author authorEntity = authorDao.findById(authorFormDTO.getId());
+        if (authorEntity == null) {
+            log.info("Author with id '{}' was not found", authorFormDTO.getId());
+            throw new AuthorNotFoundException("There is no authorEntity with this id " + authorFormDTO.getId());
+        }
+        authorEntity.setName(authorFormDTO.getName());
+        authorEntity.setBirthDate(authorFormDTO.getBirthDate());
+        authorEntity.setDeathDate(authorFormDTO.getDeathDate());
+        authorEntity.setGender(authorFormDTO.getGender());
+        authorEntity.setCountry(authorFormDTO.getCountry());
+        authorDao.save(authorEntity);
+        log.info("Updated authorEntity '{}' with id '{}'", authorEntity.getName(), authorEntity.getId());
     }
 }

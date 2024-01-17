@@ -7,12 +7,14 @@ import org.nastya.service.exception.AuthorNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -51,5 +53,17 @@ public class AuthorController {
         }
         log.info("Author '{}' deleted successfully", id);
         return ResponseEntity.ok("Author deleted successfully");
+    }
+
+    @PutMapping
+    public void updateAuthor(@RequestBody AuthorFormDTO authorFormDTO) {
+        log.info("Updating author with id '{}'", authorFormDTO.getId());
+        try {
+            authorService.updateAuthor(authorFormDTO);
+            log.info("Author '{}' updated successfully", authorFormDTO.getId());
+        } catch (AuthorNotFoundException e) {
+            log.error("No author found with ID: {}", authorFormDTO.getId(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found", e);
+        }
     }
 }
