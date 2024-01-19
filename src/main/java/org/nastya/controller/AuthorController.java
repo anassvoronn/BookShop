@@ -68,4 +68,17 @@ public class AuthorController {
         log.info("Author '{}' updated", authorFormDTO.getId());
         return ResponseEntity.ok("Author updated");
     }
+
+    @PostMapping
+    public ResponseEntity<String> addAuthor(@RequestBody AuthorFormDTO authorFormDTO) {
+        log.info("Adding a new author");
+        try {
+            authorService.addAuthor(authorFormDTO);
+            log.info("Author '{}' added successfully", authorFormDTO.getId());
+            return ResponseEntity.ok("Author added successfully");
+        } catch (Exception e) {
+            log.error("Error occurred while adding the author", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while adding the author");
+        }
+    }
 }

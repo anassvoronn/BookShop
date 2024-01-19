@@ -1,11 +1,12 @@
 package org.nastya.dto;
 
+import org.nastya.entity.Author;
 import org.nastya.entity.Country;
 import org.nastya.entity.Gender;
 
 import java.time.LocalDate;
 
-public class AuthorFormDTO {
+public class AuthorFormDTO extends Author {
     private int id;
     private String name;
     private LocalDate birthDate;

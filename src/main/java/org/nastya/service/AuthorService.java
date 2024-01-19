@@ -91,4 +91,10 @@ public class AuthorService {
         authorDao.save(authorEntity);
         log.info("Updated authorEntity '{}' with id '{}'", authorEntity.getName(), authorEntity.getId());
     }
+
+    public void addAuthor(AuthorFormDTO authorFormDTO) {
+        Author author = authorMapper.mapToAuthorFormDTO(authorFormDTO);
+        authorDao.insert(author);
+        log.info("Added author '{}' with id '{}'", author.getName(), author.getId());
+    }
 }
