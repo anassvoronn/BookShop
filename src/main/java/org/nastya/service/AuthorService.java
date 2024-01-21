@@ -78,17 +78,18 @@ public class AuthorService {
     }
 
     public void updateAuthor(AuthorFormDTO authorFormDTO) throws AuthorNotFoundException {
-        Author authorEntity = authorDao.findById(authorFormDTO.getId());
+        Author authorEntity = authorMapper.mapToAuthor(authorFormDTO);
         if (authorEntity == null) {
             log.info("Author with id '{}' was not found", authorFormDTO.getId());
             throw new AuthorNotFoundException("There is no authorEntity with this id " + authorFormDTO.getId());
         }
-        authorEntity.setName(authorFormDTO.getName());
-        authorEntity.setBirthDate(authorFormDTO.getBirthDate());
-        authorEntity.setDeathDate(authorFormDTO.getDeathDate());
-        authorEntity.setGender(authorFormDTO.getGender());
-        authorEntity.setCountry(authorFormDTO.getCountry());
         authorDao.save(authorEntity);
         log.info("Updated authorEntity '{}' with id '{}'", authorEntity.getName(), authorEntity.getId());
+    }
+
+    public void addAuthor(AuthorFormDTO authorFormDTO) {
+        Author author = authorMapper.mapToAuthor(authorFormDTO);
+        authorDao.insert(author);
+        log.info("Added author '{}' with id '{}'", author.getName(), author.getId());
     }
 }
