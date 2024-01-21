@@ -12,4 +12,6 @@ public interface AuthorMapper {
     List<AuthorListItemDTO> mapToAuthorListItemDTO(List<Author> authors);
 
     AuthorFormDTO mapToAuthorFormDTO(Author author);
+
+    Author mapToAuthor(AuthorFormDTO authorFormDTO);
 }

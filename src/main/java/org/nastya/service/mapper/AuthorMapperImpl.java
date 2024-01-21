@@ -52,4 +52,16 @@ public class AuthorMapperImpl implements AuthorMapper {
         dto.setCountry(author.getCountry());
         return dto;
     }
+
+    @Override
+    public Author mapToAuthor(AuthorFormDTO authorFormDTO) {
+        Author authorEntity = new Author();
+        authorEntity.setId(authorFormDTO.getId());
+        authorEntity.setName(authorFormDTO.getName());
+        authorEntity.setBirthDate(authorFormDTO.getBirthDate());
+        authorEntity.setDeathDate(authorFormDTO.getDeathDate());
+        authorEntity.setGender(authorFormDTO.getGender());
+        authorEntity.setCountry(authorFormDTO.getCountry());
+        return authorEntity;
+    }
 }
