@@ -22,16 +22,16 @@
           <input matInput placeholder="Gender" formControlName="gender" required>
         </mat-form-field>
         <mat-form-field class="full-width">
-          <input matInput [matDatepicker]="picker" placeholder="Date of Birth" formControlName="birthDate"
+          <input matInput [matDatepicker]="birthDatePicker" placeholder="Date of Birth" formControlName="birthDate"
                  required>
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker-toggle matIconSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #birthDatePicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="full-width">
-          <input matInput [matDatepicker]="picker" placeholder="Date of Death" formControlName="deathDate"
+          <input matInput [matDatepicker]="deathDatePicker" placeholder="Date of Death" formControlName="deathDate"
                  required>
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker-toggle matIconSuffix [for]="deathDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #deathDatePicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="full-width">
           <input matInput placeholder="Country" formControlName="country" required>
