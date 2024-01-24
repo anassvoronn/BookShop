@@ -41,10 +41,10 @@ export class AuthorFormComponent implements OnInit {
         this.authorForm = this.formBuilder.group({
             name: ['', Validators.required],
             gender: ['', Validators.required],
-            birthDate: ['', Validators.required],
-            deathDate: ['', Validators.required],
+            birthDate: [''],
+            deathDate: [''],
             country: ['', Validators.required],
-            age: ['', Validators.required]
+            age: ['']
         });
     }
 
