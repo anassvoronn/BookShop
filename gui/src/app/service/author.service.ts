@@ -24,12 +24,19 @@ export class AuthorService {
     }
 
     updateAuthor(updatedAuthor: Author): Observable<string> {
-        return this.http.put<string>(this.apiUrl, updatedAuthor.toJsonString(),
-            {
-              responseType: 'text' as 'json',
-              headers: {'Content-Type': 'application/json'}
-            }
-        );
+        const requestParams = {
+            responseType: 'text' as 'json',
+            headers: {'Content-Type': 'application/json'}
+        };
+        if (updatedAuthor.id == 0) {
+            return this.http.post<string>(this.apiUrl, updatedAuthor.toJsonString(),
+                requestParams
+            );
+        } else {
+            return this.http.put<string>(this.apiUrl, updatedAuthor.toJsonString(),
+                requestParams
+            );
+        }
     }
 
     deleteAuthor(authorId: number): Observable<string> {
