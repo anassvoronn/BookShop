@@ -52,7 +52,7 @@ export class AuthorFormComponent implements OnInit {
         if (this.authorForm.valid) {
             this.authorService.updateAuthor(
                 new Author(
-                    Number(this.authorId) ?? 0,
+                    this.authorId == null ? 0 : Number(this.authorId),
                     this.authorForm.controls['name']!.value,
                     this.authorForm.controls['gender']!.value,
                     this.authorForm.controls['birthDate']!.value,
