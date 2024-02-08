@@ -15,6 +15,11 @@ export class AuthorFormComponent implements OnInit {
     authorForm!: FormGroup;
     authorId!: string | null;
 
+    genderOptions = [
+        { value: 'MALE', label: 'Male' },
+        { value: 'FEMALE', label: 'Female'}
+    ];
+
     constructor(private formBuilder: FormBuilder,
                 private route: ActivatedRoute,
                 private authorService: AuthorService,

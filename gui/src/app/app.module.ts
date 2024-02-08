@@ -10,6 +10,7 @@ import {AuthorFormComponent} from './author-form/author-form.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCardModule} from "@angular/material/card";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatSelectModule} from "@angular/material/select"
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatInputModule} from "@angular/material/input";
 import {MatNativeDateModule} from "@angular/material/core";
@@ -34,6 +35,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
         HttpClientModule,
         MatCardModule,
         MatFormFieldModule,
+        MatSelectModule,
         MatInputModule,
         MatTableModule,
         MatDatepickerModule,

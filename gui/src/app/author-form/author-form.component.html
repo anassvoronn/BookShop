@@ -19,7 +19,11 @@
           <input matInput placeholder="Name" formControlName="name" required>
         </mat-form-field>
         <mat-form-field class="full-width">
-          <input matInput placeholder="Gender" formControlName="gender" required>
+          <mat-select placeholder="Gender" formControlName="gender">
+            <mat-option *ngFor="let option of genderOptions" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
         <mat-form-field class="full-width">
           <input matInput [matDatepicker]="birthDatePicker" placeholder="Date of Birth" formControlName="birthDate"
