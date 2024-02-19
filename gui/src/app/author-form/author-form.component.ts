@@ -4,6 +4,8 @@ import {ActivatedRoute} from "@angular/router";
 import {Author} from "../entity/author.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {AuthorService} from "../service/author.service";
+import {GenderService} from "../service/gender.service";
+import {Gender} from "../entity/gender.model";
 
 @Component({
     selector: 'app-author-form',
@@ -15,18 +17,23 @@ export class AuthorFormComponent implements OnInit {
     authorForm!: FormGroup;
     authorId!: string | null;
 
-    genderOptions = [
-        { value: 'MALE', label: 'Male' },
-        { value: 'FEMALE', label: 'Female'}
-    ];
+    genderOptions: { value: string, label: string }[] = [];
+
+    fetchGenderOptions(): void {
+        this.genderService.getAllGenders().subscribe(genders => {
+            this.genderOptions = genders;
+        });
+    }
 
     constructor(private formBuilder: FormBuilder,
                 private route: ActivatedRoute,
                 private authorService: AuthorService,
-                private snackBar: MatSnackBar) {
+                private snackBar: MatSnackBar,
+                private genderService: GenderService) {
     }
 
     ngOnInit(): void {
+        this.fetchGenderOptions();
         this.route.paramMap.subscribe((params) => {
             if (params.has('id')) {
                 this.authorId = params.get('id');
