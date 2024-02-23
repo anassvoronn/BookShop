@@ -38,7 +38,11 @@
           <mat-datepicker #deathDatePicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="full-width">
-          <input matInput placeholder="Country" formControlName="country" required>
+          <mat-select placeholder="Country" formControlName="country" required>
+            <mat-option *ngFor="let option of countryOptions" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
         <mat-form-field class="full-width">
           <span *ngIf="authorForm.get('age')?.value == 0 ; else elseBlockForEmptyAge">

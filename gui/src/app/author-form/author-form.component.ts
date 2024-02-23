@@ -6,6 +6,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {AuthorService} from "../service/author.service";
 import {GenderService} from "../service/gender.service";
 import {Gender} from "../entity/gender.model";
+import {CountryService} from "../service/country.service";
+import {Country} from "../entity/country.model";
 
 @Component({
     selector: 'app-author-form',
@@ -25,14 +27,24 @@ export class AuthorFormComponent implements OnInit {
         });
     }
 
+    countryOptions: { value: string, label: string }[] = [];
+
+        fetchCountryOptions(): void {
+            this.countryService.getAllCountry().subscribe(country => {
+                this.countryOptions = country;
+            });
+        }
+
     constructor(private formBuilder: FormBuilder,
                 private route: ActivatedRoute,
                 private authorService: AuthorService,
                 private snackBar: MatSnackBar,
-                private genderService: GenderService) {
+                private genderService: GenderService,
+                private countryService: CountryService) {
     }
 
     ngOnInit(): void {
+        this.fetchCountryOptions();
         this.fetchGenderOptions();
         this.route.paramMap.subscribe((params) => {
             if (params.has('id')) {
