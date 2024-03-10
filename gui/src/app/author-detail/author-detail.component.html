@@ -6,31 +6,24 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form [formGroup]="authorDetail">
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Name" formControlName="name" required readonly>
-        </mat-form-field><br>
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Gender" formControlName="gender" required readonly>
-        </mat-form-field><br>
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Date of Birth" formControlName="birthDate" required readonly>
-        </mat-form-field><br>
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Date of Death" formControlName="deathDate" required readonly>
-        </mat-form-field><br>
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Country" formControlName="country" required readonly>
-        </mat-form-field><br>
-        <mat-form-field class="full-width">
-          <span *ngIf="authorDetail.get('age')?.value == 0 ; else elseBlockForEmptyAge">
-            <input matInput placeholder="Age" required readonly>
-          </span>
-          <ng-template #elseBlockForEmptyAge>
-            <input matInput placeholder="Age" formControlName="age" required readonly>
-          </ng-template>
-        </mat-form-field><br>
-      </form>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Name" value="{{authorDetail.name}}" readonly>
+      </mat-form-field><br>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Gender" value="{{authorDetail.gender}}" readonly>
+      </mat-form-field><br>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Date of Birth" value="{{authorDetail.birthDate}}" readonly>
+      </mat-form-field><br>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Date of Death" value="{{authorDetail.deathDate}}" readonly>
+      </mat-form-field><br>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Country" value="{{authorDetail.country}}" readonly>
+      </mat-form-field><br>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Age" value="{{authorDetail.age}}" readonly>
+      </mat-form-field><br>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button color="warn" routerLink="/author-list">Cancel</button>
