@@ -19,7 +19,7 @@ public class BookDatabaseDao implements BookDao {
 
     static final String ID = "id";
     static final String TITLE = "title";
-    static final String PUBLISHED = "published";
+    static final String PUBLISHING_YEAR = "publishingYear";
     static final String GENRE = "genre";
 
     private static final String REQUEST_BY_ID = "SELECT id, title, published, genre FROM books WHERE id = ?";
@@ -85,7 +85,7 @@ public class BookDatabaseDao implements BookDao {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, book.getTitle());
-            stmt.setInt(2, book.getPublished());
+            stmt.setInt(2, book.getPublishingYear());
             stmt.setString(3, book.getGenre().name());
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -107,7 +107,7 @@ public class BookDatabaseDao implements BookDao {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
             stmt.setString(1, book.getTitle());
-            stmt.setInt(2, book.getPublished());
+            stmt.setInt(2, book.getPublishingYear());
             stmt.setString(3, book.getGenre().name());
             stmt.setInt(4, book.getId());
             stmt.executeUpdate();
@@ -141,7 +141,7 @@ public class BookDatabaseDao implements BookDao {
         Book book = new Book();
         book.setId(rs.getInt(ID));
         book.setTitle(rs.getString(TITLE));
-        book.setPublished(rs.getInt(PUBLISHED));
+        book.setPublishingYear(rs.getInt(PUBLISHING_YEAR));
         book.setGenre(Genre.valueOf(rs.getString(GENRE)));
         return book;
     }

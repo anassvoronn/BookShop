@@ -5,7 +5,7 @@ import org.nastya.entity.Genre;
 public class BookFormDTO {
     private int id;
     private String title;
-    private int published;
+    private int publishingYear;
     private Genre genre;
 
     @Override
@@ -13,7 +13,7 @@ public class BookFormDTO {
         return "BookListItemDTO{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", published=" + published +
+                ", published=" + publishingYear +
                 ", genre='" + genre + '\'' +
                 '}';
     }
@@ -34,12 +34,12 @@ public class BookFormDTO {
         this.title = title;
     }
 
-    public int getPublished() {
-        return published;
+    public int getPublishingYear() {
+        return publishingYear;
     }
 
-    public void setPublished(int published) {
-        this.published = published;
+    public void setPublishingYear(int publishingYear) {
+        this.publishingYear = publishingYear;
     }
 
     public Genre getGenre() {

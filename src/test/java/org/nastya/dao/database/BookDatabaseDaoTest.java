@@ -103,10 +103,10 @@ class BookDatabaseDaoTest {
     void save() {
         List<Book> books = bookDao.findByTitle("Убить сталкера");
         for (Book book : books) {
-            book.setPublished(Integer.parseInt("1875"));
+            book.setPublishingYear(Integer.parseInt("1875"));
             bookDao.save(book);
             Book updatedBook = bookDao.findById(book.getId());
-            assertEquals(Integer.parseInt("1875"), updatedBook.getPublished());
+            assertEquals(Integer.parseInt("1875"), updatedBook.getPublishingYear());
         }
     }
 
@@ -133,7 +133,7 @@ class BookDatabaseDaoTest {
         book.setTitle(title);
         if (published != null) {
             int date = Integer.parseInt(published);
-            book.setPublished(date);
+            book.setPublishingYear(date);
         }
         book.setGenre(genre);
         return book;

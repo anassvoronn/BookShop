@@ -22,7 +22,7 @@ public class BookMapperImpl implements BookMapper {
         BookListItemDTO dto = new BookListItemDTO();
         dto.setId(book.getId());
         dto.setTitle(book.getTitle());
-        dto.setPublished(book.getPublished());
+        dto.setPublishingYear(book.getPublishingYear());
         dto.setGenre(book.getGenre());
         return dto;
     }
@@ -44,7 +44,7 @@ public class BookMapperImpl implements BookMapper {
         BookFormDTO dto = new BookFormDTO();
         dto.setId(book.getId());
         dto.setTitle(book.getTitle());
-        dto.setPublished(book.getPublished());
+        dto.setPublishingYear(book.getPublishingYear());
         dto.setGenre(book.getGenre());
         return dto;
     }
@@ -54,7 +54,7 @@ public class BookMapperImpl implements BookMapper {
         Book bookEntity = new Book();
         bookEntity.setId(BookFormDTO.getId());
         bookEntity.setTitle(BookFormDTO.getTitle());
-        bookEntity.setPublished(BookFormDTO.getPublished());
+        bookEntity.setPublishingYear(BookFormDTO.getPublishingYear());
         bookEntity.setGenre(BookFormDTO.getGenre());
         return bookEntity;
     }
