@@ -74,7 +74,7 @@ class BookDatabaseDaoTest {
     }
 
     @Test
-    void deleteAsMuchId() {
+    void DeletingSeveralBooksByID() {
         int idToDelete1 = 1;
         int idToDelete5 = 5;
         int idToDelete10 = 10;

@@ -39,11 +39,11 @@ public class BookService {
     public void deleteBook(int bookId) throws BookNotFoundException {
         Book book = bookDao.findById(bookId);
         if (book == null) {
-            log.info("Author with id '{}' was not found", bookId);
+            log.info("Book with id '{}' was not found", bookId);
             throw new BookNotFoundException("There is no book with this id " + bookId);
         }
         bookDao.deleteById(bookId);
-        log.info("Deleted author '{}' with id '{}'", book.getTitle(), book.getId());
+        log.info("Deleted book '{}' with id '{}'", book.getTitle(), book.getId());
     }
 
     public void addBook(BookFormDTO bookFormDTO) {

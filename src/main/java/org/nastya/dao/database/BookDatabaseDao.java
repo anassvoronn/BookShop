@@ -27,7 +27,7 @@ public class BookDatabaseDao implements BookDao {
     private static final String INSERT = "INSERT INTO books (title, published, genre) VALUES (?, ?, ?)";
     private static final String UPDATE = "UPDATE books SET title = ?, published = ?, genre = ? WHERE id = ?";
     private static final String DELETION_BY_ID = "DELETE FROM books WHERE id = ?";
-    private static final String DELETE_FROM_AUTHORS = "DELETE FROM books";
+    private static final String DELETE_FROM_BOOKS = "DELETE FROM books";
     private static final String SELECT_BY_NAME = "SELECT * FROM books WHERE title=?";
 
 
@@ -95,7 +95,7 @@ public class BookDatabaseDao implements BookDao {
             if (generatedKeys.next()) {
                 return generatedKeys.getInt(1);
             } else {
-                throw new SQLException("Inserting author failed, no ID obtained.");
+                throw new SQLException("Inserting book failed, no ID obtained.");
             }
         } catch (SQLException e) {
             throw new RuntimeException("Insert failed", e);
@@ -131,7 +131,7 @@ public class BookDatabaseDao implements BookDao {
     public void deleteAll() {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate(DELETE_FROM_AUTHORS);
+            stmt.executeUpdate(DELETE_FROM_BOOKS);
         } catch (SQLException e) {
             throw new RuntimeException("Delete all failed", e);
         }

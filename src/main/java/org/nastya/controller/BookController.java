@@ -21,7 +21,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public List<BookListItemDTO> getAllUsers() {
+    public List<BookListItemDTO> getAllBooks() {
         log.info("Getting all books");
         return bookService.findAll();
     }

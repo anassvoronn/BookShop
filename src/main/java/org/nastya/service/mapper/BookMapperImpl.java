@@ -40,7 +40,7 @@ public class BookMapperImpl implements BookMapper {
 
     @Override
     public BookFormDTO mapToBookFormDTO(Book book) {
-        log.info("Mapping author '{}' with name '{}' to AuthorFormDTO", book.getId(), book.getTitle());
+        log.info("Mapping book '{}' with name '{}' to BookFormDTO", book.getId(), book.getTitle());
         BookFormDTO dto = new BookFormDTO();
         dto.setId(book.getId());
         dto.setTitle(book.getTitle());
