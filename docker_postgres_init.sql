@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS public.books
 (
     id bigint NOT NULL DEFAULT nextval('books_id_seq'::regclass),
     title character varying(255) COLLATE pg_catalog."default",
-    "publishingYear" integer,
+    publishingyear integer,
     genre character varying(50) COLLATE pg_catalog."default"
 )
 
