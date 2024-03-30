@@ -74,7 +74,7 @@ class BookDatabaseDaoTest {
     }
 
     @Test
-    void DeletingSeveralBooksByID() {
+    void deletingSeveralBooksByID() {
         int idToDelete1 = 1;
         int idToDelete5 = 5;
         int idToDelete10 = 10;
@@ -103,10 +103,10 @@ class BookDatabaseDaoTest {
     void save() {
         List<Book> books = bookDao.findByTitle("Убить сталкера");
         for (Book book : books) {
-            book.setPublishingYear(Integer.parseInt("1875"));
+            book.setPublishingYear(1875);
             bookDao.save(book);
             Book updatedBook = bookDao.findById(book.getId());
-            assertEquals(Integer.parseInt("1875"), updatedBook.getPublishingYear());
+            assertEquals(1875, updatedBook.getPublishingYear());
         }
     }
 
