@@ -123,16 +123,16 @@ class BookDatabaseDaoTest {
         assertNull(bookDao.findById(idToDelete), "No such ID exists");
     }
 
-    private void insertBookToDatabase(String title, String published, Genre genre) {
-        Book book = createBook(title, published, genre);
+    private void insertBookToDatabase(String title, String publishingYear, Genre genre) {
+        Book book = createBook(title, publishingYear, genre);
         bookDao.insert(book);
     }
 
-    private Book createBook(String title, String published, Genre genre) {
+    private Book createBook(String title, String publishingYear, Genre genre) {
         Book book = new Book();
         book.setTitle(title);
-        if (published != null) {
-            int date = Integer.parseInt(published);
+        if (publishingYear != null) {
+            int date = Integer.parseInt(publishingYear);
             book.setPublishingYear(date);
         }
         book.setGenre(genre);

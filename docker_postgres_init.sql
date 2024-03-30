@@ -20,3 +20,16 @@ ALTER TABLE IF EXISTS public.authors
     OWNER to postgres;
 
 ALTER TABLE authors ADD COLUMN death_date DATE;
+
+CREATE TABLE IF NOT EXISTS public.books
+(
+    id bigint NOT NULL DEFAULT nextval('books_id_seq'::regclass),
+    title character varying(255) COLLATE pg_catalog."default",
+    "publishingYear" integer,
+    genre character varying(50) COLLATE pg_catalog."default"
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.books
+    OWNER to postgres;

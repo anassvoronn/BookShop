@@ -22,10 +22,10 @@ public class BookDatabaseDao implements BookDao {
     static final String PUBLISHING_YEAR = "publishingYear";
     static final String GENRE = "genre";
 
-    private static final String REQUEST_BY_ID = "SELECT id, title, published, genre FROM books WHERE id = ?";
-    private static final String SELECT = "SELECT id, title, published, genre FROM books";
-    private static final String INSERT = "INSERT INTO books (title, published, genre) VALUES (?, ?, ?)";
-    private static final String UPDATE = "UPDATE books SET title = ?, published = ?, genre = ? WHERE id = ?";
+    private static final String REQUEST_BY_ID = "SELECT id, title, publishingYear, genre FROM books WHERE id = ?";
+    private static final String SELECT = "SELECT id, title, publishingYear, genre FROM books";
+    private static final String INSERT = "INSERT INTO books (title, publishingYear, genre) VALUES (?, ?, ?)";
+    private static final String UPDATE = "UPDATE books SET title = ?, publishingYear = ?, genre = ? WHERE id = ?";
     private static final String DELETION_BY_ID = "DELETE FROM books WHERE id = ?";
     private static final String DELETE_FROM_BOOKS = "DELETE FROM books";
     private static final String SELECT_BY_NAME = "SELECT * FROM books WHERE title=?";
