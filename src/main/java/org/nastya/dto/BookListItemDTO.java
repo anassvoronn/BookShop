@@ -1,7 +1,8 @@
-package org.nastya.entity;
+package org.nastya.dto;
 
-public class Book {
+import org.nastya.entity.Genre;
 
+public class BookListItemDTO {
     private int id;
     private String title;
     private int published;
@@ -9,10 +10,10 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{" +
+        return "BookListItemDTO{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", published='" + published + '\'' +
+                ", published=" + published +
                 ", genre='" + genre + '\'' +
                 '}';
     }

@@ -2,6 +2,7 @@ package org.nastya.dao.database;
 
 import org.nastya.dao.BookDao;
 import org.nastya.entity.Book;
+import org.nastya.entity.Genre;
 import org.springframework.stereotype.Repository;
 
 
@@ -85,7 +86,7 @@ public class BookDatabaseDao implements BookDao {
              PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, book.getTitle());
             stmt.setInt(2, book.getPublished());
-            stmt.setString(3, book.getGenre());
+            stmt.setString(3, book.getGenre().name());
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating book failed, no rows affected.");
@@ -107,7 +108,7 @@ public class BookDatabaseDao implements BookDao {
              PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
             stmt.setString(1, book.getTitle());
             stmt.setInt(2, book.getPublished());
-            stmt.setString(3, book.getGenre());
+            stmt.setString(3, book.getGenre().name());
             stmt.setInt(4, book.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -141,7 +142,7 @@ public class BookDatabaseDao implements BookDao {
         book.setId(rs.getInt(ID));
         book.setTitle(rs.getString(TITLE));
         book.setPublished(rs.getInt(PUBLISHED));
-        book.setGenre(rs.getString(GENRE));
+        book.setGenre(Genre.valueOf(rs.getString(GENRE)));
         return book;
     }
 }

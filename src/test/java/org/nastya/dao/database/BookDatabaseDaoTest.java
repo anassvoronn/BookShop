@@ -135,7 +135,7 @@ class BookDatabaseDaoTest {
             int date = Integer.parseInt(published);
             book.setPublished(date);
         }
-        book.setGenre(String.valueOf(genre));
+        book.setGenre(genre);
         return book;
     }
 }
