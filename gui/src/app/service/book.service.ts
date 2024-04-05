@@ -17,7 +17,7 @@ export class BookService {
     }
 
     getById(bookId: string | null) {
-        return this.http.get<book>(this.apiUrl + "/" + bookId);
+        return this.http.get<Book>(this.apiUrl + "/" + bookId);
     }
 
     addBook(book: Book): void {

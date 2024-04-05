@@ -4,7 +4,7 @@ export class Book {
     private readonly _publishingYear: number;
     private readonly _genre: string;
 
-    constructor(_id: number, _title: string, _publishingYear: number, _genre: string){
+    constructor(id: number, title: string, publishingYear: number, genre: string){
         this._id = id;
         this._title = title;
         this._publishingYear = publishingYear;

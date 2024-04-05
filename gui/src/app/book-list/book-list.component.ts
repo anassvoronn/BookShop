@@ -10,15 +10,15 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class BookListComponent implements OnInit {
     books: Book[] = [];
-    displayedColumns: string[] = ['title', 'publishingYear', 'genre'];
+    displayedColumns: string[] = ['title', 'publishingYear', 'genre', 'actions'];
 
     constructor(
-        private BookService: BookService,
+        private bookService: BookService,
         private snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
-        this.bookService.getAllBooks().subscribe(books => {
+        this.bookService.getAllBooks().subscribe((books: Book[]) => {
             this.books = books;
         });
     }

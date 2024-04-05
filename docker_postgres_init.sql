@@ -33,3 +33,5 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.books
     OWNER to postgres;
+
+    ALTER TABLE books ADD COLUMN actions VARCHAR;

@@ -1,0 +1,23 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        {{ "Detail Book" }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Title" value="{{bookDetail.title}}" readonly>
+      </mat-form-field><br>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Publishing Year" value="{{bookDetail.publishingYear}}" readonly>
+      </mat-form-field><br>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Genre" value="{{bookDetail.genre}}" readonly>
+      </mat-form-field><br>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="warn" routerLink="/book-list">Cancel</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
