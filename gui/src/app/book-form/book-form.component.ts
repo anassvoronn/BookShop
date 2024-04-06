@@ -18,11 +18,12 @@ export class BookFormComponent implements OnInit {
     bookId!: string | null;
 
     genreOptions: { value: string, label: string }[] = [];
-         fetchGenreOptions(): void {
-             this.genreService.getAllGenre().subscribe(genre => {
-             this.genreOptions = genre;
-             });
-         }
+
+    fetchGenreOptions(): void {
+        this.genreService.getAllGenres().subscribe(genres => {
+            this.genreOptions = genres;
+        });
+    }
 
     constructor(private formBuilder: FormBuilder,
                 private route: ActivatedRoute,

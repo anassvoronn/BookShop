@@ -22,7 +22,7 @@
           <input matInput type="number" placeholder="Publishing Year" formControlName="publishingYear" required>
         </mat-form-field>
         <mat-form-field class="full-width">
-          <mat-select placeholder="Genre" formControlName="genre">
+          <mat-select placeholder="Genre" formControlName="genre" required>
             <mat-option *ngFor="let option of genreOptions" [value]="option.value">
               {{ option.label }}
             </mat-option>

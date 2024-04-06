@@ -1,12 +1,12 @@
 package org.nastya.entity;
 
 public enum Genre {
-    FANTASY("fantasy"),
-    DETECTIVE("detective"),
-    NOVEL("novel"),
-    ADVENTURE("adventure"),
-    PSYCHOLOGY("psychology"),
-    HORROR("horror");
+    FANTASY("Fantasy"),
+    DETECTIVE("Detective"),
+    NOVEL("Novel"),
+    ADVENTURE("Adventure"),
+    PSYCHOLOGY("Psychology"),
+    HORROR("Horror");
 
     private final String label;
 
