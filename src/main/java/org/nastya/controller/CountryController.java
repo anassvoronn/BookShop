@@ -22,6 +22,6 @@ public class CountryController {
 
     @GetMapping
     public List<CountryOptionDTO> getAllCountry() {
-        return countryService.getAllCountry();
+        return countryService.getAllCountries();
     }
 }

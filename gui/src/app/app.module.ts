@@ -18,13 +18,19 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatTableModule} from "@angular/material/table";
 import {HttpClientModule} from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {BookListComponent} from "./book-list/book-list.component";
+import {BookDetailComponent} from './book-detail/book-detail.component';
+import {BookFormComponent} from './book-form/book-form.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         AuthorListComponent,
+        BookListComponent,
         AuthorDetailComponent,
+        BookDetailComponent,
         AuthorFormComponent,
+        BookFormComponent,
     ],
     imports: [
         BrowserModule,
