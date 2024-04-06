@@ -64,18 +64,18 @@ export class BookFormComponent implements OnInit {
                     this.bookForm.controls['genre']!.value
                 )
             ).subscribe(
-                         (responseText: string) => {
-                             this.snackBar.open(responseText, 'Close', {
-                                 duration: 15000, // Set the duration for which the message will be displayed
-                             });
-                             this.ngOnInit();
-                         },
-                         error => {
-                             this.snackBar.open('Error updating book: ' + error.message, 'Close', {
-                                 duration: 15000,
-                             });
-                         }
-                     );
+               (responseText: string) => {
+                   this.snackBar.open(responseText, 'Close', {
+                       duration: 15000, // Set the duration for which the message will be displayed
+                   });
+                   this.ngOnInit();
+               },
+               error => {
+                   this.snackBar.open('Error updating book: ' + error.message, 'Close', {
+                       duration: 15000,
+                   });
+               }
+           );
         }
     }
 }
