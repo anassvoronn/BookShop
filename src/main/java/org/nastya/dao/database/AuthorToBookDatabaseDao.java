@@ -17,13 +17,13 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
     static final String AUTHOR_ID = "authorId";
     static final String BOOK_ID = "bookId";
 
-    private static final String SELECT_BOOK_ID = "SELECT bookId FROM authorToBook WHERE authorId = ?";
-    private static final String SELECT_AUTHOR_ID = "SELECT authorId FROM authorToBook WHERE bookId = ?";
-    private static final String INSERT = "INSERT INTO authorToBook (authorId, bookId) VALUES (?, ?)";
-    private static final String UPDATE = "UPDATE authorToBook SET authorId = ?, bookId = ?, WHERE authorId = ?";
-    private static final String DELETE_FROM_AUTHOR_TO_BOOK = "DELETE FROM authorToBook";
-    private static final String DELETE_BY_BOOK_ID = "DELETE FROM authorToBook WHERE bookId = ?";
-    private static final String DELETE_BY_AUTHOR_ID = "DELETE FROM authorToBook WHERE authorId = ?";
+    private static final String SELECT_BOOK_ID = "SELECT bookId FROM author_To_Book WHERE authorId = ?";
+    private static final String SELECT_AUTHOR_ID = "SELECT authorId FROM author_To_Book WHERE bookId = ?";
+    private static final String INSERT = "INSERT INTO author_To_Book (authorId, bookId) VALUES (?, ?)";
+    private static final String UPDATE = "UPDATE author_To_Book SET authorId = ?, bookId = ?, WHERE authorId = ?";
+    private static final String DELETE_FROM_AUTHOR_TO_BOOK = "DELETE FROM author_To_Book";
+    private static final String DELETE_BY_BOOK_ID = "DELETE FROM author_To_Book WHERE bookId = ?";
+    private static final String DELETE_BY_AUTHOR_ID = "DELETE FROM author_To_Book WHERE authorId = ?";
 
 
     @Override
