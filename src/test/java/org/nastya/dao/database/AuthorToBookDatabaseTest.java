@@ -4,10 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nastya.dao.AuthorToBookDao;
-import org.nastya.entity.Author;
 import org.nastya.entity.AuthorToBook;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,6 +81,28 @@ public class AuthorToBookDatabaseTest {
         int idToDelete = 1;
         List<AuthorToBook> result = authorToBookDao.findByBookId(idToDelete);
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testSave() {
+        AuthorToBook authorToBook = new AuthorToBook();
+        authorToBook.setAuthorId(5);
+        authorToBook.setBookId(6);
+        authorToBookDao.save(authorToBook);
+        List<AuthorToBook> updatedAuthorToBooks = authorToBookDao.findByAuthorId(5);
+        assertEquals(9, updatedAuthorToBooks.size());
+        assertEquals(5, updatedAuthorToBooks.get(0).getAuthorId());
+        assertEquals(6, updatedAuthorToBooks.get(0).getBookId());
+    }
+
+    @Test
+    void testInsert() {
+        AuthorToBook authorToBook = new AuthorToBook();
+        authorToBook.setAuthorId(1);
+        authorToBook.setBookId(2);
+        authorToBookDao.insert(authorToBook);
+        assertEquals(1, authorToBook.getAuthorId());
+        assertEquals(2, authorToBook.getBookId());
     }
 
     private void insertAuthorToBookDatabase(int authorId, int bookId) {
