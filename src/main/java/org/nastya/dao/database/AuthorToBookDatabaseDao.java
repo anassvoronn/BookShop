@@ -17,8 +17,8 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
     static final String AUTHOR_ID = "authorId";
     static final String BOOK_ID = "bookId";
 
-    private static final String SELECT_BOOK_ID = "SELECT bookId FROM author_To_Book WHERE authorId = ?";
-    private static final String SELECT_AUTHOR_ID = "SELECT authorId FROM author_To_Book WHERE bookId = ?";
+    private static final String SELECT_AUTHOR_ID = "SELECT * FROM author_To_Book WHERE authorId = ?";
+    private static final String SELECT_BOOK_ID = "SELECT * FROM author_To_Book WHERE bookId = ?";
     private static final String INSERT = "INSERT INTO author_To_Book (authorId, bookId) VALUES (?, ?)";
     private static final String UPDATE = "UPDATE author_To_Book SET authorId = ?, bookId = ?, WHERE authorId = ?";
     private static final String DELETE_FROM_AUTHOR_TO_BOOK = "DELETE FROM author_To_Book";
@@ -74,7 +74,7 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
             if (generatedKeys.next()) {
                 return generatedKeys.getInt(1);
             } else {
-                throw new SQLException("Inserting author failed, no ID obtained.");
+                throw new SQLException("Inserting authorToBook failed, no ID obtained.");
             }
         } catch (SQLException e) {
             throw new RuntimeException("Insert failed", e);

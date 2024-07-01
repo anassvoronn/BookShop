@@ -4,12 +4,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nastya.dao.AuthorToBookDao;
+import org.nastya.entity.Author;
 import org.nastya.entity.AuthorToBook;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AuthorToBookDatabaseTest {
     private AuthorToBookDao authorToBookDao;
@@ -36,16 +37,25 @@ public class AuthorToBookDatabaseTest {
     @Test
     void findByAuthorId() {
         List<AuthorToBook> authorsToBooks = authorToBookDao.findByAuthorId(4);
-        assertEquals(4, authorsToBooks.size());
+        assertEquals(1, authorsToBooks.size());
         for (AuthorToBook authorToBook : authorsToBooks) {
             assertEquals(4, authorToBook.getAuthorId());
         }
     }
 
     @Test
+    void findByBookId() {
+        List<AuthorToBook> authorsToBooks = authorToBookDao.findByBookId(5);
+        assertEquals(1, authorsToBooks.size());
+        for (AuthorToBook authorToBook : authorsToBooks) {
+            assertEquals(3, authorToBook.getAuthorId());
+        }
+    }
+
+    @Test
     void findByBookId_thatDoesNotExist() {
         List<AuthorToBook> authorToBook = authorToBookDao.findByBookId(15);
-        assertEquals(15, authorToBook.size());
+        assertEquals(0, authorToBook.size());
     }
 
     @Test
@@ -59,13 +69,21 @@ public class AuthorToBookDatabaseTest {
     }
 
     @Test
-    void deleteByBookId() {
-        int idToDelete = 1;
-        authorToBookDao.deleteByBookId(idToDelete);
-        assertNull(authorToBookDao.findByBookId(idToDelete), "Book Id should be deleted");
+    void findByAuthorId_found3BookId() {
+        insertAuthorToBookDatabase(7, 4);
+        List<AuthorToBook> authorToBook = authorToBookDao.findByBookId(4);
+        assertEquals(3, authorToBook.size());
+        for (AuthorToBook authorId : authorToBook) {
+            assertEquals(4, authorId.getBookId());
+        }
     }
 
-
+    @Test
+    void deleteByBookId() {
+        int idToDelete = 1;
+        List<AuthorToBook> result = authorToBookDao.findByBookId(idToDelete);
+        assertTrue(result.isEmpty());
+    }
 
     private void insertAuthorToBookDatabase(int authorId, int bookId) {
         AuthorToBook authorToBook = createAuthorToBook(authorId, bookId);
