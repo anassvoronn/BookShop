@@ -20,7 +20,6 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
     private static final String SELECT_AUTHOR_ID = "SELECT * FROM author_To_Book WHERE authorId = ?";
     private static final String SELECT_BOOK_ID = "SELECT * FROM author_To_Book WHERE bookId = ?";
     private static final String INSERT = "INSERT INTO author_To_Book (authorId, bookId) VALUES (?, ?)";
-    private static final String UPDATE = "UPDATE author_To_Book SET authorId = ?, bookId = ?";
     private static final String DELETE_FROM_AUTHOR_TO_BOOK = "DELETE FROM author_To_Book";
     private static final String DELETE_BY_BOOK_ID = "DELETE FROM author_To_Book WHERE bookId = ?";
     private static final String DELETE_BY_AUTHOR_ID = "DELETE FROM author_To_Book WHERE authorId = ?";
@@ -45,19 +44,19 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
 
     @Override
     public List<AuthorToBook> findByBookId(int id) {
-        List<AuthorToBook> bookId = new ArrayList<>();
+        List<AuthorToBook> authorToBooks = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(SELECT_BOOK_ID)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 AuthorToBook authorToBook = bindAuthorToBook(rs);
-                bookId.add(authorToBook);
+                authorToBooks.add(authorToBook);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Find by bookId failed", e);
+            throw new RuntimeException("Find by authorToBooks failed", e);
         }
-        return bookId;
+        return authorToBooks;
     }
 
     @Override
@@ -78,18 +77,6 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException("Insert failed", e);
-        }
-    }
-
-    @Override
-    public void save(AuthorToBook authorToBook) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
-            stmt.setInt(1, authorToBook.getAuthorId());
-            stmt.setInt(2, authorToBook.getBookId());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Save failed", e);
         }
     }
 
@@ -125,7 +112,7 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
         }
     }
 
-    private AuthorToBook bindAuthorToBook(ResultSet rs) throws SQLException{
+    private AuthorToBook bindAuthorToBook(ResultSet rs) throws SQLException {
         AuthorToBook authorToBook = new AuthorToBook();
         authorToBook.setAuthorId(rs.getInt(AUTHOR_ID));
         authorToBook.setBookId(rs.getInt(BOOK_ID));

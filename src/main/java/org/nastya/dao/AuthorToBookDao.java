@@ -12,8 +12,6 @@ public interface AuthorToBookDao {
 
     int insert(AuthorToBook authorToBook);
 
-    void save(AuthorToBook authorToBook);
-
     void deleteByAuthorId(int id);
 
     void deleteByBookId(int id);

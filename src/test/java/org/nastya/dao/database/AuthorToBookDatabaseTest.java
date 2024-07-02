@@ -14,7 +14,7 @@ public class AuthorToBookDatabaseTest {
     private AuthorToBookDao authorToBookDao;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         authorToBookDao = new AuthorToBookDatabaseDao();
         insertAuthorToBookDatabase(1, 2);
         insertAuthorToBookDatabase(2, 3);
@@ -34,16 +34,18 @@ public class AuthorToBookDatabaseTest {
 
     @Test
     void findByAuthorId() {
-        List<AuthorToBook> authorsToBooks = authorToBookDao.findByAuthorId(4);
+        int currentAuthorId = 4;
+        List<AuthorToBook> authorsToBooks = authorToBookDao.findByAuthorId(currentAuthorId);
         assertEquals(1, authorsToBooks.size());
         for (AuthorToBook authorToBook : authorsToBooks) {
-            assertEquals(4, authorToBook.getAuthorId());
+            assertEquals(currentAuthorId, authorToBook.getAuthorId());
         }
     }
 
     @Test
     void findByBookId() {
-        List<AuthorToBook> authorsToBooks = authorToBookDao.findByBookId(5);
+        int currentBookId = 5;
+        List<AuthorToBook> authorsToBooks = authorToBookDao.findByBookId(currentBookId);
         assertEquals(1, authorsToBooks.size());
         for (AuthorToBook authorToBook : authorsToBooks) {
             assertEquals(3, authorToBook.getAuthorId());
@@ -57,52 +59,98 @@ public class AuthorToBookDatabaseTest {
     }
 
     @Test
+    void findByAuthorId_thatDoesNotExist() {
+        List<AuthorToBook> authorToBook = authorToBookDao.findByAuthorId(10);
+        assertEquals(0, authorToBook.size());
+    }
+
+    @Test
     void findByAuthorId_found2AuthorId() {
-        insertAuthorToBookDatabase(7, 6);
-        List<AuthorToBook> authorToBook = authorToBookDao.findByAuthorId(7);
+        int currentAuthorId = 7;
+        insertAuthorToBookDatabase(currentAuthorId, 6);
+        List<AuthorToBook> authorToBook = authorToBookDao.findByAuthorId(currentAuthorId);
         assertEquals(2, authorToBook.size());
         for (AuthorToBook authorId : authorToBook) {
-            assertEquals(7, authorId.getAuthorId());
+            assertEquals(currentAuthorId, authorId.getAuthorId());
         }
     }
 
     @Test
-    void findByAuthorId_found3BookId() {
-        insertAuthorToBookDatabase(7, 4);
-        List<AuthorToBook> authorToBook = authorToBookDao.findByBookId(4);
+    void findByBookId_found3BookId() {
+        int currentBookId = 4;
+        insertAuthorToBookDatabase(7, currentBookId);
+        List<AuthorToBook> authorToBook = authorToBookDao.findByBookId(currentBookId);
         assertEquals(3, authorToBook.size());
         for (AuthorToBook authorId : authorToBook) {
-            assertEquals(4, authorId.getBookId());
+            assertEquals(currentBookId, authorId.getBookId());
         }
     }
 
     @Test
     void deleteByBookId() {
-        int idToDelete = 1;
-        List<AuthorToBook> result = authorToBookDao.findByBookId(idToDelete);
-        assertTrue(result.isEmpty());
+        int currentBookId = 4;
+        List<AuthorToBook> beforeDeletion = authorToBookDao.findByBookId(currentBookId);
+        assertEquals(2, beforeDeletion.size());
+        authorToBookDao.deleteByBookId(currentBookId);
+        List<AuthorToBook> afterDeletion = authorToBookDao.findByBookId(currentBookId);
+        assertTrue(afterDeletion.isEmpty());
     }
 
     @Test
-    void testSave() {
-        AuthorToBook authorToBook = new AuthorToBook();
-        authorToBook.setAuthorId(5);
-        authorToBook.setBookId(6);
-        authorToBookDao.save(authorToBook);
-        List<AuthorToBook> updatedAuthorToBooks = authorToBookDao.findByAuthorId(5);
-        assertEquals(9, updatedAuthorToBooks.size());
-        assertEquals(5, updatedAuthorToBooks.get(0).getAuthorId());
-        assertEquals(6, updatedAuthorToBooks.get(0).getBookId());
+    void deleteByAuthorId() {
+        int currentAuthorId = 2;
+        insertAuthorToBookDatabase(currentAuthorId, 4);
+        insertAuthorToBookDatabase(currentAuthorId, 7);
+        insertAuthorToBookDatabase(currentAuthorId, 9);
+        List<AuthorToBook> beforeDeletion = authorToBookDao.findByAuthorId(currentAuthorId);
+        assertEquals(4, beforeDeletion.size());
+        authorToBookDao.deleteByAuthorId(currentAuthorId);
+        List<AuthorToBook> afterDeletion = authorToBookDao.findByAuthorId(currentAuthorId);
+        assertTrue(afterDeletion.isEmpty());
     }
 
     @Test
     void testInsert() {
         AuthorToBook authorToBook = new AuthorToBook();
-        authorToBook.setAuthorId(1);
-        authorToBook.setBookId(2);
+        int authorId = 1;
+        authorToBook.setAuthorId(authorId);
+        int bookId = 2;
+        authorToBook.setBookId(bookId);
+        List<AuthorToBook> beforeByAuthorId = authorToBookDao.findByAuthorId(authorId);
+        List<AuthorToBook> beforeByBookId = authorToBookDao.findByBookId(bookId);
         authorToBookDao.insert(authorToBook);
-        assertEquals(1, authorToBook.getAuthorId());
-        assertEquals(2, authorToBook.getBookId());
+        List<AuthorToBook> afterByAuthorId = authorToBookDao.findByAuthorId(authorId);
+        List<AuthorToBook> afterByBookId = authorToBookDao.findByBookId(bookId);
+        assertEquals(beforeByAuthorId.size() + 1, afterByAuthorId.size());
+        assertEquals(beforeByBookId.size() + 1, afterByBookId.size());
+    }
+
+    @Test
+    public void deleteAllByBookId() {
+        List<AuthorToBook> authorsToBooks = authorToBookDao.findByBookId(3);
+        assertEquals(2, authorsToBooks.size());
+        authorToBookDao.deleteAll();
+        authorsToBooks = authorToBookDao.findByBookId(3);
+        assertEquals(0, authorsToBooks.size());
+    }
+
+    @Test
+    public void deleteAllByAuthorId() {
+        int currentAuthorId = 6;
+        insertAuthorToBookDatabase(currentAuthorId, 1);
+        insertAuthorToBookDatabase(currentAuthorId, 5);
+        insertAuthorToBookDatabase(currentAuthorId, 3);
+        List<AuthorToBook> authorsToBooks = authorToBookDao.findByAuthorId(6);
+        assertEquals(4, authorsToBooks.size());
+        authorToBookDao.deleteAll();
+        authorsToBooks = authorToBookDao.findByAuthorId(6);
+        assertEquals(0, authorsToBooks.size());
+    }
+
+    @Test
+    public void findByBookId_nothingFound() {
+        List<AuthorToBook> authorsToBooks = authorToBookDao.findByBookId(12);
+        assertEquals(0, authorsToBooks.size());
     }
 
     private void insertAuthorToBookDatabase(int authorId, int bookId) {
