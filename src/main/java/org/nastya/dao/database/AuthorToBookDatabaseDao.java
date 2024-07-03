@@ -27,36 +27,36 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
 
     @Override
     public List<AuthorToBook> findByAuthorId(int id) {
-        List<AuthorToBook> authorId = new ArrayList<>();
+        List<AuthorToBook> connections = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(SELECT_AUTHOR_ID)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 AuthorToBook authorToBook = bindAuthorToBook(rs);
-                authorId.add(authorToBook);
+                connections.add(authorToBook);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Find by authorId failed", e);
         }
-        return authorId;
+        return connections;
     }
 
     @Override
     public List<AuthorToBook> findByBookId(int id) {
-        List<AuthorToBook> authorToBooks = new ArrayList<>();
+        List<AuthorToBook> connections = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement stmt = conn.prepareStatement(SELECT_BOOK_ID)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 AuthorToBook authorToBook = bindAuthorToBook(rs);
-                authorToBooks.add(authorToBook);
+                connections.add(authorToBook);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Find by authorToBooks failed", e);
         }
-        return authorToBooks;
+        return connections;
     }
 
     @Override

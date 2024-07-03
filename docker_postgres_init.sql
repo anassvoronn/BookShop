@@ -33,3 +33,14 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.books
     OWNER to postgres;
+
+CREATE TABLE IF NOT EXISTS public.author_to_book
+(
+    authorid integer,
+    bookid integer
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.author_to_book
+    OWNER to postgres;
