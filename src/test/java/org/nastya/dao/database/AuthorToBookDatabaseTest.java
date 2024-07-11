@@ -9,6 +9,7 @@ import org.nastya.entity.AuthorToBook;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.nastya.utils.ObjectCreator.createAuthorToBook;
 
 public class AuthorToBookDatabaseTest {
     private AuthorToBookDao authorToBookDao;
@@ -156,12 +157,5 @@ public class AuthorToBookDatabaseTest {
     private void insertAuthorToBookDatabase(int authorId, int bookId) {
         AuthorToBook authorToBook = createAuthorToBook(authorId, bookId);
         authorToBookDao.insert(authorToBook);
-    }
-
-    private AuthorToBook createAuthorToBook(int authorId, int bookId) {
-        AuthorToBook authorToBook = new AuthorToBook();
-        authorToBook.setAuthorId(authorId);
-        authorToBook.setBookId(bookId);
-        return authorToBook;
     }
 }

@@ -20,6 +20,7 @@ import static org.nastya.entity.Country.UKRAINE;
 import static org.nastya.entity.Country.USA;
 import static org.nastya.entity.Gender.FEMALE;
 import static org.nastya.entity.Gender.MALE;
+import static org.nastya.utils.ObjectCreator.createAuthor;
 
 class AuthorDatabaseDaoTest {
     private AuthorDao authorDao;
@@ -120,21 +121,6 @@ class AuthorDatabaseDaoTest {
         authorDao.insert(author);
     }
 
-    private Author createAuthor(String name, String birthDate, String deathDate, Gender gender, Country country) {
-        Author author = new Author();
-        author.setName(name);
-        if (birthDate != null) {
-            LocalDate date = LocalDate.parse(birthDate);
-            author.setBirthDate(date);
-        }
-        if (deathDate != null) {
-            LocalDate dateOfDeath = LocalDate.parse(deathDate);
-            author.setDeathDate(dateOfDeath);
-        }
-        author.setGender(gender);
-        author.setCountry(country);
-        return author;
-    }
 
     @Test
     public void findByGenderOrByCountry() {

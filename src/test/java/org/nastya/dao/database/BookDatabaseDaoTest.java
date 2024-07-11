@@ -9,6 +9,7 @@ import org.nastya.entity.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.nastya.utils.ObjectCreator.createBook;
 
 class BookDatabaseDaoTest {
     private BookDao bookDao;
@@ -126,16 +127,5 @@ class BookDatabaseDaoTest {
     private void insertBookToDatabase(String title, String publishingYear, Genre genre) {
         Book book = createBook(title, publishingYear, genre);
         bookDao.insert(book);
-    }
-
-    private Book createBook(String title, String publishingYear, Genre genre) {
-        Book book = new Book();
-        book.setTitle(title);
-        if (publishingYear != null) {
-            int date = Integer.parseInt(publishingYear);
-            book.setPublishingYear(date);
-        }
-        book.setGenre(genre);
-        return book;
     }
 }
