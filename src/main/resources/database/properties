@@ -1,0 +1,3 @@
+DB_URL = jdbc:postgresql://localhost/postgres
+USER = postgres
+PASS = vampyrrr9712
