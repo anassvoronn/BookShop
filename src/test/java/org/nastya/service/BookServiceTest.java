@@ -3,6 +3,7 @@ package org.nastya.service;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.AuthorDao;
 import org.nastya.dao.AuthorToBookDao;
 import org.nastya.dao.BookDao;
@@ -34,12 +35,14 @@ public class BookServiceTest {
     private BookDao bookDao;
     private AuthorToBookDao authorToBookDao;
     private int bookId;
+    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory();
 
     @BeforeEach
     void setUp() {
-        authorDao = new AuthorDatabaseDao();
-        bookDao = new BookDatabaseDao();
-        authorToBookDao = new AuthorToBookDatabaseDao();
+        connectionFactory.readingFromFile();
+        authorDao = new AuthorDatabaseDao(connectionFactory);
+        bookDao = new BookDatabaseDao(connectionFactory);
+        authorToBookDao = new AuthorToBookDatabaseDao(connectionFactory);
         bookService = new BookService(
                 bookDao,
                 new BookMapperImpl(),

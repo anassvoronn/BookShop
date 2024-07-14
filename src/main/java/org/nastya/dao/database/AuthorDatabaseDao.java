@@ -1,5 +1,6 @@
 package org.nastya.dao.database;
 
+import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.AuthorDao;
 import org.nastya.entity.Author;
 import org.nastya.entity.Country;
@@ -13,9 +14,7 @@ import java.util.List;
 
 @Repository
 public class AuthorDatabaseDao implements AuthorDao {
-    static final String DB_URL = "jdbc:postgresql://localhost/postgres";
-    static final String USER = "postgres";
-    static final String PASS = "vampyrrr9712";
+    private final DatabaseConnectionFactory connectionFactory;
 
     static final String ID = "id";
     static final String NAME = "name";
@@ -40,9 +39,13 @@ public class AuthorDatabaseDao implements AuthorDao {
     private static final String GET_BIGGEST_ID = "SELECT MAX(id) FROM authors";
     private static final String COUNT_FROM_AUTHORS = "SELECT COUNT(*) FROM authors";
 
+    public AuthorDatabaseDao(DatabaseConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
+
     @Override
     public Author findById(int id) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(REQUEST_BY_ID)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -59,7 +62,7 @@ public class AuthorDatabaseDao implements AuthorDao {
     @Override
     public List<Author> findByName(String name) {
         List<Author> authors = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_BY_NAME)) {
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
@@ -76,7 +79,7 @@ public class AuthorDatabaseDao implements AuthorDao {
     @Override
     public List<Author> findByGender(Gender gender) {
         List<Author> authors = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER)) {
             stmt.setString(1, gender.name());
             try (ResultSet rs = stmt.executeQuery()) {
@@ -94,7 +97,7 @@ public class AuthorDatabaseDao implements AuthorDao {
     @Override
     public List<Author> findByGenderAndByBirthDate(Gender gender, String birthDate) {
         List<Author> authors = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER_AND_BIRTH_DATE)) {
             stmt.setString(1, gender.name());
             stmt.setDate(2, Date.valueOf(birthDate));
@@ -112,7 +115,7 @@ public class AuthorDatabaseDao implements AuthorDao {
     @Override
     public List<Author> findByGenderOrByCountry(Gender gender, Country country) {
         List<Author> authors = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER_OR_COUNTRY)) {
             stmt.setString(1, gender.name());
             stmt.setString(2, country.name());
@@ -130,7 +133,7 @@ public class AuthorDatabaseDao implements AuthorDao {
     @Override
     public List<Author> findAll() {
         List<Author> authorList = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(SELECT)) {
             while (rs.next()) {
@@ -164,7 +167,7 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public int insert(Author author) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, author.getName());
             LocalDate birthDate = author.getBirthDate();
@@ -199,7 +202,7 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public void save(Author author) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
             stmt.setString(1, author.getName());
             LocalDate date = author.getBirthDate();
@@ -217,7 +220,7 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public void deleteById(int id) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(DELETION_BY_ID)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -228,7 +231,7 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public void deleteAllByGender(Gender gender) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(DELETE_BY_GENDER)) {
             stmt.setString(1, gender.name());
             stmt.executeUpdate();
@@ -239,7 +242,7 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public void deleteAll() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(DELETE_FROM_AUTHORS);
         } catch (SQLException e) {
@@ -249,7 +252,7 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public int getBiggestId() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery(GET_BIGGEST_ID);
             if (rs.next()) {
@@ -264,7 +267,7 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public int getCountByGender(Gender gender) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(COUNT_BY_GENDER)) {
             stmt.setString(1, gender.name());
             ResultSet rs = stmt.executeQuery();
@@ -280,7 +283,7 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public int getCount() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              Statement stmt = conn.createStatement()) {
             ResultSet resultSet = stmt.executeQuery(COUNT_FROM_AUTHORS);
             if (resultSet.next()) {

@@ -3,6 +3,7 @@ package org.nastya.dao.database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.BookDao;
 import org.nastya.entity.*;
 
@@ -13,10 +14,12 @@ import static org.nastya.utils.ObjectCreator.createBook;
 
 class BookDatabaseDaoTest {
     private BookDao bookDao;
+    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory();
 
     @BeforeEach
     void setUp() {
-        bookDao = new BookDatabaseDao();
+        bookDao = new BookDatabaseDao(connectionFactory);
+        connectionFactory.readingFromFile();
         insertBookToDatabase("Зачарованные", "1980", Genre.FANTASY);
         insertBookToDatabase("Время Приключений", "2008", Genre.ADVENTURE);
         insertBookToDatabase("Оттенки любви", "1882", Genre.NOVEL);

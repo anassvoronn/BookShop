@@ -3,6 +3,7 @@ package org.nastya.dao.database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.AuthorToBookDao;
 import org.nastya.entity.AuthorToBook;
 
@@ -13,10 +14,12 @@ import static org.nastya.utils.ObjectCreator.createAuthorToBook;
 
 public class AuthorToBookDatabaseTest {
     private AuthorToBookDao authorToBookDao;
+    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory();
 
     @BeforeEach
     void setUp() {
-        authorToBookDao = new AuthorToBookDatabaseDao();
+        authorToBookDao = new AuthorToBookDatabaseDao(connectionFactory);
+        connectionFactory.readingFromFile();
         insertAuthorToBookDatabase(1, 2);
         insertAuthorToBookDatabase(2, 3);
         insertAuthorToBookDatabase(3, 5);

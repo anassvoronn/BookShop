@@ -1,5 +1,6 @@
 package org.nastya.dao.database;
 
+import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.AuthorToBookDao;
 import org.nastya.entity.AuthorToBook;
 import org.springframework.stereotype.Repository;
@@ -10,9 +11,7 @@ import java.util.List;
 
 @Repository
 public class AuthorToBookDatabaseDao implements AuthorToBookDao {
-    static final String DB_URL = "jdbc:postgresql://localhost/postgres";
-    static final String USER = "postgres";
-    static final String PASS = "vampyrrr9712";
+    private final DatabaseConnectionFactory connectionFactory;
 
     static final String AUTHOR_ID = "authorId";
     static final String BOOK_ID = "bookId";
@@ -24,11 +23,14 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
     private static final String DELETE_BY_BOOK_ID = "DELETE FROM author_To_Book WHERE bookId = ?";
     private static final String DELETE_BY_AUTHOR_ID = "DELETE FROM author_To_Book WHERE authorId = ?";
 
+    public AuthorToBookDatabaseDao(DatabaseConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
 
     @Override
     public List<AuthorToBook> findByAuthorId(int id) {
         List<AuthorToBook> connections = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_AUTHOR_ID)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -45,7 +47,7 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
     @Override
     public List<AuthorToBook> findByBookId(int id) {
         List<AuthorToBook> connections = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_BOOK_ID)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -61,7 +63,7 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
 
     @Override
     public int insert(AuthorToBook authorToBook) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, authorToBook.getAuthorId());
             stmt.setInt(2, authorToBook.getBookId());
@@ -82,7 +84,7 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
 
     @Override
     public void deleteByAuthorId(int id) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(DELETE_BY_AUTHOR_ID)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -93,7 +95,7 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
 
     @Override
     public void deleteByBookId(int id) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(DELETE_BY_BOOK_ID)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -104,7 +106,7 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
 
     @Override
     public void deleteAll() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        try (Connection conn = connectionFactory.getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(DELETE_FROM_AUTHOR_TO_BOOK);
         } catch (SQLException e) {

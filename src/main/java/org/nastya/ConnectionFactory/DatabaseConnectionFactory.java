@@ -30,11 +30,11 @@ public class DatabaseConnectionFactory {
     @PostConstruct
     public void readingFromFile() {
         Properties properties = new Properties();
-        try (InputStream input = new FileInputStream("database.properties")) {
+        try (InputStream input = new FileInputStream("src/main/resources/database.properties")) {
             properties.load(input);
-            this.dbUrl = properties.getProperty("DB_URL");
-            this.user = properties.getProperty("USER");
-            this.password = properties.getProperty("PASS");
+            this.dbUrl = properties.getProperty("database.url");
+            this.user = properties.getProperty("database.user");
+            this.password = properties.getProperty("database.pass");
         } catch (IOException e) {
             throw new RuntimeException("File reading failed", e);
         }
