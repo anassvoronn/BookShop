@@ -30,8 +30,8 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
     @Override
     public List<AuthorToBook> findByAuthorId(int id) {
         List<AuthorToBook> connections = new ArrayList<>();
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SELECT_AUTHOR_ID)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(SELECT_AUTHOR_ID)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -47,8 +47,8 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
     @Override
     public List<AuthorToBook> findByBookId(int id) {
         List<AuthorToBook> connections = new ArrayList<>();
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SELECT_BOOK_ID)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(SELECT_BOOK_ID)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -63,8 +63,8 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
 
     @Override
     public int insert(AuthorToBook authorToBook) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, authorToBook.getAuthorId());
             stmt.setInt(2, authorToBook.getBookId());
             int affectedRows = stmt.executeUpdate();
@@ -84,8 +84,8 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
 
     @Override
     public void deleteByAuthorId(int id) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(DELETE_BY_AUTHOR_ID)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(DELETE_BY_AUTHOR_ID)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -95,8 +95,8 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
 
     @Override
     public void deleteByBookId(int id) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(DELETE_BY_BOOK_ID)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(DELETE_BY_BOOK_ID)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -106,8 +106,8 @@ public class AuthorToBookDatabaseDao implements AuthorToBookDao {
 
     @Override
     public void deleteAll() {
-        try (Connection conn = connectionFactory.getConnection();
-             Statement stmt = conn.createStatement()) {
+        Connection conn = connectionFactory.getConnection();
+        try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(DELETE_FROM_AUTHOR_TO_BOOK);
         } catch (SQLException e) {
             throw new RuntimeException("Delete all failed", e);

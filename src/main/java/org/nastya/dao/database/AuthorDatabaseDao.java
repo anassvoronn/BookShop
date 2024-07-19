@@ -45,8 +45,8 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public Author findById(int id) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(REQUEST_BY_ID)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(REQUEST_BY_ID)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -62,8 +62,8 @@ public class AuthorDatabaseDao implements AuthorDao {
     @Override
     public List<Author> findByName(String name) {
         List<Author> authors = new ArrayList<>();
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SELECT_BY_NAME)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(SELECT_BY_NAME)) {
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -79,8 +79,8 @@ public class AuthorDatabaseDao implements AuthorDao {
     @Override
     public List<Author> findByGender(Gender gender) {
         List<Author> authors = new ArrayList<>();
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER)) {
             stmt.setString(1, gender.name());
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -97,8 +97,8 @@ public class AuthorDatabaseDao implements AuthorDao {
     @Override
     public List<Author> findByGenderAndByBirthDate(Gender gender, String birthDate) {
         List<Author> authors = new ArrayList<>();
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER_AND_BIRTH_DATE)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER_AND_BIRTH_DATE)) {
             stmt.setString(1, gender.name());
             stmt.setDate(2, Date.valueOf(birthDate));
             ResultSet rs = stmt.executeQuery();
@@ -115,8 +115,8 @@ public class AuthorDatabaseDao implements AuthorDao {
     @Override
     public List<Author> findByGenderOrByCountry(Gender gender, Country country) {
         List<Author> authors = new ArrayList<>();
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER_OR_COUNTRY)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(SELECT_BY_GENDER_OR_COUNTRY)) {
             stmt.setString(1, gender.name());
             stmt.setString(2, country.name());
             ResultSet rs = stmt.executeQuery();
@@ -133,8 +133,8 @@ public class AuthorDatabaseDao implements AuthorDao {
     @Override
     public List<Author> findAll() {
         List<Author> authorList = new ArrayList<>();
-        try (Connection conn = connectionFactory.getConnection();
-             Statement stmt = conn.createStatement();
+        Connection conn = connectionFactory.getConnection();
+        try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(SELECT)) {
             while (rs.next()) {
                 Author author = bindAuthor(rs);
@@ -167,8 +167,8 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public int insert(Author author) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, author.getName());
             LocalDate birthDate = author.getBirthDate();
             if (birthDate != null) {
@@ -202,8 +202,8 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public void save(Author author) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
             stmt.setString(1, author.getName());
             LocalDate date = author.getBirthDate();
             stmt.setDate(2, Date.valueOf(date));
@@ -220,8 +220,8 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public void deleteById(int id) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(DELETION_BY_ID)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(DELETION_BY_ID)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -231,8 +231,8 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public void deleteAllByGender(Gender gender) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(DELETE_BY_GENDER)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(DELETE_BY_GENDER)) {
             stmt.setString(1, gender.name());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -242,8 +242,8 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public void deleteAll() {
-        try (Connection conn = connectionFactory.getConnection();
-             Statement stmt = conn.createStatement()) {
+        Connection conn = connectionFactory.getConnection();
+        try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(DELETE_FROM_AUTHORS);
         } catch (SQLException e) {
             throw new RuntimeException("Delete all failed", e);
@@ -252,8 +252,8 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public int getBiggestId() {
-        try (Connection conn = connectionFactory.getConnection();
-             Statement stmt = conn.createStatement()) {
+        Connection conn = connectionFactory.getConnection();
+        try (Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery(GET_BIGGEST_ID);
             if (rs.next()) {
                 return rs.getInt(1);
@@ -267,8 +267,8 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public int getCountByGender(Gender gender) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(COUNT_BY_GENDER)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(COUNT_BY_GENDER)) {
             stmt.setString(1, gender.name());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -283,8 +283,8 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public int getCount() {
-        try (Connection conn = connectionFactory.getConnection();
-             Statement stmt = conn.createStatement()) {
+        Connection conn = connectionFactory.getConnection();
+        try (Statement stmt = conn.createStatement()) {
             ResultSet resultSet = stmt.executeQuery(COUNT_FROM_AUTHORS);
             if (resultSet.next()) {
                 return resultSet.getInt(1);

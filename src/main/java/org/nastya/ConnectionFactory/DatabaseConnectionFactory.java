@@ -20,7 +20,7 @@ public class DatabaseConnectionFactory {
     private final ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<>();
 
     public Connection getConnection() {
-        Connection connection = connectionThreadLocal.get();;
+        Connection connection = connectionThreadLocal.get();
         if (connection == null) {
             try {
                 connection = DriverManager.getConnection(dbUrl, user, password);

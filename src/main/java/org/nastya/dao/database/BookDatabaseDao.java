@@ -34,8 +34,8 @@ public class BookDatabaseDao implements BookDao {
 
     @Override
     public Book findById(int id) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(REQUEST_BY_ID)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(REQUEST_BY_ID)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -51,8 +51,8 @@ public class BookDatabaseDao implements BookDao {
     @Override
     public List<Book> findAll() {
         List<Book> bookList = new ArrayList<>();
-        try (Connection conn = connectionFactory.getConnection();
-             Statement stmt = conn.createStatement();
+        Connection conn = connectionFactory.getConnection();
+        try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(SELECT)) {
             while (rs.next()) {
                 Book book = bindBook(rs);
@@ -67,8 +67,8 @@ public class BookDatabaseDao implements BookDao {
     @Override
     public List<Book> findByTitle(String title) {
         List<Book> books = new ArrayList<>();
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SELECT_BY_NAME)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(SELECT_BY_NAME)) {
             stmt.setString(1, title);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -83,8 +83,8 @@ public class BookDatabaseDao implements BookDao {
 
     @Override
     public int insert(Book book) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, book.getTitle());
             stmt.setInt(2, book.getPublishingYear());
             stmt.setString(3, book.getGenre().name());
@@ -105,8 +105,8 @@ public class BookDatabaseDao implements BookDao {
 
     @Override
     public void save(Book book) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
             stmt.setString(1, book.getTitle());
             stmt.setInt(2, book.getPublishingYear());
             stmt.setString(3, book.getGenre().name());
@@ -119,8 +119,8 @@ public class BookDatabaseDao implements BookDao {
 
     @Override
     public void deleteById(int id) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(DELETION_BY_ID)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(DELETION_BY_ID)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -130,8 +130,8 @@ public class BookDatabaseDao implements BookDao {
 
     @Override
     public void deleteAll() {
-        try (Connection conn = connectionFactory.getConnection();
-             Statement stmt = conn.createStatement()) {
+        Connection conn = connectionFactory.getConnection();
+        try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(DELETE_FROM_BOOKS);
         } catch (SQLException e) {
             throw new RuntimeException("Delete all failed", e);
