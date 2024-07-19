@@ -17,12 +17,17 @@ public class DatabaseConnectionFactory {
     private String user;
     private String password;
 
+    private final ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<>();
+
     public Connection getConnection() {
-        Connection connection;
-        try {
-            connection = DriverManager.getConnection(dbUrl, user, password);
-        } catch (SQLException e) {
-            throw new RuntimeException("Connection failed", e);
+        Connection connection = connectionThreadLocal.get();;
+        if (connection == null) {
+            try {
+                connection = DriverManager.getConnection(dbUrl, user, password);
+                connectionThreadLocal.set(connection);
+            } catch (SQLException e) {
+                throw new RuntimeException("Connection failed", e);
+            }
         }
         return connection;
     }
