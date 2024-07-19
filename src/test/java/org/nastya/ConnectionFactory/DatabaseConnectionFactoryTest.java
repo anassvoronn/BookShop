@@ -1,6 +1,7 @@
 package org.nastya.ConnectionFactory;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -52,11 +53,6 @@ class DatabaseConnectionFactoryTest {
         factory.readingFromFile();
         connection1 = factory.getConnection();
         connection1.close();
-        connection2 = factory.getConnection();
-        assertNotNull(connection1);
-        assertNotNull(connection2);
-        assertNotEquals(connection1, connection2);
-        assertTrue(connection1.isClosed());
-        assertFalse(connection2.isClosed());
+        Assertions.assertThrows(ClosedConnectionException.class, factory::getConnection);
     }
 }
