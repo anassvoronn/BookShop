@@ -14,7 +14,7 @@ import static org.nastya.utils.ObjectCreator.createBook;
 
 class BookDatabaseDaoTest {
     private BookDao bookDao;
-    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory();
+    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory(new ThreadLocal<>());
 
     @BeforeEach
     void setUp() {

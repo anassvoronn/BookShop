@@ -4,13 +4,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseConnectionFactoryTest {
-    private final DatabaseConnectionFactory factory = new DatabaseConnectionFactory();
+    private final DatabaseConnectionFactory factory = new DatabaseConnectionFactory(new ThreadLocal<>());
     private Connection connection1;
     private Connection connection2;
 
@@ -21,17 +20,19 @@ class DatabaseConnectionFactoryTest {
     }
 
     @Test
-    void getConnection_sameThread() {
+    void getConnection_sameThread() throws SQLException {
         factory.readingFromFile();
         connection1 = factory.getConnection();
         connection2 = factory.getConnection();
         assertNotNull(connection1);
         assertNotNull(connection2);
         assertEquals(connection1, connection2);
+        assertFalse(connection1.isClosed());
+        assertFalse(connection2.isClosed());
     }
 
     @Test
-    void getConnection_2Threads() throws InterruptedException {
+    void getConnection_2Threads() throws InterruptedException, SQLException {
         factory.readingFromFile();
         connection1 = factory.getConnection();
 
@@ -42,5 +43,20 @@ class DatabaseConnectionFactoryTest {
         assertNotNull(connection1);
         assertNotNull(connection2);
         assertNotEquals(connection1, connection2);
+        assertFalse(connection1.isClosed());
+        assertFalse(connection2.isClosed());
+    }
+
+    @Test
+    void getConnection_sameThreadButConnectionClosed() throws SQLException {
+        factory.readingFromFile();
+        connection1 = factory.getConnection();
+        connection1.close();
+        connection2 = factory.getConnection();
+        assertNotNull(connection1);
+        assertNotNull(connection2);
+        assertNotEquals(connection1, connection2);
+        assertTrue(connection1.isClosed());
+        assertFalse(connection2.isClosed());
     }
 }

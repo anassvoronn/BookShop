@@ -17,7 +17,11 @@ public class DatabaseConnectionFactory {
     private String user;
     private String password;
 
-    private final ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<>();
+    private final ThreadLocal<Connection> connectionThreadLocal;
+
+    public DatabaseConnectionFactory(ThreadLocal<Connection> connectionThreadLocal){
+        this.connectionThreadLocal = connectionThreadLocal;
+    }
 
     public Connection getConnection() {
         Connection connection = connectionThreadLocal.get();

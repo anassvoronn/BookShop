@@ -32,7 +32,7 @@ class AuthorServiceTest {
     private BookDao bookDao;
     private AuthorToBookDao authorToBookDao;
     private int authorId;
-    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory();
+    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory(new ThreadLocal<>());
 
     @BeforeEach
     void setUp() {

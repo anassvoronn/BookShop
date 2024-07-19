@@ -35,7 +35,7 @@ public class BookServiceTest {
     private BookDao bookDao;
     private AuthorToBookDao authorToBookDao;
     private int bookId;
-    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory();
+    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory(new ThreadLocal<>());
 
     @BeforeEach
     void setUp() {
