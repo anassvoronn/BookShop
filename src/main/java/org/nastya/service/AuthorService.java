@@ -1,26 +1,44 @@
 package org.nastya.service;
 
 import org.nastya.dao.AuthorDao;
+import org.nastya.dao.AuthorToBookDao;
+import org.nastya.dao.BookDao;
 import org.nastya.dto.AuthorFormDTO;
 import org.nastya.dto.AuthorListItemDTO;
+import org.nastya.dto.BookListItemDTO;
 import org.nastya.entity.Author;
+import org.nastya.entity.AuthorToBook;
+import org.nastya.entity.Book;
 import org.nastya.service.exception.AuthorNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class AuthorService {
     private static final Logger log = LoggerFactory.getLogger(AuthorService.class);
-    @Autowired
-    private AuthorDao authorDao;
-    @Autowired
-    private AuthorMapper authorMapper;
+    private final AuthorDao authorDao;
+    private final BookDao bookDao;
+    private final AuthorToBookDao authorToBookDao;
+    private final BookMapper bookMapper;
+    private final AuthorMapper authorMapper;
+
+    public AuthorService(final AuthorDao authorDao,
+                         final AuthorToBookDao authorToBookDao,
+                         final AuthorMapper authorMapper,
+                         final BookDao bookDao,
+                         final BookMapper bookMapper) {
+        this.authorDao = authorDao;
+        this.authorToBookDao = authorToBookDao;
+        this.authorMapper = authorMapper;
+        this.bookDao = bookDao;
+        this.bookMapper = bookMapper;
+    }
 
     public List<AuthorListItemDTO> findAll() {
         List<Author> authors = authorDao.findAll();
@@ -62,6 +80,16 @@ public class AuthorService {
         LocalDate deathDate = dto.getDeathDate();
         int ages = calculateAge(birthDate, deathDate);
         dto.setAge(ages);
+        List<AuthorToBook> authorToBooks = authorToBookDao.findByAuthorId(id);
+        List<BookListItemDTO> bookListDTO = new ArrayList<>();
+        for (AuthorToBook authorToBook : authorToBooks) {
+            Book book = bookDao.findById(authorToBook.getBookId());
+            if (book != null) {
+                BookListItemDTO bookListItemDTO = bookMapper.mapToBookListItemDTO(book);
+                bookListDTO.add(bookListItemDTO);
+            }
+        }
+        dto.setBooks(bookListDTO);
         log.info("Calculated age '{}' for author '{}' with id '{}'",
                 dto.getAge(), dto.getName(), dto.getId());
         return dto;

@@ -3,6 +3,7 @@ package org.nastya.dao.database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.AuthorDao;
 import org.nastya.entity.Author;
 import org.nastya.entity.Country;
@@ -20,13 +21,16 @@ import static org.nastya.entity.Country.UKRAINE;
 import static org.nastya.entity.Country.USA;
 import static org.nastya.entity.Gender.FEMALE;
 import static org.nastya.entity.Gender.MALE;
+import static org.nastya.utils.ObjectCreator.createAuthor;
 
 class AuthorDatabaseDaoTest {
     private AuthorDao authorDao;
+    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory(new ThreadLocal<>());
 
     @BeforeEach
     void setUp() {
-        authorDao = new AuthorDatabaseDao();
+        authorDao = new AuthorDatabaseDao(connectionFactory);
+        connectionFactory.readingFromFile();
         insertAuthorToDatabase("Александр Грин", "1880-08-23", "1932-07-08", MALE, RUSSIA);
         insertAuthorToDatabase("Александр Пушкин", "1799-06-06", "1837-02-10", MALE, RUSSIA);
         insertAuthorToDatabase("Владимир Маяковский", "1893-07-19", null, MALE, RUSSIA);
@@ -120,21 +124,6 @@ class AuthorDatabaseDaoTest {
         authorDao.insert(author);
     }
 
-    private Author createAuthor(String name, String birthDate, String deathDate, Gender gender, Country country) {
-        Author author = new Author();
-        author.setName(name);
-        if (birthDate != null) {
-            LocalDate date = LocalDate.parse(birthDate);
-            author.setBirthDate(date);
-        }
-        if (deathDate != null) {
-            LocalDate dateOfDeath = LocalDate.parse(deathDate);
-            author.setDeathDate(dateOfDeath);
-        }
-        author.setGender(gender);
-        author.setCountry(country);
-        return author;
-    }
 
     @Test
     public void findByGenderOrByCountry() {

@@ -2,6 +2,7 @@
 
 -- DROP TABLE IF EXISTS public.authors;
 CREATE SEQUENCE authors_id_seq START 101;
+CREATE SEQUENCE books_id_seq START 101;
 
 CREATE TABLE IF NOT EXISTS public.authors
 (
@@ -32,4 +33,15 @@ CREATE TABLE IF NOT EXISTS public.books
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.books
+    OWNER to postgres;
+
+CREATE TABLE IF NOT EXISTS public.author_to_book
+(
+    authorid integer,
+    bookid integer
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.author_to_book
     OWNER to postgres;

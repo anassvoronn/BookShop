@@ -1,5 +1,6 @@
 package org.nastya.dao.database;
 
+import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.BookDao;
 import org.nastya.entity.Book;
 import org.nastya.entity.Genre;
@@ -12,10 +13,7 @@ import java.util.List;
 
 @Repository
 public class BookDatabaseDao implements BookDao {
-    static final String DB_URL = "jdbc:postgresql://localhost/postgres";
-    static final String USER = "postgres";
-    static final String PASS = "vampyrrr9712";
-
+    private final DatabaseConnectionFactory connectionFactory;
 
     static final String ID = "id";
     static final String TITLE = "title";
@@ -30,11 +28,14 @@ public class BookDatabaseDao implements BookDao {
     private static final String DELETE_FROM_BOOKS = "DELETE FROM books";
     private static final String SELECT_BY_NAME = "SELECT * FROM books WHERE title=?";
 
+    public BookDatabaseDao(DatabaseConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
 
     @Override
     public Book findById(int id) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement stmt = conn.prepareStatement(REQUEST_BY_ID)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(REQUEST_BY_ID)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -50,8 +51,8 @@ public class BookDatabaseDao implements BookDao {
     @Override
     public List<Book> findAll() {
         List<Book> bookList = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             Statement stmt = conn.createStatement();
+        Connection conn = connectionFactory.getConnection();
+        try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(SELECT)) {
             while (rs.next()) {
                 Book book = bindBook(rs);
@@ -66,8 +67,8 @@ public class BookDatabaseDao implements BookDao {
     @Override
     public List<Book> findByTitle(String title) {
         List<Book> books = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement stmt = conn.prepareStatement(SELECT_BY_NAME)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(SELECT_BY_NAME)) {
             stmt.setString(1, title);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -82,8 +83,8 @@ public class BookDatabaseDao implements BookDao {
 
     @Override
     public int insert(Book book) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, book.getTitle());
             stmt.setInt(2, book.getPublishingYear());
             stmt.setString(3, book.getGenre().name());
@@ -104,8 +105,8 @@ public class BookDatabaseDao implements BookDao {
 
     @Override
     public void save(Book book) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
             stmt.setString(1, book.getTitle());
             stmt.setInt(2, book.getPublishingYear());
             stmt.setString(3, book.getGenre().name());
@@ -118,8 +119,8 @@ public class BookDatabaseDao implements BookDao {
 
     @Override
     public void deleteById(int id) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement stmt = conn.prepareStatement(DELETION_BY_ID)) {
+        Connection conn = connectionFactory.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(DELETION_BY_ID)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -129,8 +130,8 @@ public class BookDatabaseDao implements BookDao {
 
     @Override
     public void deleteAll() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             Statement stmt = conn.createStatement()) {
+        Connection conn = connectionFactory.getConnection();
+        try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(DELETE_FROM_BOOKS);
         } catch (SQLException e) {
             throw new RuntimeException("Delete all failed", e);

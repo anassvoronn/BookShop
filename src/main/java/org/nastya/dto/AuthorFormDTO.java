@@ -4,6 +4,7 @@ import org.nastya.entity.Country;
 import org.nastya.entity.Gender;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class AuthorFormDTO {
     private int id;
@@ -13,6 +14,7 @@ public class AuthorFormDTO {
     private Country country;
     private Gender gender;
     private int age;
+    private List<BookListItemDTO> books;
 
     @Override
     public String toString() {
@@ -24,6 +26,14 @@ public class AuthorFormDTO {
                 ", country='" + country + '\'' +
                 ", gender='" + gender + '\'' +
                 '}';
+    }
+
+    public List<BookListItemDTO> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<BookListItemDTO> books) {
+        this.books = books;
     }
 
     public void setId(int id) {

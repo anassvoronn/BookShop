@@ -3,19 +3,23 @@ package org.nastya.dao.database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.BookDao;
 import org.nastya.entity.*;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.nastya.utils.ObjectCreator.createBook;
 
 class BookDatabaseDaoTest {
     private BookDao bookDao;
+    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory(new ThreadLocal<>());
 
     @BeforeEach
     void setUp() {
-        bookDao = new BookDatabaseDao();
+        bookDao = new BookDatabaseDao(connectionFactory);
+        connectionFactory.readingFromFile();
         insertBookToDatabase("Зачарованные", "1980", Genre.FANTASY);
         insertBookToDatabase("Время Приключений", "2008", Genre.ADVENTURE);
         insertBookToDatabase("Оттенки любви", "1882", Genre.NOVEL);
@@ -126,16 +130,5 @@ class BookDatabaseDaoTest {
     private void insertBookToDatabase(String title, String publishingYear, Genre genre) {
         Book book = createBook(title, publishingYear, genre);
         bookDao.insert(book);
-    }
-
-    private Book createBook(String title, String publishingYear, Genre genre) {
-        Book book = new Book();
-        book.setTitle(title);
-        if (publishingYear != null) {
-            int date = Integer.parseInt(publishingYear);
-            book.setPublishingYear(date);
-        }
-        book.setGenre(genre);
-        return book;
     }
 }

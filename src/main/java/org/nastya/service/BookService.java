@@ -1,29 +1,62 @@
 package org.nastya.service;
 
+import org.nastya.dao.AuthorDao;
+import org.nastya.dao.AuthorToBookDao;
 import org.nastya.dao.BookDao;
+import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.dto.BookFormDTO;
 import org.nastya.dto.BookListItemDTO;
+import org.nastya.entity.Author;
+import org.nastya.entity.AuthorToBook;
 import org.nastya.entity.Book;
 import org.nastya.service.exception.BookNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class BookService {
     private static final Logger log = LoggerFactory.getLogger(BookService.class);
-    @Autowired
-    private BookDao bookDao;
-    @Autowired
-    private BookMapper bookMapper;
+    private final BookDao bookDao;
+    private final BookMapper bookMapper;
+    private final AuthorDao authorDao;
+    private final AuthorToBookDao authorToBookDao;
+    private final AuthorMapper authorMapper;
+
+    public BookService(final BookDao bookDao,
+                       final BookMapper bookMapper,
+                       final AuthorDao authorDao,
+                       final AuthorToBookDao authorToBookDao,
+                       final AuthorMapper authorMapper) {
+        this.bookDao = bookDao;
+        this.bookMapper = bookMapper;
+        this.authorDao = authorDao;
+        this.authorToBookDao = authorToBookDao;
+        this.authorMapper = authorMapper;
+    }
 
     public List<BookListItemDTO> findAll() {
         List<Book> books = bookDao.findAll();
         log.info("Found '{}' books", books.size());
         return bookMapper.mapToBookListItemDTO(books);
+    }
+
+    private int calculateAge(LocalDate dateOfBirth, LocalDate deathDate) {
+        if (dateOfBirth == null) {
+            log.info("Date of birth was not provided. Returning 0");
+            return 0;
+        }
+        if (deathDate == null) {
+            LocalDate now = LocalDate.now();
+            log.info("Date of death was not provided. Using current date '{}'", now);
+            return Period.between(dateOfBirth, now).getYears();
+        }
+        return Period.between(dateOfBirth, deathDate).getYears();
     }
 
     public BookFormDTO findById(int id) throws BookNotFoundException {
@@ -33,7 +66,22 @@ public class BookService {
             throw new BookNotFoundException("There is no book with this id " + id);
         }
         log.info("Found book with id '{}'", id);
-        return bookMapper.mapToBookFormDTO(book);
+        BookFormDTO dto = bookMapper.mapToBookFormDTO(book);
+        List<AuthorToBook> authorToBooks = authorToBookDao.findByBookId(id);
+        List<AuthorListItemDTO> authorListDTO = new ArrayList<>();
+        for (AuthorToBook authorToBook : authorToBooks) {
+            Author author = authorDao.findById(authorToBook.getAuthorId());
+            if (author != null) {
+                AuthorListItemDTO authorListItemDTO = authorMapper.mapToAuthorListItemDTO(author);
+                LocalDate birthDate = authorListItemDTO.getBirthDate();
+                LocalDate deathDate = authorListItemDTO.getDeathDate();
+                int age = calculateAge(birthDate, deathDate);
+                authorListItemDTO.setAge(age);
+                authorListDTO.add(authorListItemDTO);
+            }
+        }
+        dto.setAuthors(authorListDTO);
+        return dto;
     }
 
     public void deleteBook(int bookId) throws BookNotFoundException {
