@@ -3,7 +3,6 @@ package org.nastya.service;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.AuthorDao;
 import org.nastya.dao.AuthorToBookDao;
 import org.nastya.dao.BookDao;
@@ -13,10 +12,12 @@ import org.nastya.dao.database.BookDatabaseDao;
 import org.nastya.dto.AuthorFormDTO;
 import org.nastya.dto.BookListItemDTO;
 import org.nastya.service.mapper.BookMapperImpl;
+import org.nastya.utils.DataSourceFactory;
 import org.nastya.utils.ObjectCreator;
 import org.nastya.entity.Genre;
 import org.nastya.service.exception.AuthorNotFoundException;
 import org.nastya.service.mapper.AuthorMapperImpl;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -32,14 +33,15 @@ class AuthorServiceTest {
     private BookDao bookDao;
     private AuthorToBookDao authorToBookDao;
     private int authorId;
-    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory(new ThreadLocal<>());
 
     @BeforeEach
     void setUp() {
-        connectionFactory.readingFromFile();
-        authorDao = new AuthorDatabaseDao(connectionFactory);
-        bookDao = new BookDatabaseDao(connectionFactory);
-        authorToBookDao = new AuthorToBookDatabaseDao(connectionFactory);
+        DataSourceFactory factory = new DataSourceFactory();
+        factory.readingFromFile();
+        NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(factory.getDataSource());
+        authorDao = new AuthorDatabaseDao(jdbcTemplate);
+        bookDao = new BookDatabaseDao(jdbcTemplate);
+        authorToBookDao = new AuthorToBookDatabaseDao(jdbcTemplate);
         authorService = new AuthorService(
                 authorDao,
                 authorToBookDao,

@@ -3,9 +3,10 @@ package org.nastya.dao.database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.BookDao;
 import org.nastya.entity.*;
+import org.nastya.utils.DataSourceFactory;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
 
@@ -14,12 +15,12 @@ import static org.nastya.utils.ObjectCreator.createBook;
 
 class BookDatabaseDaoTest {
     private BookDao bookDao;
-    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory(new ThreadLocal<>());
 
     @BeforeEach
     void setUp() {
-        bookDao = new BookDatabaseDao(connectionFactory);
-        connectionFactory.readingFromFile();
+        DataSourceFactory sourceFactory = new DataSourceFactory();
+        sourceFactory.readingFromFile();
+        bookDao = new BookDatabaseDao(new NamedParameterJdbcTemplate(sourceFactory.getDataSource()));
         insertBookToDatabase("Зачарованные", "1980", Genre.FANTASY);
         insertBookToDatabase("Время Приключений", "2008", Genre.ADVENTURE);
         insertBookToDatabase("Оттенки любви", "1882", Genre.NOVEL);

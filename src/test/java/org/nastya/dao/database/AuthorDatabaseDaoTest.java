@@ -3,11 +3,12 @@ package org.nastya.dao.database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.AuthorDao;
 import org.nastya.entity.Author;
 import org.nastya.entity.Country;
 import org.nastya.entity.Gender;
+import org.nastya.utils.DataSourceFactory;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,12 +26,12 @@ import static org.nastya.utils.ObjectCreator.createAuthor;
 
 class AuthorDatabaseDaoTest {
     private AuthorDao authorDao;
-    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory(new ThreadLocal<>());
 
     @BeforeEach
     void setUp() {
-        authorDao = new AuthorDatabaseDao(connectionFactory);
-        connectionFactory.readingFromFile();
+        DataSourceFactory sourceFactory = new DataSourceFactory();
+        sourceFactory.readingFromFile();
+        authorDao = new AuthorDatabaseDao(new NamedParameterJdbcTemplate(sourceFactory.getDataSource()));
         insertAuthorToDatabase("Александр Грин", "1880-08-23", "1932-07-08", MALE, RUSSIA);
         insertAuthorToDatabase("Александр Пушкин", "1799-06-06", "1837-02-10", MALE, RUSSIA);
         insertAuthorToDatabase("Владимир Маяковский", "1893-07-19", null, MALE, RUSSIA);
