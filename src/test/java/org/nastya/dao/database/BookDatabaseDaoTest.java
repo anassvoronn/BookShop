@@ -1,26 +1,43 @@
 package org.nastya.dao.database;
 
+import com.zaxxer.hikari.HikariDataSource;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nastya.dao.BookDao;
-import org.nastya.entity.*;
+import org.nastya.entity.Book;
+import org.nastya.entity.Genre;
 import org.nastya.utils.DataSourceFactory;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.nastya.utils.ObjectCreator.createBook;
 
 class BookDatabaseDaoTest {
-    private BookDao bookDao;
+    private static BookDao bookDao;
+    private static HikariDataSource dataSource;
+
+    @BeforeAll
+    static void beforeAll() {
+        DataSourceFactory sourceFactory = new DataSourceFactory();
+        sourceFactory.readingFromFile();
+        dataSource = sourceFactory.getDataSource();
+        bookDao = new BookDatabaseDao(new NamedParameterJdbcTemplate(dataSource));
+    }
+
+    @AfterAll
+    static void afterAll() {
+        dataSource.close();
+    }
 
     @BeforeEach
     void setUp() {
-        DataSourceFactory sourceFactory = new DataSourceFactory();
-        sourceFactory.readingFromFile();
-        bookDao = new BookDatabaseDao(new NamedParameterJdbcTemplate(sourceFactory.getDataSource()));
         insertBookToDatabase("Зачарованные", "1980", Genre.FANTASY);
         insertBookToDatabase("Время Приключений", "2008", Genre.ADVENTURE);
         insertBookToDatabase("Оттенки любви", "1882", Genre.NOVEL);

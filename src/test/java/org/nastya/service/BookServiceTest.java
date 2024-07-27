@@ -1,6 +1,9 @@
 package org.nastya.service;
 
+import com.zaxxer.hikari.HikariDataSource;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nastya.dao.AuthorDao;
@@ -24,24 +27,26 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import java.time.LocalDate;
 import java.util.Comparator;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.nastya.entity.Country.ENGLAND;
 import static org.nastya.entity.Gender.FEMALE;
 import static org.nastya.entity.Gender.MALE;
 
 public class BookServiceTest {
 
-    private BookService bookService;
-    private AuthorDao authorDao;
-    private BookDao bookDao;
-    private AuthorToBookDao authorToBookDao;
+    private static BookService bookService;
+    private static AuthorDao authorDao;
+    private static BookDao bookDao;
+    private static AuthorToBookDao authorToBookDao;
+    private static HikariDataSource dataSource;
     private int bookId;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         DataSourceFactory factory = new DataSourceFactory();
         factory.readingFromFile();
-        NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(factory.getDataSource());
+        dataSource = factory.getDataSource();
+        NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         authorDao = new AuthorDatabaseDao(jdbcTemplate);
         bookDao = new BookDatabaseDao(jdbcTemplate);
         authorToBookDao = new AuthorToBookDatabaseDao(jdbcTemplate);
@@ -52,6 +57,15 @@ public class BookServiceTest {
                 authorToBookDao,
                 new AuthorMapperImpl()
         );
+    }
+
+    @AfterAll
+    static void afterAll() {
+        dataSource.close();
+    }
+
+    @BeforeEach
+    void setUp() {
         bookId = bookDao.insert(
                 ObjectCreator.createBook(
                         "Властелин камня",
@@ -98,7 +112,7 @@ public class BookServiceTest {
     }
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         bookDao.deleteAll();
         authorDao.deleteAll();
         authorToBookDao.deleteAll();

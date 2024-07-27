@@ -1,8 +1,8 @@
 package org.nastya.utils;
 
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
-import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,14 +12,21 @@ public class DataSourceFactory {
     private String dbUrl;
     private String user;
     private String password;
+    private String driver;
 
-    public DataSource getDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl(dbUrl);
-        dataSource.setUsername(user);
-        dataSource.setPassword(password);
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        return dataSource;
+    public HikariDataSource getDataSource() {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(dbUrl);
+        config.setUsername(user);
+        config.setPassword(password);
+        config.setDriverClassName(driver);
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+
+        config.setMaximumPoolSize(20); // Adjust based on your needs
+        config.setMinimumIdle(5);
+        return new HikariDataSource(config);
     }
 
     public void readingFromFile() {
@@ -29,6 +36,7 @@ public class DataSourceFactory {
             this.dbUrl = properties.getProperty("database.url");
             this.user = properties.getProperty("database.user");
             this.password = properties.getProperty("database.pass");
+            this.driver = properties.getProperty("database.driver");
         } catch (IOException e) {
             throw new RuntimeException("File reading failed", e);
         }

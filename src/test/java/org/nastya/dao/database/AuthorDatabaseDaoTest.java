@@ -1,6 +1,9 @@
 package org.nastya.dao.database;
 
+import com.zaxxer.hikari.HikariDataSource;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nastya.dao.AuthorDao;
@@ -25,13 +28,24 @@ import static org.nastya.entity.Gender.MALE;
 import static org.nastya.utils.ObjectCreator.createAuthor;
 
 class AuthorDatabaseDaoTest {
-    private AuthorDao authorDao;
+    private static AuthorDao authorDao;
+    private static HikariDataSource dataSource;
+
+    @BeforeAll
+    static void beforeAll() {
+        DataSourceFactory sourceFactory = new DataSourceFactory();
+        sourceFactory.readingFromFile();
+        dataSource = sourceFactory.getDataSource();
+        authorDao = new AuthorDatabaseDao(new NamedParameterJdbcTemplate(dataSource));
+    }
+
+    @AfterAll
+    static void afterAll() {
+        dataSource.close();
+    }
 
     @BeforeEach
     void setUp() {
-        DataSourceFactory sourceFactory = new DataSourceFactory();
-        sourceFactory.readingFromFile();
-        authorDao = new AuthorDatabaseDao(new NamedParameterJdbcTemplate(sourceFactory.getDataSource()));
         insertAuthorToDatabase("Александр Грин", "1880-08-23", "1932-07-08", MALE, RUSSIA);
         insertAuthorToDatabase("Александр Пушкин", "1799-06-06", "1837-02-10", MALE, RUSSIA);
         insertAuthorToDatabase("Владимир Маяковский", "1893-07-19", null, MALE, RUSSIA);
