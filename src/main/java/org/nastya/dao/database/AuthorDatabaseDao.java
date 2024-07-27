@@ -4,9 +4,13 @@ import org.nastya.dao.AuthorDao;
 import org.nastya.entity.Author;
 import org.nastya.entity.Country;
 import org.nastya.entity.Gender;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -29,7 +33,7 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     private static final String SELECT = "SELECT id, name, date_of_birth, death_date, gender, country FROM authors";
     private static final String REQUEST_BY_ID = "SELECT id, name, date_of_birth, death_date, gender, country FROM authors WHERE id = :id";
-    private static final String INSERT = "INSERT INTO authors (name, date_of_birth, death_date, gender, country) VALUES (:name, :birthDate, :deathDate, :gender, :country)";
+    private static final String INSERT = "INSERT INTO authors (name, date_of_birth, death_date, gender, country) VALUES (:name, :birthDate, :deathDate, :gender, :country) RETURNING id";
     private static final String DELETION_BY_ID = "DELETE FROM authors WHERE id = :id";
     private static final String DELETE_FROM_AUTHORS = "DELETE FROM authors";
     private static final String UPDATE = "UPDATE authors SET name = :name, date_of_birth = :birthDate, death_date = :deathDate, gender = :gender, country = :country WHERE id = :id";
@@ -116,13 +120,15 @@ public class AuthorDatabaseDao implements AuthorDao {
 
     @Override
     public int insert(Author author) {
-        return jdbcTemplate.update(INSERT,
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(INSERT,
                 new MapSqlParameterSource()
                         .addValue("name", author.getName())
                         .addValue("birthDate", author.getBirthDate())
                         .addValue("deathDate", author.getDeathDate())
                         .addValue("gender", author.getGender().name())
-                        .addValue("country", author.getCountry().name()));
+                        .addValue("country", author.getCountry().name()), keyHolder);
+        return Objects.requireNonNull(keyHolder.getKey()).intValue();
     }
 
     @Override

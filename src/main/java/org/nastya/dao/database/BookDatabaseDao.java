@@ -3,14 +3,18 @@ package org.nastya.dao.database;
 import org.nastya.dao.BookDao;
 import org.nastya.entity.Book;
 import org.nastya.entity.Genre;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 
 import java.sql.*;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class BookDatabaseDao implements BookDao {
@@ -23,12 +27,13 @@ public class BookDatabaseDao implements BookDao {
 
     private static final String REQUEST_BY_ID = "SELECT id, title, publishingYear, genre FROM books WHERE id = :id";
     private static final String SELECT = "SELECT id, title, publishingYear, genre FROM books";
-    private static final String INSERT = "INSERT INTO books (title, publishingYear, genre) VALUES (:title, :publishingYear, :genre)";
+    private static final String INSERT = "INSERT INTO books (title, publishingYear, genre) VALUES (:title, :publishingYear, :genre) RETURNING id";
     private static final String UPDATE = "UPDATE books SET title = :title, publishingYear = :publishingYear, genre = :genre WHERE id = :id";
     private static final String DELETION_BY_ID = "DELETE FROM books WHERE id = :id";
     private static final String DELETE_FROM_BOOKS = "DELETE FROM books";
     private static final String SELECT_BY_NAME = "SELECT * FROM books WHERE title= :title";
 
+    @Autowired
     public BookDatabaseDao(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -59,11 +64,13 @@ public class BookDatabaseDao implements BookDao {
 
     @Override
     public int insert(Book book) {
-        return jdbcTemplate.update(INSERT,
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(INSERT,
                 new MapSqlParameterSource()
                         .addValue("title", book.getTitle())
                         .addValue("publishingYear", book.getPublishingYear())
-                        .addValue("genre", book.getGenre().name()));
+                        .addValue("genre", book.getGenre().name()), keyHolder);
+        return Objects.requireNonNull(keyHolder.getKey()).intValue();
     }
 
     @Override
