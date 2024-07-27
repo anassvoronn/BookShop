@@ -124,6 +124,7 @@ class BookDatabaseDaoTest {
     @Test
     void save() {
         List<Book> books = bookDao.findByTitle("Убить сталкера");
+        assertEquals(1, books.size());
         for (Book book : books) {
             book.setPublishingYear(1875);
             bookDao.save(book);

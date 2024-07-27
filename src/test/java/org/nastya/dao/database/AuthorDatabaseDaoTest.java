@@ -165,7 +165,7 @@ class AuthorDatabaseDaoTest {
         assertEquals(0, authors.size());
     }
 
-    @Test
+    @Test// TODO the test is sporadically failing. Fix it.
     public void findByGenderAndByBirthDate_found2Authors() {
         insertAuthorToDatabase("Джейн Остин", "1926-04-28", "1817-07-18", FEMALE, ENGLAND);
 
