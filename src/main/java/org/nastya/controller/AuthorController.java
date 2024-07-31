@@ -6,7 +6,6 @@ import org.nastya.service.AuthorService;
 import org.nastya.service.exception.AuthorNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +20,11 @@ import java.util.List;
 @RequestMapping("/api/author")
 public class AuthorController {
     private static final Logger log = LoggerFactory.getLogger(AuthorController.class);
-    @Autowired
-    private AuthorService authorService;
+    private final AuthorService authorService;
+
+    public AuthorController(AuthorService authorService){
+        this.authorService = authorService;
+    }
 
     @GetMapping
     public List<AuthorListItemDTO> getAllUsers() {

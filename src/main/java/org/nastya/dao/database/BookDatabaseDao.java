@@ -33,7 +33,6 @@ public class BookDatabaseDao implements BookDao {
     private static final String DELETE_FROM_BOOKS = "DELETE FROM books";
     private static final String SELECT_BY_NAME = "SELECT * FROM books WHERE title= :title";
 
-    @Autowired
     public BookDatabaseDao(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

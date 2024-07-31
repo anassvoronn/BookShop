@@ -4,8 +4,6 @@ import org.nastya.dao.AuthorDao;
 import org.nastya.entity.Author;
 import org.nastya.entity.Country;
 import org.nastya.entity.Gender;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
