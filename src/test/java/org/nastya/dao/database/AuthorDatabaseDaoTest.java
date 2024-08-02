@@ -1,13 +1,17 @@
 package org.nastya.dao.database;
 
+import com.zaxxer.hikari.HikariDataSource;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.AuthorDao;
 import org.nastya.entity.Author;
 import org.nastya.entity.Country;
 import org.nastya.entity.Gender;
+import org.nastya.utils.DataSourceFactory;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,13 +28,24 @@ import static org.nastya.entity.Gender.MALE;
 import static org.nastya.utils.ObjectCreator.createAuthor;
 
 class AuthorDatabaseDaoTest {
-    private AuthorDao authorDao;
-    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory(new ThreadLocal<>());
+    private static AuthorDao authorDao;
+    private static HikariDataSource dataSource;
+
+    @BeforeAll
+    static void beforeAll() {
+        DataSourceFactory sourceFactory = new DataSourceFactory();
+        sourceFactory.readingFromFile();
+        dataSource = sourceFactory.getDataSource();
+        authorDao = new AuthorDatabaseDao(new NamedParameterJdbcTemplate(dataSource));
+    }
+
+    @AfterAll
+    static void afterAll() {
+        dataSource.close();
+    }
 
     @BeforeEach
     void setUp() {
-        authorDao = new AuthorDatabaseDao(connectionFactory);
-        connectionFactory.readingFromFile();
         insertAuthorToDatabase("Александр Грин", "1880-08-23", "1932-07-08", MALE, RUSSIA);
         insertAuthorToDatabase("Александр Пушкин", "1799-06-06", "1837-02-10", MALE, RUSSIA);
         insertAuthorToDatabase("Владимир Маяковский", "1893-07-19", null, MALE, RUSSIA);
@@ -150,7 +165,7 @@ class AuthorDatabaseDaoTest {
         assertEquals(0, authors.size());
     }
 
-    @Test
+    @Test// TODO the test is sporadically failing. Fix it.
     public void findByGenderAndByBirthDate_found2Authors() {
         insertAuthorToDatabase("Джейн Остин", "1926-04-28", "1817-07-18", FEMALE, ENGLAND);
 

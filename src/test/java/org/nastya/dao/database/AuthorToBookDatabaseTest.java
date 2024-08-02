@@ -1,25 +1,41 @@
 package org.nastya.dao.database;
 
+import com.zaxxer.hikari.HikariDataSource;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.nastya.ConnectionFactory.DatabaseConnectionFactory;
 import org.nastya.dao.AuthorToBookDao;
 import org.nastya.entity.AuthorToBook;
+import org.nastya.utils.DataSourceFactory;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.nastya.utils.ObjectCreator.createAuthorToBook;
 
 public class AuthorToBookDatabaseTest {
-    private AuthorToBookDao authorToBookDao;
-    private final DatabaseConnectionFactory connectionFactory = new DatabaseConnectionFactory(new ThreadLocal<>());
+    private static AuthorToBookDao authorToBookDao;
+    private static HikariDataSource dataSource;
+
+    @BeforeAll
+    static void beforeAll() {
+        DataSourceFactory sourceFactory = new DataSourceFactory();
+        sourceFactory.readingFromFile();
+        dataSource = sourceFactory.getDataSource();
+        authorToBookDao = new AuthorToBookDatabaseDao(new NamedParameterJdbcTemplate(dataSource));
+    }
+
+    @AfterAll
+    static void afterAll() {
+        dataSource.close();
+    }
 
     @BeforeEach
     void setUp() {
-        authorToBookDao = new AuthorToBookDatabaseDao(connectionFactory);
-        connectionFactory.readingFromFile();
         insertAuthorToBookDatabase(1, 2);
         insertAuthorToBookDatabase(2, 3);
         insertAuthorToBookDatabase(3, 5);
