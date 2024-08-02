@@ -10,19 +10,19 @@ import org.springframework.context.annotation.PropertySource;
 import javax.sql.DataSource;
 
 @Configuration
-@PropertySource("src/main/resources/database.properties")
+@PropertySource("database.properties")
 public class DaoConfiguration {
 
-    @Value("${db.url}")
+    @Value("${database.url}")
     private String jdbcUrl;
 
-    @Value("${db.username}")
+    @Value("${database.user}")
     private String username;
 
-    @Value("${db.password}")
+    @Value("${database.pass}")
     private String password;
 
-    @Value("${db.driverClassName}")
+    @Value("${database.driver}")
     private String driverClassName;
 
     @Bean

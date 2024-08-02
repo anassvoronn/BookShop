@@ -6,7 +6,12 @@ public enum Genre {
     NOVEL("Novel"),
     ADVENTURE("Adventure"),
     PSYCHOLOGY("Psychology"),
-    HORROR("Horror");
+    HORROR("Horror"),
+    COMEDY("Comedy"),
+    DYSTOPIA("Dystopia"),
+    DOCUMENTARY("Documentary"),
+    CLASSIC("Classic"),
+    SCIENCE_FICTION("Science fiction");
 
     private final String label;
 
