@@ -78,7 +78,7 @@ public class BookDatabaseDao implements BookDao {
                 new MapSqlParameterSource()
                         .addValue("title", book.getTitle())
                         .addValue("publishingYear", book.getPublishingYear())
-                        .addValue("country", book.getGenre().name())
+                        .addValue("genre", book.getGenre().name())
                         .addValue("id", book.getId()));
     }
 
