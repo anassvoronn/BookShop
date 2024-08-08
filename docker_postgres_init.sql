@@ -45,14 +45,3 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.author_to_book
     OWNER to postgres;
-
-CREATE TABLE IF NOT EXISTS public.book_views
-(
-    bookid integer,
-    viewcount integer
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.book_views
-    OWNER to postgres;

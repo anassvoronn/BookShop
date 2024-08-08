@@ -9,11 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.nastya.dao.AuthorDao;
 import org.nastya.dao.AuthorToBookDao;
 import org.nastya.dao.BookDao;
-import org.nastya.dao.BookViewsDao;
 import org.nastya.dao.database.AuthorDatabaseDao;
 import org.nastya.dao.database.AuthorToBookDatabaseDao;
 import org.nastya.dao.database.BookDatabaseDao;
-import org.nastya.dao.database.BookViewsDatabaseDao;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.dto.BookFormDTO;
 import org.nastya.entity.Country;
@@ -41,7 +39,6 @@ public class BookServiceTest {
     private static BookDao bookDao;
     private static AuthorToBookDao authorToBookDao;
     private static HikariDataSource dataSource;
-    private static BookViewsDao bookViewsDao;
     private int bookId;
 
     @BeforeAll
@@ -53,14 +50,12 @@ public class BookServiceTest {
         authorDao = new AuthorDatabaseDao(jdbcTemplate);
         bookDao = new BookDatabaseDao(jdbcTemplate);
         authorToBookDao = new AuthorToBookDatabaseDao(jdbcTemplate);
-        bookViewsDao = new BookViewsDatabaseDao(jdbcTemplate);
         bookService = new BookService(
                 bookDao,
                 new BookMapperImpl(),
                 authorDao,
                 authorToBookDao,
-                new AuthorMapperImpl(),
-                bookViewsDao
+                new AuthorMapperImpl()
         );
     }
 

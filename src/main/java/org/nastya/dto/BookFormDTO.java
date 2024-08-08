@@ -10,7 +10,6 @@ public class BookFormDTO {
     private int publishingYear;
     private Genre genre;
     private List<AuthorListItemDTO> authors;
-    private int viewsCount;
 
     @Override
     public String toString() {
@@ -20,14 +19,6 @@ public class BookFormDTO {
                 ", published=" + publishingYear +
                 ", genre='" + genre + '\'' +
                 '}';
-    }
-
-    public int getViewsCount() {
-        return viewsCount;
-    }
-
-    public void setViewsCount(int viewsCount) {
-        this.viewsCount = viewsCount;
     }
 
     public List<AuthorListItemDTO> getAuthors() {
