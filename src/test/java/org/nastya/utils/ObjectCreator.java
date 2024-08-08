@@ -39,4 +39,11 @@ public class ObjectCreator {
         authorToBook.setBookId(bookId);
         return authorToBook;
     }
+
+    public static BookViews createBookViews(int bookId, int viewsCount) {
+        BookViews bookViews = new BookViews();
+        bookViews.setBookId(bookId);
+        bookViews.setViewsCount(viewsCount);
+        return bookViews;
+    }
 }

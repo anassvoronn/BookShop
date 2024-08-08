@@ -3,7 +3,6 @@ package org.nastya.dao.database;
 import org.nastya.dao.BookDao;
 import org.nastya.entity.Book;
 import org.nastya.entity.Genre;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
