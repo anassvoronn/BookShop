@@ -3,12 +3,14 @@ package org.nastya.service;
 import org.nastya.dao.AuthorDao;
 import org.nastya.dao.AuthorToBookDao;
 import org.nastya.dao.BookDao;
+import org.nastya.dao.BookViewsDao;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.dto.BookFormDTO;
 import org.nastya.dto.BookListItemDTO;
 import org.nastya.entity.Author;
 import org.nastya.entity.AuthorToBook;
 import org.nastya.entity.Book;
+import org.nastya.entity.BookViews;
 import org.nastya.service.exception.BookNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,17 +29,20 @@ public class BookService {
     private final AuthorDao authorDao;
     private final AuthorToBookDao authorToBookDao;
     private final AuthorMapper authorMapper;
+    private final BookViewsDao bookViewsDao;
 
     public BookService(final BookDao bookDao,
                        final BookMapper bookMapper,
                        final AuthorDao authorDao,
                        final AuthorToBookDao authorToBookDao,
-                       final AuthorMapper authorMapper) {
+                       final AuthorMapper authorMapper,
+                       final BookViewsDao bookViewsDao) {
         this.bookDao = bookDao;
         this.bookMapper = bookMapper;
         this.authorDao = authorDao;
         this.authorToBookDao = authorToBookDao;
         this.authorMapper = authorMapper;
+        this.bookViewsDao = bookViewsDao;
     }
 
     public List<BookListItemDTO> findAll() {
@@ -110,4 +115,24 @@ public class BookService {
         log.info("Updated bookEntity '{}' with id '{}'", bookEntity.getTitle(), bookEntity.getId());
     }
 
+    public void incrementViewCount(int bookId) throws BookNotFoundException {
+        Book book = bookDao.findById(bookId);
+        if (book == null) {
+            log.warn("Book with id '{}' not found for incrementing view count", bookId);
+            throw new BookNotFoundException("There is no book with this id " + bookId);
+        }
+        BookFormDTO bookFormDTO = bookMapper.mapToBookFormDTO(book);
+
+        int newViewsCount = bookFormDTO.getViewsCount() + 1;
+        bookFormDTO.setViewsCount(newViewsCount);
+
+        Book updatedBook = bookMapper.mapToBook(bookFormDTO);
+
+        BookViews bookViews = new BookViews();
+        bookViews.setBookId(updatedBook.getId());
+        bookViews.setViewsCount(newViewsCount);
+        bookViewsDao.incrementViewCount(bookViews);
+        log.info("Incremented view count for book with id '{}'. New view count: {}",
+                updatedBook.getId(), newViewsCount);
+    }
 }
