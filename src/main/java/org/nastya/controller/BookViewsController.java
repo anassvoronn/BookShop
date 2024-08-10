@@ -20,7 +20,7 @@ public class BookViewsController {
         this.bookService = bookService;
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{bookId}")
     public ResponseEntity<String> incrementViewCount(@PathVariable int bookId) {
         log.info("Received request to increment view count for book with ID: {}", bookId);
         try {

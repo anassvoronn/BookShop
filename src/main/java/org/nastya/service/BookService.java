@@ -21,6 +21,8 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.nastya.dao.database.BookViewsDatabaseDao.DEFAULT_COUNT_IF_NOT_FOUND;
+
 @Service
 public class BookService {
     private static final Logger log = LoggerFactory.getLogger(BookService.class);
@@ -30,6 +32,7 @@ public class BookService {
     private final AuthorToBookDao authorToBookDao;
     private final AuthorMapper authorMapper;
     private final BookViewsDao bookViewsDao;
+    private static final int FIRST_VIEW = 1;
 
     public BookService(final BookDao bookDao,
                        final BookMapper bookMapper,
@@ -121,18 +124,13 @@ public class BookService {
             log.warn("Book with id '{}' not found for incrementing view count", bookId);
             throw new BookNotFoundException("There is no book with this id " + bookId);
         }
-        BookFormDTO bookFormDTO = bookMapper.mapToBookFormDTO(book);
-
-        int newViewsCount = bookFormDTO.getViewsCount() + 1;
-        bookFormDTO.setViewsCount(newViewsCount);
-
-        Book updatedBook = bookMapper.mapToBook(bookFormDTO);
-
-        BookViews bookViews = new BookViews();
-        bookViews.setBookId(updatedBook.getId());
-        bookViews.setViewsCount(newViewsCount);
-        bookViewsDao.incrementViewCount(bookViews);
-        log.info("Incremented view count for book with id '{}'. New view count: {}",
-                updatedBook.getId(), newViewsCount);
+        if (bookViewsDao.getViewsCountByBookId(bookId) == DEFAULT_COUNT_IF_NOT_FOUND) {
+            BookViews bookViews = new BookViews();
+            bookViews.setBookId(bookId);
+            bookViews.setViewsCount(FIRST_VIEW);
+            bookViewsDao.insert(bookViews);
+            return;
+        }
+        bookViewsDao.incrementViewsCountByBookId(bookId);
     }
 }
