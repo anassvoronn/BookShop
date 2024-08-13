@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BookService} from "../service/book.service";
 import {Book} from "../entity/book.model";
 import {ActivatedRoute} from "@angular/router";
@@ -8,7 +8,7 @@ import {ActivatedRoute} from "@angular/router";
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.css']
 })
-export class BookDetailComponent {
+export class BookDetailComponent implements OnInit {
 
     bookDetail!: Book;
     bookId!: string | null;
@@ -23,6 +23,7 @@ export class BookDetailComponent {
                 this.bookId = params.get('id');
                 this.bookService.getById(this.bookId).subscribe(book => {
                     this.bookDetail = book;
+                    this.bookService.incrementViewCount(book.id);
                 })
             }
         });

@@ -44,4 +44,8 @@ export class BookService {
             {responseType: 'text' as 'json'}
         );
     }
+
+    incrementViewCount(bookId: number): void {
+        this.http.post<string>("/book-shop/api/bookViews/" + bookId, {}).subscribe();
+    }
 }
