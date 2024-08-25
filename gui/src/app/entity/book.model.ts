@@ -1,12 +1,14 @@
 export class Book {
     private readonly _id: number;
     private readonly _title: string;
+    private readonly _views: string;
     private readonly _publishingYear: number;
     private readonly _genre: string;
 
-    constructor(id: number, title: string, publishingYear: number, genre: string){
+    constructor(id: number, title: string, views: string, publishingYear: number, genre: string){
         this._id = id;
         this._title = title;
+        this._views = views;
         this._publishingYear = publishingYear;
         this._genre = genre;
     }
@@ -27,6 +29,10 @@ export class Book {
      get title(): string {
          return this._title;
      }
+
+     get views(): string {
+              return this._views;
+          }
 
      get publishingYear(): number {
          return this._publishingYear;

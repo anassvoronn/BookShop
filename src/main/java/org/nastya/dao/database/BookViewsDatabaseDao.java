@@ -20,7 +20,7 @@ public class BookViewsDatabaseDao implements BookViewsDao {
     private static final String GET_VIEWS_BY_BOOK_ID = "SELECT viewCount FROM book_views WHERE bookId = :bookId";
     private static final String INCREMENT_VIEWS_COUNT_BY_BOOK_ID = "UPDATE book_views SET viewCount = viewCount + 1 WHERE bookId = :bookId";
 
-    public static final int DEFAULT_COUNT_IF_NOT_FOUND = -1;
+    public static final int DEFAULT_COUNT_IF_NOT_FOUND = 0;
 
     public BookViewsDatabaseDao(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

@@ -2,7 +2,7 @@
   <table mat-table [dataSource]="books">
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef>Title</th>
-      <td mat-cell *matCellDef="let book">{{ book.title }}</td>
+      <td mat-cell *matCellDef="let book">{{ book.title }} (views {{book.views}} times)</td>
     </ng-container>
     <ng-container matColumnDef="publishingYear">
       <th mat-header-cell *matHeaderCellDef>Publishing Year</th>

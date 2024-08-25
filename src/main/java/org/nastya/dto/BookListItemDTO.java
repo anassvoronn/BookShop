@@ -7,6 +7,7 @@ public class BookListItemDTO {
     private String title;
     private int publishingYear;
     private Genre genre;
+    private int views;
 
     @Override
     public String toString() {
@@ -16,6 +17,15 @@ public class BookListItemDTO {
                 ", published=" + publishingYear +
                 ", genre='" + genre + '\'' +
                 '}';
+    }
+
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 
     public int getId() {

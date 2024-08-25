@@ -51,7 +51,18 @@ public class BookService {
     public List<BookListItemDTO> findAll() {
         List<Book> books = bookDao.findAll();
         log.info("Found '{}' books", books.size());
-        return bookMapper.mapToBookListItemDTO(books);
+        List<BookListItemDTO> bookDTOs = new ArrayList<>();
+        for (Book book : books) {
+            BookListItemDTO bookDTO = new BookListItemDTO();
+            bookDTO.setId(book.getId());
+            bookDTO.setTitle(book.getTitle());
+            bookDTO.setPublishingYear(book.getPublishingYear());
+            bookDTO.setGenre(book.getGenre());
+            int views = bookViewsDao.getViewsCountByBookId(book.getId());
+            bookDTO.setViews(views);
+            bookDTOs.add(bookDTO);
+        }
+        return bookDTOs;
     }
 
     private int calculateAge(LocalDate dateOfBirth, LocalDate deathDate) {
