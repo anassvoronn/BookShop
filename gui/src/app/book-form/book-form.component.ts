@@ -60,6 +60,7 @@ export class BookFormComponent implements OnInit {
                 new Book(
                     this.bookId == null ? 0 : Number(this.bookId),
                     this.bookForm.controls['title']!.value,
+                    this.bookForm.controls['views']!.value,
                     this.bookForm.controls['publishingYear']!.value,
                     this.bookForm.controls['genre']!.value
                 )

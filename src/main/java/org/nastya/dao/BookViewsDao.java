@@ -4,5 +4,9 @@ import org.nastya.entity.BookViews;
 
 public interface BookViewsDao {
 
-    void incrementViewCount(BookViews bookViews);
+    void incrementViewsCountByBookId(int bookId);
+
+    int getViewsCountByBookId(int bookId);
+
+    void insert(BookViews bookViews);
 }

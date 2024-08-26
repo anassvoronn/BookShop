@@ -8,6 +8,7 @@ import {Observable} from "rxjs";
 })
 export class BookService {
     private apiUrl: string = "/book-shop/api/book";
+    private apiUrlViews: string = "/book-shop/api/bookViews/";
 
     constructor(private http: HttpClient) {
     }
@@ -43,5 +44,9 @@ export class BookService {
         return this.http.delete<string>(this.apiUrl + "/" + bookId,
             {responseType: 'text' as 'json'}
         );
+    }
+
+    incrementViewCount(bookId: number): void {
+        this.http.post<string>(this.apiUrlViews + bookId, {}).subscribe();
     }
 }
