@@ -31,8 +31,8 @@ export class Book {
      }
 
      get views(): string {
-              return this._views;
-          }
+         return this._views;
+     }
 
      get publishingYear(): number {
          return this._publishingYear;
