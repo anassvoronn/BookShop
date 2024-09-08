@@ -14,9 +14,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.nastya.utils.ObjectCreator.createBook;
 
 class BookDatabaseDaoTest {
@@ -144,6 +142,32 @@ class BookDatabaseDaoTest {
         int idToDelete = 21;
         bookDao.deleteById(idToDelete);
         assertNull(bookDao.findById(idToDelete), "No such ID exists");
+    }
+
+    @Test
+    void findByFullName() {
+        List<Book> books = bookDao.findByTitleContaining("Зачарованные");
+        assertEquals(1, books.size());
+        assertEquals("Зачарованные", books.get(0).getTitle());
+    }
+
+    @Test
+    void findByPartOfTheName() {
+        List<Book> books = bookDao.findByTitleContaining("Приключений");
+        assertEquals(1, books.size());
+        assertEquals("Время Приключений", books.get(0).getTitle());
+    }
+
+    @Test
+    void findBySyllable() {
+        List<Book> books = bookDao.findByTitleContaining("на");
+        assertTrue(books.size() > 0);
+    }
+
+    @Test
+    void findANonExistentBook() {
+        List<Book> books = bookDao.findByTitleContaining("НеСуществующаяКнига");
+        assertTrue(books.isEmpty(), "No matches");
     }
 
     private void insertBookToDatabase(String title, String publishingYear, Genre genre) {

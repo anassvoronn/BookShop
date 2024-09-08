@@ -12,6 +12,8 @@ public interface BookDao {
 
     List<Book> findByTitle(String title);
 
+    List<Book> findByTitleContaining(String title);
+
     int insert(Book book);
 
     void save(Book book);

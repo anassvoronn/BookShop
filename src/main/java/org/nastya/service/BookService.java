@@ -138,4 +138,15 @@ public class BookService {
         }
         bookViewsDao.incrementViewsCountByBookId(bookId);
     }
+
+    public List<BookListItemDTO> findByTitleContaining(String title) {
+        List<Book> books = bookDao.findByTitleContaining(title);
+        log.info("Found '{}' books containing title '{}'", books.size(), title);
+        List<BookListItemDTO> dtos = bookMapper.mapToBookListItemDTO(books);
+        for (BookListItemDTO dto : dtos) {
+            int views = bookViewsDao.getViewsCountByBookId(dto.getId());
+            dto.setViews(views);
+        }
+        return dtos;
+    }
 }

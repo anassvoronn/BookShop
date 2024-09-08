@@ -78,4 +78,15 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while adding the book");
         }
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<BookListItemDTO>> searchBooks(@RequestParam String title) {
+        log.info("Searching books containing title '{}'", title);
+        List<BookListItemDTO> books = bookService.findByTitleContaining(title);
+        if (books.isEmpty()) {
+            log.warn("No books found containing title '{}'", title);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(books);
+    }
 }
