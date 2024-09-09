@@ -11,6 +11,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class BookListComponent implements OnInit {
     books: Book[] = [];
     displayedColumns: string[] = ['title', 'publishingYear', 'genre', 'actions'];
+     title: string = '';
+     errorMessage: string = '';
 
     constructor(
         private bookService: BookService,
@@ -40,5 +42,25 @@ export class BookListComponent implements OnInit {
                 });
             }
         );
+    }
+
+    searchBooks() {
+        if (this.title.trim() === '') {
+            this.ngOnInit();
+        } else {
+            this.bookService.searchBooks(this.title).subscribe(
+                (bookSearch: Book[]) => {
+                    this.books = bookSearch;
+                    this.errorMessage = '';
+                },
+            error => {
+                if (error.status === 204) {
+                    this.books = [];
+                    this.errorMessage = 'No books found';
+                } else {
+                    this.errorMessage = 'An error occurred while searching for books';
+                    }
+            });
+        }
     }
 }

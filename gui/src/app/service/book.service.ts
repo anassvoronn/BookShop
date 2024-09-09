@@ -9,6 +9,7 @@ import {Observable} from "rxjs";
 export class BookService {
     private apiUrl: string = "/book-shop/api/book";
     private apiUrlViews: string = "/book-shop/api/bookViews/";
+    private apiUrlSearch: string = "/book-shop/api/book/search";
 
     constructor(private http: HttpClient) {
     }
@@ -48,5 +49,10 @@ export class BookService {
 
     incrementViewCount(bookId: number): void {
         this.http.post<string>(this.apiUrlViews + bookId, {}).subscribe();
+    }
+
+    searchBooks(title: string): Observable<Book[]> {
+            const searchUrl = this.apiUrlSearch + '?title=' + encodeURIComponent(title);
+                return this.http.get<Book[]>(searchUrl);
     }
 }
