@@ -12,7 +12,6 @@ export class BookListComponent implements OnInit {
     books: Book[] = [];
     displayedColumns: string[] = ['title', 'publishingYear', 'genre', 'actions'];
      title: string = '';
-     errorMessage: string = '';
 
     constructor(
         private bookService: BookService,
@@ -20,10 +19,14 @@ export class BookListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.bookService.getAllBooks().subscribe((books: Book[]) => {
-            this.books = books;
-        });
+        this.loadAllBooks();
     }
+
+    loadAllBooks(): void {
+            this.bookService.getAllBooks().subscribe((books: Book[]) => {
+                this.books = books;
+            });
+        }
 
     updateBook(id: number): void {
     }
@@ -34,7 +37,7 @@ export class BookListComponent implements OnInit {
                 this.snackBar.open(responseText, 'Close', {
                     duration: 15000, // Set the duration for which the message will be displayed
                 });
-                this.ngOnInit();
+                this.loadAllBooks();
             },
             error => {
                 this.snackBar.open('Error deleting book: ' + error.message, 'Close', {
@@ -46,21 +49,28 @@ export class BookListComponent implements OnInit {
 
     searchBooks() {
         if (this.title.trim() === '') {
-            this.ngOnInit();
+            this.loadAllBooks();
         } else {
             this.bookService.searchBooks(this.title).subscribe(
-                (bookSearch: Book[]) => {
-                    this.books = bookSearch;
-                    this.errorMessage = '';
+                (foundBooks: Book[]) => {
+                    this.books = foundBooks;
+                    this.snackBar.open('Books found', 'Close', {
+                        duration: 15000,
+                    });
                 },
-            error => {
-                if (error.status === 204) {
-                    this.books = [];
-                    this.errorMessage = 'No books found';
-                } else {
-                    this.errorMessage = 'An error occurred while searching for books';
+                error => {
+                    if (error.status === 204) {
+                        this.books = [];
+                        this.snackBar.open('No books found', 'Close', {
+                            duration: 15000,
+                        });
+                    } else {
+                        this.snackBar.open('Error searching books: ' + error.message, 'Close', {
+                            duration: 15000,
+                        });
                     }
-            });
+                }
+            );
         }
     }
 }

@@ -161,7 +161,7 @@ class BookDatabaseDaoTest {
     @Test
     void findBySyllable() {
         List<Book> books = bookDao.findByTitleContaining("на");
-        assertTrue(books.size() > 0);
+        assertEquals(4, books.size());
     }
 
     @Test

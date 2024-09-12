@@ -52,10 +52,7 @@ public class BookService {
         List<Book> books = bookDao.findAll();
         log.info("Found '{}' books", books.size());
         List<BookListItemDTO> dtos = bookMapper.mapToBookListItemDTO(books);
-        for (BookListItemDTO dto : dtos) {
-            int views = bookViewsDao.getViewsCountByBookId(dto.getId());
-            dto.setViews(views);
-        }
+        setViewsForBooks(dtos);
         return dtos;
     }
 
@@ -143,10 +140,14 @@ public class BookService {
         List<Book> books = bookDao.findByTitleContaining(title);
         log.info("Found '{}' books containing title '{}'", books.size(), title);
         List<BookListItemDTO> dtos = bookMapper.mapToBookListItemDTO(books);
+        setViewsForBooks(dtos);
+        return dtos;
+    }
+
+    private void setViewsForBooks(List<BookListItemDTO> dtos) {
         for (BookListItemDTO dto : dtos) {
             int views = bookViewsDao.getViewsCountByBookId(dto.getId());
             dto.setViews(views);
         }
-        return dtos;
     }
 }
