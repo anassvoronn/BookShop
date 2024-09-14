@@ -41,7 +41,8 @@ export class BookFormComponent implements OnInit {
                     this.bookForm.setValue({
                         title: book.title,
                         publishingYear: book.publishingYear,
-                        genre: book.genre
+                        genre: book.genre,
+                        views: book.views || 0
                     });
                 })
             }
@@ -50,7 +51,8 @@ export class BookFormComponent implements OnInit {
         this.bookForm = this.formBuilder.group({
             title: ['', Validators.required],
             publishingYear: [''],
-            genre: ['', Validators.required]
+            genre: ['', Validators.required],
+            views: ['']
         });
     }
 
