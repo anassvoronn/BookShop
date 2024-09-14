@@ -2,6 +2,7 @@ package org.nastya.controller;
 
 import org.nastya.dto.BookFormDTO;
 import org.nastya.dto.BookListItemDTO;
+import org.nastya.entity.Genre;
 import org.nastya.service.BookService;
 import org.nastya.service.exception.BookNotFoundException;
 import org.slf4j.Logger;
@@ -80,11 +81,12 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<BookListItemDTO>> searchBooks(@RequestParam String title) {
-        log.info("Searching books containing title '{}'", title);
-        List<BookListItemDTO> books = bookService.findByTitleContaining(title);
+    public ResponseEntity<List<BookListItemDTO>> searchBooks(@RequestParam(required = false) Genre genre,
+                                                             @RequestParam(required = false) String title) {
+        log.info("Searching books with genre '{}' and title '{}'", genre, title);
+        List<BookListItemDTO> books = bookService.findByGenreOrTitle(genre, title);
         if (books.isEmpty()) {
-            log.warn("No books found containing title '{}'", title);
+            log.warn("No books found for the given criteria");
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(books);

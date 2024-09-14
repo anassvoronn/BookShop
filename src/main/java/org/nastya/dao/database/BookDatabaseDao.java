@@ -32,6 +32,7 @@ public class BookDatabaseDao implements BookDao {
     private static final String DELETE_FROM_BOOKS = "DELETE FROM books";
     private static final String SELECT_BY_NAME = "SELECT * FROM books WHERE title= :title";
     private static final String SELECT_BY_TITLE_CONTAINING = "SELECT * FROM books WHERE title ILIKE :title";
+    private static final String SELECT_BY_GENRE_AND_TITLE = "SELECT * FROM books WHERE genre= :genre OR title = :title";
 
     public BookDatabaseDao(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -98,6 +99,15 @@ public class BookDatabaseDao implements BookDao {
         String searchTerm = "%" + title + "%";
         return jdbcTemplate.query(SELECT_BY_TITLE_CONTAINING,
                 new MapSqlParameterSource().addValue("title", searchTerm),
+                (rs, rowNum) -> bindBook(rs));
+    }
+
+    @Override
+    public List<Book> findByGenreAndByTitle(Genre genre, String title) {
+        return jdbcTemplate.query(SELECT_BY_GENRE_AND_TITLE,
+                new MapSqlParameterSource()
+                        .addValue("genre", genre.name())
+                        .addValue("title", title),
                 (rs, rowNum) -> bindBook(rs));
     }
 

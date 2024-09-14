@@ -7,10 +7,7 @@ import org.nastya.dao.BookViewsDao;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.dto.BookFormDTO;
 import org.nastya.dto.BookListItemDTO;
-import org.nastya.entity.Author;
-import org.nastya.entity.AuthorToBook;
-import org.nastya.entity.Book;
-import org.nastya.entity.BookViews;
+import org.nastya.entity.*;
 import org.nastya.service.exception.BookNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,5 +146,13 @@ public class BookService {
             int views = bookViewsDao.getViewsCountByBookId(dto.getId());
             dto.setViews(views);
         }
+    }
+
+    public List<BookListItemDTO> findByGenreOrTitle(Genre genre, String title) {
+        List<Book> books = bookDao.findByGenreAndByTitle(genre, title);
+        log.info("Found '{}' books by genre '{}' or title '{}'", books.size(), genre, title);
+        List<BookListItemDTO> dtos = bookMapper.mapToBookListItemDTO(books);
+        setViewsForBooks(dtos);
+        return dtos;
     }
 }
