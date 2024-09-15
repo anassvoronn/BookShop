@@ -170,6 +170,24 @@ class BookDatabaseDaoTest {
         assertTrue(books.isEmpty(), "No matches");
     }
 
+    @Test
+    void findByGenreAndByTitle(){
+        List<Book> books = bookDao.findByGenreAndByTitle(Genre.HORROR, "Возмездие");
+        assertEquals(3, books.size());
+    }
+
+    @Test
+    void findByGenreAndTitleThatDoesNotExist() {
+        List<Book> books = bookDao.findByGenreAndByTitle(Genre.NOVEL, "Киллер");
+        assertEquals(2, books.size());
+    }
+
+    @Test
+    void findByTitleAndGenreThatDoesNotExist() {
+        List<Book> books = bookDao.findByGenreAndByTitle( Genre.COMEDY , "Оттенки любви");
+        assertEquals(1, books.size());
+    }
+
     private void insertBookToDatabase(String title, String publishingYear, Genre genre) {
         Book book = createBook(title, publishingYear, genre);
         bookDao.insert(book);
