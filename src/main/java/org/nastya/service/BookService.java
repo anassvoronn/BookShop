@@ -142,10 +142,10 @@ public class BookService {
     }
 
     private void setViewsForBooks(List<BookListItemDTO> dtos) {
-        for (BookListItemDTO dto : dtos) {
+        dtos.forEach(dto -> {
             int views = bookViewsDao.getViewsCountByBookId(dto.getId());
             dto.setViews(views);
-        }
+        });
     }
 
     public List<BookListItemDTO> findByGenreAndTitle(Genre genre, String title) {
