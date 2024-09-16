@@ -7,6 +7,7 @@ import org.nastya.entity.BookViews;
 import org.nastya.utils.DataSourceFactory;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.nastya.utils.ObjectCreator.createBookViews;
 
 class BookViewsDatabaseDaoTest {
@@ -28,15 +29,28 @@ class BookViewsDatabaseDaoTest {
 
     @BeforeEach
     void setUp() {
-        insertViewsCount(1, 15);
-        insertViewsCount(2, 0);
-        insertViewsCount(3, 100);
-        insertViewsCount(4, 60);
-        insertViewsCount(5, 1);
+        insertBookViews(1, 0);
+        insertBookViews(2, 5);
+        insertBookViews(3, 1);
+        insertBookViews(4, 20);
+        insertBookViews(5, 100);
     }
 
-    private void insertViewsCount(int bookId, int viewsCount) {
-        BookViews bookViews = createBookViews(bookId, viewsCount);
-        bookViewsDao.incrementViewCount(bookViews);
+    @Test
+    void test() {
+        insertBookViews(9, 0);
+        int countBefore = bookViewsDao.getViewsCountByBookId(9);
+        assertEquals(0, countBefore);
+
+        bookViewsDao.incrementViewsCountByBookId(9);
+
+        int countAfter = bookViewsDao.getViewsCountByBookId(9);
+        assertEquals(1, countAfter);
+
+    }
+
+    private void insertBookViews(int bookId, int viewCount) {
+        BookViews bookViews = createBookViews(bookId, viewCount);
+        bookViewsDao.insert(bookViews);
     }
 }

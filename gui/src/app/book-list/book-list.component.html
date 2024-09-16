@@ -1,4 +1,18 @@
 <div class="mat-elevation-z2">
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Search by Title</mat-label>
+      <input matInput [(ngModel)]="title" placeholder="Enter book title">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Genre</mat-label>
+      <mat-select [(ngModel)]="selectedGenre">
+        <mat-option *ngFor="let genre of genres" [value]="genre">{{ genre.value }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="searchBooks()">Search</button>
+    <button mat-raised-button color="warn" (click)="resetSearch()">Reset</button>
+  </div>
   <table mat-table [dataSource]="books">
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef>Title</th>

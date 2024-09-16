@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Book} from "../entity/book.model";
+import {Genre} from "../entity/genre.model";
 import {BookService} from "../service/book.service";
+import {GenreService} from "../service/genre.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -11,15 +13,30 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class BookListComponent implements OnInit {
     books: Book[] = [];
     displayedColumns: string[] = ['title', 'publishingYear', 'genre', 'actions'];
+     title: string = '';
+     selectedGenre: Genre | null = null;
+     genres: Genre[] = [];
 
     constructor(
         private bookService: BookService,
-        private snackBar: MatSnackBar) {
+        private snackBar: MatSnackBar,
+        private genreService: GenreService) {
     }
 
     ngOnInit(): void {
+        this.loadAllBooks();
+        this.loadGenres();
+    }
+
+    loadAllBooks(): void {
         this.bookService.getAllBooks().subscribe((books: Book[]) => {
             this.books = books;
+        });
+    }
+
+    loadGenres(): void {
+        this.genreService.getAllGenres().subscribe((genres: Genre[]) => {
+            this.genres = genres;
         });
     }
 
@@ -32,7 +49,7 @@ export class BookListComponent implements OnInit {
                 this.snackBar.open(responseText, 'Close', {
                     duration: 15000, // Set the duration for which the message will be displayed
                 });
-                this.ngOnInit();
+                this.loadAllBooks();
             },
             error => {
                 this.snackBar.open('Error deleting book: ' + error.message, 'Close', {
@@ -40,5 +57,38 @@ export class BookListComponent implements OnInit {
                 });
             }
         );
+    }
+
+    searchBooks(): void {
+        if (this.title.trim() === '' && !this.selectedGenre) {
+            this.loadAllBooks();
+        } else {
+            this.bookService.searchBooks(this.title, this.selectedGenre).subscribe(
+                (foundBooks: Book[]) => {
+                    this.books = foundBooks;
+                    this.snackBar.open('Books found', 'Close', {
+                        duration: 15000,
+                    });
+                },
+                error => {
+                    if (error.status === 204) {
+                        this.books = [];
+                        this.snackBar.open('No books found', 'Close', {
+                            duration: 15000,
+                        });
+                    } else {
+                        this.snackBar.open('Error searching books: ' + error.message, 'Close', {
+                            duration: 15000,
+                        });
+                    }
+                }
+            );
+        }
+    }
+
+    resetSearch(): void {
+        this.title = '';
+        this.selectedGenre = null;
+        this.loadAllBooks();
     }
 }

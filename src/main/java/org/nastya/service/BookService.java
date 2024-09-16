@@ -7,10 +7,7 @@ import org.nastya.dao.BookViewsDao;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.dto.BookFormDTO;
 import org.nastya.dto.BookListItemDTO;
-import org.nastya.entity.Author;
-import org.nastya.entity.AuthorToBook;
-import org.nastya.entity.Book;
-import org.nastya.entity.BookViews;
+import org.nastya.entity.*;
 import org.nastya.service.exception.BookNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,10 +49,7 @@ public class BookService {
         List<Book> books = bookDao.findAll();
         log.info("Found '{}' books", books.size());
         List<BookListItemDTO> dtos = bookMapper.mapToBookListItemDTO(books);
-        for (BookListItemDTO dto : dtos) {
-            int views = bookViewsDao.getViewsCountByBookId(dto.getId());
-            dto.setViews(views);
-        }
+        setViewsForBooks(dtos);
         return dtos;
     }
 
@@ -137,5 +131,28 @@ public class BookService {
             return;
         }
         bookViewsDao.incrementViewsCountByBookId(bookId);
+    }
+
+    public List<BookListItemDTO> findByTitleContaining(String title) {
+        List<Book> books = bookDao.findByTitleContaining(title);
+        log.info("Found '{}' books containing title '{}'", books.size(), title);
+        List<BookListItemDTO> dtos = bookMapper.mapToBookListItemDTO(books);
+        setViewsForBooks(dtos);
+        return dtos;
+    }
+
+    private void setViewsForBooks(List<BookListItemDTO> dtos) {
+        dtos.forEach(dto -> {
+            int views = bookViewsDao.getViewsCountByBookId(dto.getId());
+            dto.setViews(views);
+        });
+    }
+
+    public List<BookListItemDTO> findByGenreAndTitle(Genre genre, String title) {
+        List<Book> books = bookDao.findByGenreAndByTitle(genre, title);
+        log.info("Found '{}' books by genre '{}' or title '{}'", books.size(), genre, title);
+        List<BookListItemDTO> dtos = bookMapper.mapToBookListItemDTO(books);
+        setViewsForBooks(dtos);
+        return dtos;
     }
 }
