@@ -104,17 +104,18 @@ public class BookDatabaseDao implements BookDao {
     @Override
     public List<Book> findByGenreAndByTitle(Genre genre, String title) {
         String searchTerm = title != null ? "%" + title + "%" : null;
-        StringBuilder sql = new StringBuilder("SELECT * FROM books WHERE 1=1");
+        String sql = "SELECT * FROM books WHERE ";
+        String where = ""; // TODO finish
         MapSqlParameterSource params = new MapSqlParameterSource();
         if (genre != null) {
-            sql.append(" AND genre = :genre");
+            sql += " AND genre = :genre";
             params.addValue("genre", genre.name());
         }
         if (title != null) {
-            sql.append(" AND title ILIKE :title");
+            sql += " AND title ILIKE :title";
             params.addValue("title", searchTerm);
         }
-        return jdbcTemplate.query(sql.toString(), params, (rs, rowNum) -> bindBook(rs));
+        return jdbcTemplate.query(sql, params, (rs, rowNum) -> bindBook(rs));
     }
 
     private Book bindBook(ResultSet rs) throws SQLException {
