@@ -148,7 +148,7 @@ public class BookService {
         }
     }
 
-    public List<BookListItemDTO> findByGenreOrTitle(Genre genre, String title) {
+    public List<BookListItemDTO> findByGenreAndTitle(Genre genre, String title) {
         List<Book> books = bookDao.findByGenreAndByTitle(genre, title);
         log.info("Found '{}' books by genre '{}' or title '{}'", books.size(), genre, title);
         List<BookListItemDTO> dtos = bookMapper.mapToBookListItemDTO(books);

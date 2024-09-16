@@ -32,7 +32,6 @@ public class BookDatabaseDao implements BookDao {
     private static final String DELETE_FROM_BOOKS = "DELETE FROM books";
     private static final String SELECT_BY_NAME = "SELECT * FROM books WHERE title= :title";
     private static final String SELECT_BY_TITLE_CONTAINING = "SELECT * FROM books WHERE title ILIKE :title";
-    private static final String SELECT_BY_GENRE_AND_TITLE = "SELECT * FROM books WHERE genre= :genre OR title = :title";
 
     public BookDatabaseDao(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -104,11 +103,18 @@ public class BookDatabaseDao implements BookDao {
 
     @Override
     public List<Book> findByGenreAndByTitle(Genre genre, String title) {
-        return jdbcTemplate.query(SELECT_BY_GENRE_AND_TITLE,
-                new MapSqlParameterSource()
-                        .addValue("genre", genre.name())
-                        .addValue("title", title),
-                (rs, rowNum) -> bindBook(rs));
+        String searchTerm = title != null ? "%" + title + "%" : null;
+        StringBuilder sql = new StringBuilder("SELECT * FROM books WHERE 1=1");
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        if (genre != null) {
+            sql.append(" AND genre = :genre");
+            params.addValue("genre", genre.name());
+        }
+        if (title != null) {
+            sql.append(" AND title ILIKE :title");
+            params.addValue("title", searchTerm);
+        }
+        return jdbcTemplate.query(sql.toString(), params, (rs, rowNum) -> bindBook(rs));
     }
 
     private Book bindBook(ResultSet rs) throws SQLException {

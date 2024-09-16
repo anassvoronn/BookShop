@@ -84,7 +84,7 @@ public class BookController {
     public ResponseEntity<List<BookListItemDTO>> searchBooks(@RequestParam(required = false) Genre genre,
                                                              @RequestParam(required = false) String title) {
         log.info("Searching books with genre '{}' and title '{}'", genre, title);
-        List<BookListItemDTO> books = bookService.findByGenreOrTitle(genre, title);
+        List<BookListItemDTO> books = bookService.findByGenreAndTitle(genre, title);
         if (books.isEmpty()) {
             log.warn("No books found for the given criteria");
             return ResponseEntity.noContent().build();

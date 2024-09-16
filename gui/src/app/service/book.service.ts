@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Book} from "../entity/book.model";
+import {Genre} from "../entity/genre.model";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 
@@ -51,8 +52,11 @@ export class BookService {
         this.http.post<string>(this.apiUrlViews + bookId, {}).subscribe();
     }
 
-    searchBooks(title: string): Observable<Book[]> {
-            const searchUrl = this.apiUrlSearch + '?title=' + encodeURIComponent(title);
-                return this.http.get<Book[]>(searchUrl);
+    searchBooks(title: string, genre: Genre | null): Observable<Book[]> {
+        let searchUrl = this.apiUrlSearch + '?title=' + encodeURIComponent(title);
+        if (genre) {
+            searchUrl += '&genre=' + encodeURIComponent(genre.value);
+        }
+        return this.http.get<Book[]>(searchUrl);
     }
 }

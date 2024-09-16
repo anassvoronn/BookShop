@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Book} from "../entity/book.model";
+import {Genre} from "../entity/genre.model";
 import {BookService} from "../service/book.service";
+import {GenreService} from "../service/genre.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -12,21 +14,31 @@ export class BookListComponent implements OnInit {
     books: Book[] = [];
     displayedColumns: string[] = ['title', 'publishingYear', 'genre', 'actions'];
      title: string = '';
+     selectedGenre: Genre | null = null;
+     genres: Genre[] = [];
 
     constructor(
         private bookService: BookService,
-        private snackBar: MatSnackBar) {
+        private snackBar: MatSnackBar,
+        private genreService: GenreService) {
     }
 
     ngOnInit(): void {
         this.loadAllBooks();
+        this.loadGenres();
     }
 
     loadAllBooks(): void {
-            this.bookService.getAllBooks().subscribe((books: Book[]) => {
-                this.books = books;
-            });
-        }
+        this.bookService.getAllBooks().subscribe((books: Book[]) => {
+            this.books = books;
+        });
+    }
+
+    loadGenres(): void {
+        this.genreService.getAllGenres().subscribe((genres: Genre[]) => {
+            this.genres = genres;
+        });
+    }
 
     updateBook(id: number): void {
     }
@@ -47,11 +59,11 @@ export class BookListComponent implements OnInit {
         );
     }
 
-    searchBooks() {
-        if (this.title.trim() === '') {
+    searchBooks(): void {
+        if (this.title.trim() === '' && !this.selectedGenre) {
             this.loadAllBooks();
         } else {
-            this.bookService.searchBooks(this.title).subscribe(
+            this.bookService.searchBooks(this.title, this.selectedGenre).subscribe(
                 (foundBooks: Book[]) => {
                     this.books = foundBooks;
                     this.snackBar.open('Books found', 'Close', {
@@ -72,5 +84,11 @@ export class BookListComponent implements OnInit {
                 }
             );
         }
+    }
+
+    resetSearch(): void {
+        this.title = '';
+        this.selectedGenre = null;
+        this.loadAllBooks();
     }
 }
