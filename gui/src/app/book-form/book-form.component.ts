@@ -41,8 +41,7 @@ export class BookFormComponent implements OnInit {
                     this.bookForm.setValue({
                         title: book.title,
                         publishingYear: book.publishingYear,
-                        genre: book.genre,
-                        views: book.views || 0
+                        genre: book.genre
                     });
                 })
             }
@@ -51,8 +50,7 @@ export class BookFormComponent implements OnInit {
         this.bookForm = this.formBuilder.group({
             title: ['', Validators.required],
             publishingYear: [''],
-            genre: ['', Validators.required],
-            views: ['']
+            genre: ['', Validators.required]
         });
     }
 
@@ -62,7 +60,7 @@ export class BookFormComponent implements OnInit {
                 new Book(
                     this.bookId == null ? 0 : Number(this.bookId),
                     this.bookForm.controls['title']!.value,
-                    this.bookForm.controls['views']!.value,
+                    "0",
                     this.bookForm.controls['publishingYear']!.value,
                     this.bookForm.controls['genre']!.value
                 )
