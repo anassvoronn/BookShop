@@ -13,6 +13,7 @@ import org.nastya.utils.DataSourceFactory;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.nastya.utils.ObjectCreator.createBook;
@@ -162,12 +163,17 @@ class BookDatabaseDaoTest {
     void findBySyllable() {
         List<Book> books = bookDao.findByTitleContaining("на");
         assertEquals(4, books.size());
+        List<Book> actualBooks = books.stream()
+                .filter(book -> book.getTitle().contains("на"))
+                .collect(Collectors.toList());
+
+        assertEquals(4, actualBooks.size());
     }
 
     @Test
     void findANonExistentBook() {
         List<Book> books = bookDao.findByTitleContaining("НеСуществующаяКнига");
-        assertTrue(books.isEmpty(), "No matches");
+        assertTrue(books.isEmpty());
     }
 
     @Test
