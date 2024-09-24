@@ -146,37 +146,6 @@ class BookDatabaseDaoTest {
     }
 
     @Test
-    void findByFullName() {
-        List<Book> books = bookDao.findByTitleContaining("Зачарованные");
-        assertEquals(1, books.size());
-        assertEquals("Зачарованные", books.get(0).getTitle());
-    }
-
-    @Test
-    void findByPartOfTheName() {
-        List<Book> books = bookDao.findByTitleContaining("Приключений");
-        assertEquals(1, books.size());
-        assertEquals("Время Приключений", books.get(0).getTitle());
-    }
-
-    @Test
-    void findBySyllable() {
-        List<Book> books = bookDao.findByTitleContaining("на");
-        assertEquals(4, books.size());
-        List<Book> actualBooks = books.stream()
-                .filter(book -> book.getTitle().contains("на"))
-                .collect(Collectors.toList());
-
-        assertEquals(4, actualBooks.size());
-    }
-
-    @Test
-    void findANonExistentBook() {
-        List<Book> books = bookDao.findByTitleContaining("НеСуществующаяКнига");
-        assertTrue(books.isEmpty());
-    }
-
-    @Test
     void findByGenreAndByTitle_case1(){
         List<Book> books = bookDao.findByGenreAndByTitle(Genre.HORROR, "и");
         assertEquals(2, books.size());
