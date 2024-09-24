@@ -14,4 +14,8 @@ export class Genre {
     get label(): string {
         return this._label;
     }
+
+    static emptyGenre(): Genre {
+            return new Genre("", "No Genre");
+        }
 }

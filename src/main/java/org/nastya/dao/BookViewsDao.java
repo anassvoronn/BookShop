@@ -9,4 +9,6 @@ public interface BookViewsDao {
     int getViewsCountByBookId(int bookId);
 
     void insert(BookViews bookViews);
+
+    void deleteAll();
 }

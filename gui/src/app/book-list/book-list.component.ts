@@ -36,7 +36,7 @@ export class BookListComponent implements OnInit {
 
     loadGenres(): void {
         this.genreService.getAllGenres().subscribe((genres: Genre[]) => {
-            this.genres = genres;
+            this.genres = [Genre.emptyGenre(), ...genres];
         });
     }
 
