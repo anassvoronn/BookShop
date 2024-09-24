@@ -102,18 +102,31 @@ public class BookDatabaseDao implements BookDao {
     }
 
     @Override
-    public List<Book> findByGenreAndByTitle(Genre genre, String title) {
-        String searchTerm = title != null ? "%" + title + "%" : null;
-        String sql = "SELECT * FROM books WHERE ";
-        String where = ""; // TODO finish
+    public List<Book> findByGenreAndByTitleAndByPublishingYear(Genre genre, String title, Integer publishingYear) {
+        String searchTerm = title != null ? "%" + title.replace(" ", "%") + "%" : null;
+        String sql = "SELECT * FROM books";
+        String where = "";
         MapSqlParameterSource params = new MapSqlParameterSource();
         if (genre != null) {
-            sql += " AND genre = :genre";
+            where += "genre = :genre";
             params.addValue("genre", genre.name());
         }
         if (title != null) {
-            sql += " AND title ILIKE :title";
+            if (!where.isEmpty()) {
+                where += " AND ";
+            }
+            where += "title ILIKE :title";
             params.addValue("title", searchTerm);
+        }
+        if (publishingYear != null) {
+            if (!where.isEmpty()) {
+                where += " AND ";
+            }
+            where += "publishingYear = :publishingYear";
+            params.addValue("publishingYear", publishingYear);
+        }
+        if (!where.isEmpty()) {
+            sql += " WHERE " + where;
         }
         return jdbcTemplate.query(sql, params, (rs, rowNum) -> bindBook(rs));
     }

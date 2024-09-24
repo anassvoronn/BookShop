@@ -148,9 +148,9 @@ public class BookService {
         });
     }
 
-    public List<BookListItemDTO> findByGenreAndTitle(Genre genre, String title) {
-        List<Book> books = bookDao.findByGenreAndByTitle(genre, title);
-        log.info("Found '{}' books by genre '{}' or title '{}'", books.size(), genre, title);
+    public List<BookListItemDTO> findByGenreAndByTitleAndByPublishingYear(Genre genre, String title, Integer publishingYear) {
+        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(genre, title, publishingYear);
+        log.info("Found '{}' books by genre '{}' or title '{}' or publishingYear'{}'", books.size(), genre, title, publishingYear);
         List<BookListItemDTO> dtos = bookMapper.mapToBookListItemDTO(books);
         setViewsForBooks(dtos);
         return dtos;

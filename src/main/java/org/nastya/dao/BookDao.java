@@ -16,7 +16,7 @@ public interface BookDao {
 
     List<Book> findByTitleContaining(String title);
 
-    List<Book> findByGenreAndByTitle(Genre genre, String title);
+    List<Book> findByGenreAndByTitleAndByPublishingYear(Genre genre, String title, Integer publishingYear);
 
     int insert(Book book);
 
