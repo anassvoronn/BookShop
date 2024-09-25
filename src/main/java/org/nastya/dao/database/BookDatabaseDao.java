@@ -94,7 +94,7 @@ public class BookDatabaseDao implements BookDao {
 
     @Override
     public List<Book> findByGenreAndByTitle(Genre genre, String title) {
-        String searchTerm = title != null ? "%" + title.replace(" ", "%") + "%" : null;
+        String searchTerm = title != null ? "%" + title + "%" : null;
         String sql = "SELECT * FROM books";
         String where = "";
         MapSqlParameterSource params = new MapSqlParameterSource();
