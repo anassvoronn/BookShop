@@ -7,7 +7,7 @@
     <mat-form-field appearance="outline">
       <mat-label>Genre</mat-label>
       <mat-select [(ngModel)]="selectedGenre">
-        <mat-option *ngFor="let genre of genres" [value]="genre">{{ genre.value }}</mat-option>
+        <mat-option *ngFor="let genre of genres" [value]="genre">{{ genre.label }}</mat-option>
       </mat-select>
     </mat-form-field>
     <button mat-raised-button color="primary" (click)="searchBooks()">Search</button>

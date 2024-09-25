@@ -24,6 +24,7 @@ class BookViewsDatabaseDaoTest {
 
     @AfterAll
     static void afterAll() {
+        bookViewsDao.deleteAll();
         dataSource.close();
     }
 

@@ -19,6 +19,7 @@ public class BookViewsDatabaseDao implements BookViewsDao {
     private static final String INSERT = "INSERT INTO book_views (bookId, viewCount) VALUES (:bookId, :viewCount)";
     private static final String GET_VIEWS_BY_BOOK_ID = "SELECT viewCount FROM book_views WHERE bookId = :bookId";
     private static final String INCREMENT_VIEWS_COUNT_BY_BOOK_ID = "UPDATE book_views SET viewCount = viewCount + 1 WHERE bookId = :bookId";
+    private static final String DELETE_FROM_BOOKS_VIEWS = "DELETE FROM book_views";
 
     public static final int DEFAULT_COUNT_IF_NOT_FOUND = 0;
 
@@ -49,5 +50,10 @@ public class BookViewsDatabaseDao implements BookViewsDao {
             return DEFAULT_COUNT_IF_NOT_FOUND;
         }
         return Objects.requireNonNullElse(count, DEFAULT_COUNT_IF_NOT_FOUND);
+    }
+
+    @Override
+    public void deleteAll() {
+        jdbcTemplate.update(DELETE_FROM_BOOKS_VIEWS, new MapSqlParameterSource());
     }
 }

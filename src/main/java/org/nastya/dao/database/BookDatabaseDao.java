@@ -31,7 +31,6 @@ public class BookDatabaseDao implements BookDao {
     private static final String DELETION_BY_ID = "DELETE FROM books WHERE id = :id";
     private static final String DELETE_FROM_BOOKS = "DELETE FROM books";
     private static final String SELECT_BY_NAME = "SELECT * FROM books WHERE title= :title";
-    private static final String SELECT_BY_TITLE_CONTAINING = "SELECT * FROM books WHERE title ILIKE :title";
 
     public BookDatabaseDao(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -94,26 +93,24 @@ public class BookDatabaseDao implements BookDao {
     }
 
     @Override
-    public List<Book> findByTitleContaining(String title) {
-        String searchTerm = "%" + title + "%";
-        return jdbcTemplate.query(SELECT_BY_TITLE_CONTAINING,
-                new MapSqlParameterSource().addValue("title", searchTerm),
-                (rs, rowNum) -> bindBook(rs));
-    }
-
-    @Override
     public List<Book> findByGenreAndByTitle(Genre genre, String title) {
         String searchTerm = title != null ? "%" + title + "%" : null;
-        String sql = "SELECT * FROM books WHERE ";
-        String where = ""; // TODO finish
+        String sql = "SELECT * FROM books";
+        String where = "";
         MapSqlParameterSource params = new MapSqlParameterSource();
         if (genre != null) {
-            sql += " AND genre = :genre";
+            where += "genre = :genre";
             params.addValue("genre", genre.name());
         }
         if (title != null) {
-            sql += " AND title ILIKE :title";
+            if (!where.isEmpty()) {
+                where += " AND ";
+            }
+            where += "title ILIKE :title";
             params.addValue("title", searchTerm);
+        }
+        if (!where.isEmpty()) {
+            sql += " WHERE " + where;
         }
         return jdbcTemplate.query(sql, params, (rs, rowNum) -> bindBook(rs));
     }
