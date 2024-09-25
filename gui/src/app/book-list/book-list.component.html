@@ -10,6 +10,10 @@
         <mat-option *ngFor="let genre of genres" [value]="genre">{{ genre.label }}</mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Publishing Year</mat-label>
+      <input matInput [(ngModel)]="publishingYear" placeholder="Enter year" type="number">
+    </mat-form-field>
     <button mat-raised-button color="primary" (click)="searchBooks()">Search</button>
     <button mat-raised-button color="warn" (click)="resetSearch()">Reset</button>
   </div>

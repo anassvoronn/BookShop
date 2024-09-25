@@ -16,6 +16,7 @@ export class BookListComponent implements OnInit {
      title: string = '';
      selectedGenre: Genre | null = null;
      genres: Genre[] = [];
+     publishingYear?: number;
 
     constructor(
         private bookService: BookService,
@@ -60,10 +61,10 @@ export class BookListComponent implements OnInit {
     }
 
     searchBooks(): void {
-        if (this.title.trim() === '' && !this.selectedGenre) {
+        if (this.title.trim() === '' && !this.selectedGenre && !this.publishingYear) {
             this.loadAllBooks();
         } else {
-            this.bookService.searchBooks(this.title, this.selectedGenre).subscribe(
+            this.bookService.searchBooks(this.title, this.selectedGenre, this.publishingYear).subscribe(
                 (foundBooks: Book[]) => {
                     this.books = foundBooks;
                     this.snackBar.open('Books found', 'Close', {
@@ -90,5 +91,6 @@ export class BookListComponent implements OnInit {
         this.title = '';
         this.selectedGenre = null;
         this.loadAllBooks();
+        this.publishingYear = undefined;
     }
 }
