@@ -91,5 +91,6 @@ export class BookListComponent implements OnInit {
         this.title = '';
         this.selectedGenre = null;
         this.loadAllBooks();
+        this.publishingYear = undefined;
     }
 }
