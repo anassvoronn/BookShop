@@ -17,6 +17,9 @@
     <button mat-raised-button color="primary" (click)="searchBooks()">Search</button>
     <button mat-raised-button color="warn" (click)="resetSearch()">Reset</button>
   </div>
+  <div class="statistics">
+    {{ books.length }} / {{ totalBooks }}
+  </div>
   <table mat-table [dataSource]="books">
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef>Title</th>
