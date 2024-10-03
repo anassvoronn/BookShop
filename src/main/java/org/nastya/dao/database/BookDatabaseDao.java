@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -93,7 +94,7 @@ public class BookDatabaseDao implements BookDao {
     }
 
     @Override
-    public List<Book> findByGenreAndByTitleAndByPublishingYear(Genre genre, String title, Integer publishingYear) {
+    public List<Book> findByGenreAndByTitleAndByPublishingYear(Genre genre, String title, String publishingYear) {
         String searchTerm = title != null ? "%" + title.replace(" ", "%") + "%" : null;
         String sql = "SELECT * FROM books";
         String where = "";
@@ -109,12 +110,29 @@ public class BookDatabaseDao implements BookDao {
             where += "title ILIKE :title";
             params.addValue("title", searchTerm);
         }
-        if (publishingYear != null) {
+        if (publishingYear != null && !publishingYear.trim().isEmpty()) {
             if (!where.isEmpty()) {
                 where += " AND ";
             }
-            where += "publishingYear = :publishingYear";
-            params.addValue("publishingYear", publishingYear);
+            String[] publishingYearSeparators = publishingYear.split(",");
+            List<String> conditions = new ArrayList<>();
+            for (String separator : publishingYearSeparators) {
+                separator = separator.trim();
+                if (separator.contains("-")) {
+                    String[] intervals = separator.split("-");
+                    if (intervals.length == 2) {
+                        conditions.add("publishingYear BETWEEN :startYear" + intervals[0] + " AND :endYear" + intervals[1]);
+                        params.addValue("startYear" + intervals[0], Integer.parseInt(intervals[0].trim()));
+                        params.addValue("endYear" + intervals[1], Integer.parseInt(intervals[1].trim()));
+                    }
+                } else {
+                    conditions.add("publishingYear = :year" + separator);
+                    params.addValue("year" + separator, Integer.parseInt(separator.trim()));
+                }
+            }
+            if (!conditions.isEmpty()) {
+                where += "(" + String.join(" OR ", conditions) + ")";
+            }
         }
         if (!where.isEmpty()) {
             sql += " WHERE " + where;
