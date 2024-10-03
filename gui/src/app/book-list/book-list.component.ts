@@ -16,7 +16,7 @@ export class BookListComponent implements OnInit {
      title: string = '';
      selectedGenre: Genre | null = null;
      genres: Genre[] = [];
-     publishingYear?: number;
+     publishingYear: string = '';
 
     constructor(
         private bookService: BookService,
@@ -91,6 +91,6 @@ export class BookListComponent implements OnInit {
         this.title = '';
         this.selectedGenre = null;
         this.loadAllBooks();
-        this.publishingYear = undefined;
+        this.publishingYear = '';
     }
 }
