@@ -13,10 +13,11 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class BookListComponent implements OnInit {
     books: Book[] = [];
     displayedColumns: string[] = ['title', 'publishingYear', 'genre', 'actions'];
-     title: string = '';
-     selectedGenre: Genre | null = null;
-     genres: Genre[] = [];
-     publishingYear?: number;
+    title: string = '';
+    selectedGenre: Genre | null = null;
+    genres: Genre[] = [];
+    publishingYear?: number;
+    totalBooks: number = 0;
 
     constructor(
         private bookService: BookService,
@@ -32,6 +33,7 @@ export class BookListComponent implements OnInit {
     loadAllBooks(): void {
         this.bookService.getAllBooks().subscribe((books: Book[]) => {
             this.books = books;
+            this.totalBooks = books.length;
         });
     }
 
@@ -72,16 +74,9 @@ export class BookListComponent implements OnInit {
                     });
                 },
                 error => {
-                    if (error.status === 204) {
-                        this.books = [];
-                        this.snackBar.open('No books found', 'Close', {
-                            duration: 15000,
-                        });
-                    } else {
-                        this.snackBar.open('Error searching books: ' + error.message, 'Close', {
-                            duration: 15000,
-                        });
-                    }
+                    this.snackBar.open('Error searching books: ' + error.message, 'Close', {
+                        duration: 15000,
+                    });
                 }
             );
         }

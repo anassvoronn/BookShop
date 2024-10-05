@@ -86,10 +86,6 @@ public class BookController {
                                                              @RequestParam(required = false) Integer publishingYear) {
         log.info("Searching books with genre '{}' and title '{}' and publishingYear '{}'", genre, title, publishingYear);
         List<BookListItemDTO> books = bookService.findByGenreAndByTitleAndByPublishingYear(genre, title, publishingYear);
-        if (books.isEmpty()) {
-            log.warn("No books found for the given criteria");
-            return ResponseEntity.noContent().build();
-        }
         return ResponseEntity.ok(books);
     }
 }
