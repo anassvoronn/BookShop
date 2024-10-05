@@ -67,15 +67,32 @@ export class BookListComponent implements OnInit {
             this.loadAllBooks();
         } else {
             this.bookService.searchBooks(this.title, this.selectedGenre, this.publishingYear).subscribe(
-                (foundBooks: Book[]) => {
-                    this.books = foundBooks;
-                    this.snackBar.open('Books found', 'Close', {
-                        duration: 15000,
-                    });
+                (foundBooks: Book[] | null) => {
+                    if (foundBooks) {
+                        this.books = foundBooks;
+                        this.totalBooks = foundBooks.length;
+
+                        if (foundBooks.length === 0) {
+                            this.snackBar.open('No books found', 'Close', {
+                                duration: 15000,
+                            });
+                        } else {
+                            this.snackBar.open('Books found', 'Close', {
+                                duration: 15000,
+                            });
+                        }
+                    } else {
+                        this.books = [];
+                        this.totalBooks = 0;
+                        this.snackBar.open('No books found', 'Close', {
+                            duration: 15000,
+                        });
+                    }
                 },
                 error => {
                     if (error.status === 204) {
                         this.books = [];
+                        this.totalBooks = 0;
                         this.snackBar.open('No books found', 'Close', {
                             duration: 15000,
                         });
