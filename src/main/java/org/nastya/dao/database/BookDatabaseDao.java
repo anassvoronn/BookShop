@@ -110,24 +110,24 @@ public class BookDatabaseDao implements BookDao {
             where += "title ILIKE :title";
             params.addValue("title", searchTerm);
         }
-        if (publishingYear != null && !publishingYear.trim().isEmpty()) {
+        publishingYear = removeSpaces(publishingYear);
+        if (!publishingYear.isEmpty()) {
             if (!where.isEmpty()) {
                 where += " AND ";
             }
             String[] publishingYearSeparators = publishingYear.split(",");
             List<String> conditions = new ArrayList<>();
             for (String separator : publishingYearSeparators) {
-                separator = separator.trim();
                 if (separator.contains("-")) {
                     String[] intervals = separator.split("-");
                     if (intervals.length == 2) {
-                        conditions.add("publishingYear BETWEEN :startYear" + intervals[0].trim() + " AND :endYear" + intervals[1].trim());
-                        params.addValue("startYear" + intervals[0].trim(), Integer.parseInt(intervals[0].trim()));
-                        params.addValue("endYear" + intervals[1].trim(), Integer.parseInt(intervals[1].trim()));
+                        conditions.add("publishingYear BETWEEN :startYear" + intervals[0] + " AND :endYear" + intervals[1]);
+                        params.addValue("startYear" + intervals[0], Integer.parseInt(intervals[0]));
+                        params.addValue("endYear" + intervals[1], Integer.parseInt(intervals[1]));
                     }
                 } else {
                     conditions.add("publishingYear = :year" + separator);
-                    params.addValue("year" + separator, Integer.parseInt(separator.trim()));
+                    params.addValue("year" + separator, Integer.parseInt(separator));
                 }
             }
             if (!conditions.isEmpty()) {
@@ -138,6 +138,13 @@ public class BookDatabaseDao implements BookDao {
             sql += " WHERE " + where;
         }
         return jdbcTemplate.query(sql, params, (rs, rowNum) -> bindBook(rs));
+    }
+
+    private String removeSpaces(String publishingYear) {
+        if (publishingYear == null) {
+            return "";
+        }
+        return publishingYear.replace(" ", "");
     }
 
     private Book bindBook(ResultSet rs) throws SQLException {
