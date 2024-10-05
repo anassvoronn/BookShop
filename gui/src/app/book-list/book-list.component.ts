@@ -74,16 +74,9 @@ export class BookListComponent implements OnInit {
                     });
                 },
                 error => {
-                    if (error.status === 204) {
-                        this.books = [];
-                        this.snackBar.open('No books found', 'Close', {
-                            duration: 15000,
-                        });
-                    } else {
-                        this.snackBar.open('Error searching books: ' + error.message, 'Close', {
-                            duration: 15000,
-                        });
-                    }
+                    this.snackBar.open('Error searching books: ' + error.message, 'Close', {
+                        duration: 15000,
+                    });
                 }
             );
         }
