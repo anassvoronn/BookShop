@@ -38,6 +38,7 @@ class BookDatabaseDaoTest {
 
     @BeforeEach
     void setUp() {
+        bookDao.deleteAll();
         insertBookToDatabase("Зачарованные", "1980", Genre.FANTASY);
         insertBookToDatabase("Время Приключений", "2008", Genre.ADVENTURE);
         insertBookToDatabase("Оттенки любви", "1882", Genre.NOVEL);
