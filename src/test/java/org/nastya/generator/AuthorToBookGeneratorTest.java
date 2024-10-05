@@ -104,7 +104,7 @@ public class AuthorToBookGeneratorTest {
         int bookId;
         for (int i = 0; i < 40; i++) {
             String authorName = NAMES[random.nextInt(NAMES.length)];
-            String dateOfBirth = "196" + random.nextInt(8) + "-01-01";
+            String dateOfBirth = "195" + random.nextInt(9) + "-01-01";
             String dateOfDeath = random.nextBoolean() ?
                     (random.nextInt(currentYear - 2000 + 1) + 2000) + "-01-01" : null;
             Gender gender = random.nextBoolean() ? Gender.MALE : Gender.FEMALE;
@@ -119,7 +119,7 @@ public class AuthorToBookGeneratorTest {
             bookId = bookDao.insert(
                     ObjectCreator.createBook(
                             bookTitle,
-                            String.valueOf(1980 + random.nextInt(20)),
+                            String.valueOf(1970 + random.nextInt(50)),
                             Genre.valueOf(GENRES[random.nextInt(GENRES.length)])
                     )
             );

@@ -83,7 +83,7 @@ public class BookController {
     @GetMapping("/search")
     public ResponseEntity<List<BookListItemDTO>> searchBooks(@RequestParam(required = false) Genre genre,
                                                              @RequestParam(required = false) String title,
-                                                             @RequestParam(required = false) Integer publishingYear) {
+                                                             @RequestParam(required = false) String publishingYear) {
         log.info("Searching books with genre '{}' and title '{}' and publishingYear '{}'", genre, title, publishingYear);
         List<BookListItemDTO> books = bookService.findByGenreAndByTitleAndByPublishingYear(genre, title, publishingYear);
         return ResponseEntity.ok(books);
