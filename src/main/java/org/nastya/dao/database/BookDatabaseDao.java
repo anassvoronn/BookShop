@@ -121,9 +121,9 @@ public class BookDatabaseDao implements BookDao {
                 if (separator.contains("-")) {
                     String[] intervals = separator.split("-");
                     if (intervals.length == 2) {
-                        conditions.add("publishingYear BETWEEN :startYear" + intervals[0] + " AND :endYear" + intervals[1]);
-                        params.addValue("startYear" + intervals[0], Integer.parseInt(intervals[0].trim()));
-                        params.addValue("endYear" + intervals[1], Integer.parseInt(intervals[1].trim()));
+                        conditions.add("publishingYear BETWEEN :startYear" + intervals[0].trim() + " AND :endYear" + intervals[1].trim());
+                        params.addValue("startYear" + intervals[0].trim(), Integer.parseInt(intervals[0].trim()));
+                        params.addValue("endYear" + intervals[1].trim(), Integer.parseInt(intervals[1].trim()));
                     }
                 } else {
                     conditions.add("publishingYear = :year" + separator);
