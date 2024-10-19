@@ -1,5 +1,6 @@
 package org.nastya.dao.database;
 
+import org.nastya.dao.AuthorDao;
 import org.nastya.dao.BookDao;
 import org.nastya.entity.Book;
 import org.nastya.entity.Genre;
@@ -94,7 +95,7 @@ public class BookDatabaseDao implements BookDao {
     }
 
     @Override
-    public List<Book> findByGenreAndByTitleAndByPublishingYear(Genre genre, String title, String publishingYear) {
+    public List<Book> findByGenreAndByTitleAndByPublishingYear(Genre genre, String title, String publishingYear, String authorName) {
         String searchTerm = title != null ? "%" + title.replace(" ", "%") + "%" : null;
         String sql = "SELECT * FROM books";
         String where = "";
@@ -133,6 +134,13 @@ public class BookDatabaseDao implements BookDao {
             if (!conditions.isEmpty()) {
                 where += "(" + String.join(" OR ", conditions) + ")";
             }
+        }
+        if (authorName != null) {
+            if (!where.isEmpty()) {
+                where += " AND ";
+            }
+            where += "id IN (SELECT ab.bookId FROM author_To_Book ab JOIN authors a ON ab.authorId = a.id WHERE a.name ILIKE :authorName)";
+            params.addValue("authorName", "%" + authorName.replace(" ", "%") + "%");
         }
         if (!where.isEmpty()) {
             sql += " WHERE " + where;

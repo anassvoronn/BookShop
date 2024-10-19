@@ -52,13 +52,16 @@ export class BookService {
         this.http.post<string>(this.apiUrlViews + bookId, {}).subscribe();
     }
 
-    searchBooks(title: string, genre: Genre | null, publishingYear: string): Observable<Book[]> {
+    searchBooks(title: string, genre: Genre | null, publishingYear: string, authorName: string | null): Observable<Book[]> {
         let searchUrl = this.apiUrlSearch + '?title=' + encodeURIComponent(title);
         if (genre) {
             searchUrl += '&genre=' + encodeURIComponent(genre.value);
         }
         if (publishingYear) {
             searchUrl += '&publishingYear=' + encodeURIComponent(publishingYear);
+        }
+        if (authorName) {
+            searchUrl += '&authorName=' + encodeURIComponent(authorName);
         }
         return this.http.get<Book[]>(searchUrl);
     }

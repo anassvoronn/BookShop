@@ -4,6 +4,7 @@ import org.nastya.dao.AuthorDao;
 import org.nastya.dao.AuthorToBookDao;
 import org.nastya.dao.BookDao;
 import org.nastya.dao.BookViewsDao;
+import org.nastya.dto.AuthorFormDTO;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.dto.BookFormDTO;
 import org.nastya.dto.BookListItemDTO;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.nastya.dao.database.BookViewsDatabaseDao.DEFAULT_COUNT_IF_NOT_FOUND;
 
@@ -140,9 +142,9 @@ public class BookService {
         });
     }
 
-    public List<BookListItemDTO> findByGenreAndByTitleAndByPublishingYear(Genre genre, String title, String publishingYear) {
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(genre, title, publishingYear);
-        log.info("Found '{}' books by genre '{}' or title '{}' or publishingYear'{}'", books.size(), genre, title, publishingYear);
+    public List<BookListItemDTO> findByGenreAndByTitleAndByPublishingYearAndByAuthor(Genre genre, String title, String publishingYear, String authorName) {
+        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(genre, title, publishingYear, authorName);
+        log.info("Found '{}' books by genre '{}' or title '{}' or publishingYear'{}' and author '{}'", books.size(), genre, title, publishingYear, authorName);
         List<BookListItemDTO> dtos = bookMapper.mapToBookListItemDTO(books);
         setViewsForBooks(dtos);
         return dtos;
