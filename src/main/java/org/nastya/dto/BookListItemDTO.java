@@ -2,12 +2,15 @@ package org.nastya.dto;
 
 import org.nastya.entity.Genre;
 
+import java.util.List;
+
 public class BookListItemDTO {
     private int id;
     private String title;
     private int publishingYear;
     private Genre genre;
     private int views;
+    private List<AuthorListItemDTO> authors;
 
     @Override
     public String toString() {
@@ -18,7 +21,6 @@ public class BookListItemDTO {
                 ", genre='" + genre + '\'' +
                 '}';
     }
-
 
     public int getViews() {
         return views;
@@ -58,5 +60,13 @@ public class BookListItemDTO {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public List<AuthorListItemDTO> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<AuthorListItemDTO> authors) {
+        this.authors = authors;
     }
 }

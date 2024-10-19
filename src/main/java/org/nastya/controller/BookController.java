@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/book")
@@ -83,9 +84,14 @@ public class BookController {
     @GetMapping("/search")
     public ResponseEntity<List<BookListItemDTO>> searchBooks(@RequestParam(required = false) Genre genre,
                                                              @RequestParam(required = false) String title,
-                                                             @RequestParam(required = false) String publishingYear) {
-        log.info("Searching books with genre '{}' and title '{}' and publishingYear '{}'", genre, title, publishingYear);
-        List<BookListItemDTO> books = bookService.findByGenreAndByTitleAndByPublishingYear(genre, title, publishingYear);
+                                                             @RequestParam(required = false) String publishingYear,
+                                                             @RequestParam(required = false) String authorName) {
+        log.info("Searching books with genre '{}', title '{}', publishingYear '{}', and authorName '{}'",
+                genre,
+                title,
+                publishingYear,
+                authorName);
+        List<BookListItemDTO> books = bookService.findByGenreAndByTitleAndByPublishingYearAndByAuthor(genre, title, publishingYear, authorName);
         return ResponseEntity.ok(books);
     }
 }
