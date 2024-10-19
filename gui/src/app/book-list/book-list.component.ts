@@ -3,6 +3,8 @@ import {Book} from "../entity/book.model";
 import {Genre} from "../entity/genre.model";
 import {BookService} from "../service/book.service";
 import {GenreService} from "../service/genre.service";
+import {Author} from "../entity/author.model";
+import {AuthorService} from "../service/author.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -15,19 +17,23 @@ export class BookListComponent implements OnInit {
     displayedColumns: string[] = ['title', 'publishingYear', 'genre', 'actions'];
     title: string = '';
     selectedGenre: Genre | null = null;
+    selectedAuthor: Author | null = null;
     genres: Genre[] = [];
     publishingYear: string = '';
     totalBooks: number = 0;
+    authors: Author[] = [];
 
     constructor(
         private bookService: BookService,
         private snackBar: MatSnackBar,
-        private genreService: GenreService) {
+        private genreService: GenreService,
+        private authorService: AuthorService) {
     }
 
     ngOnInit(): void {
         this.loadAllBooks();
         this.loadGenres();
+        this.loadAuthors();
     }
 
     loadAllBooks(): void {
@@ -40,6 +46,12 @@ export class BookListComponent implements OnInit {
     loadGenres(): void {
         this.genreService.getAllGenres().subscribe((genres: Genre[]) => {
             this.genres = [Genre.emptyGenre(), ...genres];
+        });
+    }
+
+    loadAuthors(): void {
+        this.authorService.getAllAuthors().subscribe((authors: Author[]) => {
+            this.authors = [Author.emptyAuthor(), ...authors];
         });
     }
 
@@ -63,10 +75,11 @@ export class BookListComponent implements OnInit {
     }
 
     searchBooks(): void {
-        if (this.title.trim() === '' && !this.selectedGenre && !this.publishingYear) {
+        if (this.title.trim() === '' && !this.selectedGenre && !this.publishingYear && !this.selectedAuthor) {
             this.loadAllBooks();
         } else {
-            this.bookService.searchBooks(this.title, this.selectedGenre, this.publishingYear).subscribe(
+            const authorName = this.selectedAuthor ? this.selectedAuthor.name : null;
+            this.bookService.searchBooks(this.title, this.selectedGenre, this.publishingYear, authorName).subscribe(
                 (foundBooks: Book[]) => {
                     this.books = foundBooks;
                     this.snackBar.open('Books found', 'Close', {
@@ -87,5 +100,6 @@ export class BookListComponent implements OnInit {
         this.selectedGenre = null;
         this.loadAllBooks();
         this.publishingYear = '';
+        this.selectedAuthor = null;
     }
 }

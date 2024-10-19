@@ -16,6 +16,6 @@ export class Genre {
     }
 
     static emptyGenre(): Genre {
-            return new Genre("", "No Genre");
-        }
+        return new Genre("", "No Genre");
+    }
 }

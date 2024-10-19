@@ -53,4 +53,8 @@ export class Author {
     get age(): number {
         return this._age;
     }
+
+    static emptyAuthor(): Author {
+        return new Author(0, "No Author", "Unknown", new Date(), new Date(), "Unknown", 0);
+    }
 }
