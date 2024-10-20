@@ -148,171 +148,171 @@ class BookDatabaseDaoTest {
     }
 
     @Test
-    void findByPublishingYear_case1(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(null, null, "1816-1882");
+    void findByPublishingYear_case1() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(null, null, "1816-1882", null);
         assertEquals(4, books.size());
     }
 
     @Test
-    void findByPublishingYear_case2(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(null, null, "1816-1882, 2008");
+    void findByPublishingYear_case2() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(null, null, "1816-1882, 2008", null);
         assertEquals(5, books.size());
     }
 
     @Test
-    void findByPublishingYear_case3(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(null, null, "1816-1882, 2008, 1961-1985");
+    void findByPublishingYear_case3() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(null, null, "1816-1882, 2008, 1961-1985", null);
         assertEquals(8, books.size());
     }
 
 
     @Test
-    void findByPublishingYearAndGenre_case4(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.FANTASY, null, "1800-1900");
+    void findByPublishingYearAndGenre_case4() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.FANTASY, null, "1800-1900", null);
         assertEquals(2, books.size());
     }
 
     @Test
-    void findByPublishingYearAndGenre_case4_withOverlapping(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.FANTASY, null, "1800-1875, 1825-1900");
+    void findByPublishingYearAndGenre_case4_withOverlapping() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.FANTASY, null, "1800-1875, 1825-1900", null);
         assertEquals(2, books.size());
     }
 
     @Test
-    void findByPublishingYearAndGenre_case4_withMinimalOverlapping(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.FANTASY, null, "1800-1850, 1850-1900");
-        assertEquals(2, books.size());
-    }
-    
-    @Test
-    void findByPublishingYearAndGenre_case4_withBigOverlapping(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.FANTASY, null, "1800-1850, 1800-1900");
+    void findByPublishingYearAndGenre_case4_withMinimalOverlapping() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.FANTASY, null, "1800-1850, 1850-1900", null);
         assertEquals(2, books.size());
     }
 
     @Test
-    void findByPublishingYearAndGenre_case5(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.NOVEL, null, "1805-1885, 2010");
+    void findByPublishingYearAndGenre_case4_withBigOverlapping() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.FANTASY, null, "1800-1850, 1800-1900", null);
+        assertEquals(2, books.size());
+    }
+
+    @Test
+    void findByPublishingYearAndGenre_case5() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.NOVEL, null, "1805-1885, 2010", null);
         assertEquals(1, books.size());
     }
 
     @Test
-    void findByPublishingYearAndGenre_case6(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.FANTASY, null, "1810-1840, 1919, 1960-1990");
-        assertEquals(3, books.size());
-    }
-    
-    @Test
-    void findByPublishingYearAndGenre_case7_withSpace(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.FANTASY, null, "1810  -  1840  , 1960 -  1990");
+    void findByPublishingYearAndGenre_case6() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.FANTASY, null, "1810-1840, 1919, 1960-1990", null);
         assertEquals(3, books.size());
     }
 
     @Test
-    void findByPublishingYearAndGenreAndTitle_case7(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.FANTASY, "р    ", "1800-1900");
+    void findByPublishingYearAndGenre_case7_withSpace() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.FANTASY, null, "1810  -  1840  , 1960 -  1990", null);
+        assertEquals(3, books.size());
+    }
+
+    @Test
+    void findByPublishingYearAndGenreAndTitle_case7() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.FANTASY, "р    ", "1800-1900", null);
         assertEquals(2, books.size());
     }
 
     @Test
-    void findByPublishingYearAndGenreAndTitle_case8(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.ADVENTURE, "   д", "1830-1999, 2008");
+    void findByPublishingYearAndGenreAndTitle_case8() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.ADVENTURE, "   д", "1830-1999, 2008", null);
         assertEquals(2, books.size());
     }
 
     @Test
-    void findByPublishingYearAndTitle_case9(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(null, "   а   ", "1810-1840, 1919, 1960-1990");
+    void findByPublishingYearAndTitle_case9() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(null, "   а   ", "1810-1840, 1919, 1960-1990", null);
         assertEquals(6, books.size());
     }
-    
+
     @Test
-    void findByPublishingYearAndTitle_case9_withSpace(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(null, "   а   ", "  1810  -  1840 ,   1919 ,   1960 - 1990 ");
+    void findByPublishingYearAndTitle_case9_withSpace() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(null, "   а   ", "  1810  -  1840 ,   1919 ,   1960 - 1990 ", null);
         assertEquals(6, books.size());
     }
 
     @Test
-    void findByGenreAndByTitle_case1(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.HORROR, "и", "1919");
-        assertEquals(1, books.size());
-    }
-    
-    @Test
-    void findByGenreAndByTitle_case1_twoIdenticalDates(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.HORROR, "и", " 1919 ,  1919 ");
+    void findByGenreAndByTitle_case1() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.HORROR, "и", "1919", null);
         assertEquals(1, books.size());
     }
 
     @Test
-    void findByGenreAndByTitle_case2(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.NOVEL, "И", null);
+    void findByGenreAndByTitle_case1_twoIdenticalDates() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.HORROR, "и", " 1919 ,  1919 ", null);
+        assertEquals(1, books.size());
+    }
+
+    @Test
+    void findByGenreAndByTitle_case2() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.NOVEL, "И", null, null);
         assertEquals(2, books.size());
     }
 
     @Test
-    void findByGenreAndByTitle_case3(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.FANTASY, "аватар", "1816");
+    void findByGenreAndByTitle_case3() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.FANTASY, "аватар", "1816", null);
         assertEquals(1, books.size());
     }
 
     @Test
     void findByGenreAndByTitle_case4() {
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.PSYCHOLOGY, "  на    краю  ", null);
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.PSYCHOLOGY, "  на    краю  ", null, null);
         assertEquals(1, books.size());
     }
 
     @Test
-    void findByGenreAndByTitle_case1_whenGenreIsNull(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(null, "и", null);
+    void findByGenreAndByTitle_case1_whenGenreIsNull() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(null, "и", null, null);
         assertEquals(11, books.size());
     }
 
     @Test
-    void findByGenreAndByTitle_case2_whenGenreIsNull(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(null, "И", "1842");
+    void findByGenreAndByTitle_case2_whenGenreIsNull() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(null, "И", "1842", null);
         assertEquals(1, books.size());
     }
 
     @Test
-    void findByGenreAndByTitle_case3_whenGenreIsNull(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(null, "дорог", null);
+    void findByGenreAndByTitle_case3_whenGenreIsNull() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(null, "дорог", null, null);
         assertEquals(2, books.size());
     }
 
     @Test
-    void findByGenreAndByTitle_case1_whenTitleIsNull(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.HORROR, null, "1919");
+    void findByGenreAndByTitle_case1_whenTitleIsNull() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.HORROR, null, "1919", null);
         assertEquals(1, books.size());
     }
 
     @Test
-    void findByGenreAndByTitle_case2_whenTitleIsNull(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.NOVEL, null, "1882");
+    void findByGenreAndByTitle_case2_whenTitleIsNull() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.NOVEL, null, "1882", null);
         assertEquals(1, books.size());
     }
 
     @Test
-    void findByGenreAndByTitle_case3_whenTitleIsNull(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.NOVEL, null, null);
+    void findByGenreAndByTitle_case3_whenTitleIsNull() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.NOVEL, null, null, null);
         assertEquals(2, books.size());
     }
 
     @Test
-    void findByGenreAndByTitle_whenAllNull(){
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(null, null, null);
+    void findByGenreAndByTitle_whenAllNull() {
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(null, null, null, null);
         assertEquals(15, books.size());
     }
 
     @Test
     void findByGenreAndTitleThatDoesNotExist() {
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear(Genre.NOVEL, "Киллер", "1885");
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.NOVEL, "Киллер", "1885", null);
         assertEquals(0, books.size());
     }
 
     @Test
     void findByTitleAndGenreThatDoesNotExist() {
-        List<Book> books = bookDao.findByGenreAndByTitleAndByPublishingYear( Genre.COMEDY , "", "1825");
+        List<Book> books = bookDao.findByGenreAndTitleAndPublishingYearAndAuthor(Genre.COMEDY, "", "1825", null);
         assertEquals(0, books.size());
     }
 
