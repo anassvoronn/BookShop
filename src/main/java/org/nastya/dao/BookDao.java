@@ -13,7 +13,7 @@ public interface BookDao {
 
     List<Book> findByTitle(String title);
 
-    List<Book> findByGenreAndByTitleAndByPublishingYear(Genre genre, String title, String publishingYear,  String authorName);
+    List<Book> findByGenreAndTitleAndPublishingYearAndAuthor(Genre genre, String title, String publishingYear, String authorName);
 
     int insert(Book book);
 

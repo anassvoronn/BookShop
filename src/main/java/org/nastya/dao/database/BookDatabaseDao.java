@@ -95,7 +95,7 @@ public class BookDatabaseDao implements BookDao {
     }
 
     @Override
-    public List<Book> findByGenreAndByTitleAndByPublishingYear(Genre genre, String title, String publishingYear, String authorName) {
+    public List<Book> findByGenreAndTitleAndPublishingYearAndAuthor(Genre genre, String title, String publishingYear, String authorName) {
         String searchTerm = title != null ? "%" + title.replace(" ", "%") + "%" : null;
         String sql = "SELECT * FROM books";
         String where = "";
