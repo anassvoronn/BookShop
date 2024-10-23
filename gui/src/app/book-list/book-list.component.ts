@@ -78,8 +78,8 @@ export class BookListComponent implements OnInit {
         if (this.title.trim() === '' && !this.selectedGenre && !this.publishingYear && !this.selectedAuthor) {
             this.loadAllBooks();
         } else {
-            const authorName = this.selectedAuthor ? this.selectedAuthor.name : null;
-            this.bookService.searchBooks(this.title, this.selectedGenre, this.publishingYear, authorName).subscribe(
+            const authorId = this.selectedAuthor ? this.selectedAuthor.id : null;
+            this.bookService.searchBooks(this.title, this.selectedGenre, this.publishingYear, authorId).subscribe(
                 (foundBooks: Book[]) => {
                     this.books = foundBooks;
                     this.snackBar.open('Books found', 'Close', {
