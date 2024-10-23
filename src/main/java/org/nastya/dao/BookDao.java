@@ -1,7 +1,7 @@
 package org.nastya.dao;
 
+import org.nastya.dao.builder.SearchDetails;
 import org.nastya.entity.Book;
-import org.nastya.entity.Genre;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface BookDao {
 
     List<Book> findByTitle(String title);
 
-    List<Book> findByGenreAndTitleAndPublishingYearAndAuthor(Genre genre, String title, String publishingYear, String authorName);
+    List<Book> findByGenreAndTitleAndPublishingYearAndAuthorId(SearchDetails searchDetails);
 
     int insert(Book book);
 

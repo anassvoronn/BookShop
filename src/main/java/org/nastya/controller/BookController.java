@@ -85,13 +85,13 @@ public class BookController {
     public ResponseEntity<List<BookListItemDTO>> searchBooks(@RequestParam(required = false) Genre genre,
                                                              @RequestParam(required = false) String title,
                                                              @RequestParam(required = false) String publishingYear,
-                                                             @RequestParam(required = false) String authorName) {
-        log.info("Searching books with genre '{}', title '{}', publishingYear '{}', and authorName '{}'",
+                                                             @RequestParam(required = false) Integer authorId) {
+        log.info("Searching books with genre '{}', title '{}', publishingYear '{}', and authorId '{}'",
                 genre,
                 title,
                 publishingYear,
-                authorName);
-        List<BookListItemDTO> books = bookService.findByGenreAndByTitleAndByPublishingYearAndByAuthor(genre, title, publishingYear, authorName);
+                authorId);
+        List<BookListItemDTO> books = bookService.findByGenreAndByTitleAndByPublishingYearAndByAuthor(genre, title, publishingYear, authorId);
         return ResponseEntity.ok(books);
     }
 }

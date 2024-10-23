@@ -1,7 +1,7 @@
 package org.nastya.dao.database;
 
-import org.nastya.dao.AuthorDao;
 import org.nastya.dao.BookDao;
+import org.nastya.dao.builder.SearchDetails;
 import org.nastya.entity.Book;
 import org.nastya.entity.Genre;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -95,23 +95,23 @@ public class BookDatabaseDao implements BookDao {
     }
 
     @Override
-    public List<Book> findByGenreAndTitleAndPublishingYearAndAuthor(Genre genre, String title, String publishingYear, String authorName) {
-        String searchTerm = title != null ? "%" + title.replace(" ", "%") + "%" : null;
+    public List<Book> findByGenreAndTitleAndPublishingYearAndAuthorId(SearchDetails searchDetails) {
+        String searchTerm = searchDetails.getTitle() != null ? "%" + searchDetails.getTitle().replace(" ", "%") + "%" : null;
         String sql = "SELECT * FROM books";
         String where = "";
         MapSqlParameterSource params = new MapSqlParameterSource();
-        if (genre != null) {
+        if (searchDetails.getGenre() != null) {
             where += "genre = :genre";
-            params.addValue("genre", genre.name());
+            params.addValue("genre", searchDetails.getGenre().name());
         }
-        if (title != null) {
+        if (searchDetails.getTitle() != null) {
             if (!where.isEmpty()) {
                 where += " AND ";
             }
             where += "title ILIKE :title";
             params.addValue("title", searchTerm);
         }
-        publishingYear = removeSpaces(publishingYear);
+        String publishingYear = removeSpaces(searchDetails.getPublishingYear());
         if (!publishingYear.isEmpty()) {
             if (!where.isEmpty()) {
                 where += " AND ";
@@ -135,12 +135,12 @@ public class BookDatabaseDao implements BookDao {
                 where += "(" + String.join(" OR ", conditions) + ")";
             }
         }
-        if (authorName != null) {
+        if (searchDetails.getAuthorId() != null) {
             if (!where.isEmpty()) {
                 where += " AND ";
             }
-            where += "id IN (SELECT ab.bookId FROM author_To_Book ab JOIN authors a ON ab.authorId = a.id WHERE a.name ILIKE :authorName)";
-            params.addValue("authorName", "%" + authorName.replace(" ", "%") + "%");
+            where += "id IN (SELECT ab.bookId FROM author_To_Book ab WHERE ab.authorId = :authorId)";
+            params.addValue("authorId", searchDetails.getAuthorId());
         }
         if (!where.isEmpty()) {
             sql += " WHERE " + where;
