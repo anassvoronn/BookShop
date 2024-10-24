@@ -19,7 +19,6 @@ public class BookListItemDTO {
                 '}';
     }
 
-
     public int getViews() {
         return views;
     }
