@@ -17,7 +17,7 @@ export class BookListComponent implements OnInit {
     displayedColumns: string[] = ['title', 'publishingYear', 'genre', 'actions'];
     title: string = '';
     selectedGenre: Genre | null = null;
-    selectedAuthor: Author | null = null;
+    selectedAuthorId: number | null = null;
     genres: Genre[] = [];
     publishingYear: string = '';
     totalBooks: number = 0;
@@ -75,11 +75,10 @@ export class BookListComponent implements OnInit {
     }
 
     searchBooks(): void {
-        if (this.title.trim() === '' && !this.selectedGenre && !this.publishingYear && !this.selectedAuthor) {
+        if (this.title.trim() === '' && !this.selectedGenre && !this.publishingYear && !this.selectedAuthorId) {
             this.loadAllBooks();
         } else {
-            const authorId = this.selectedAuthor ? this.selectedAuthor.id : null;
-            this.bookService.searchBooks(this.title, this.selectedGenre, this.publishingYear, authorId).subscribe(
+            this.bookService.searchBooks(this.title, this.selectedGenre, this.publishingYear, this.selectedAuthorId).subscribe(
                 (foundBooks: Book[]) => {
                     this.books = foundBooks;
                     this.snackBar.open('Books found', 'Close', {
@@ -100,6 +99,6 @@ export class BookListComponent implements OnInit {
         this.selectedGenre = null;
         this.loadAllBooks();
         this.publishingYear = '';
-        this.selectedAuthor = null;
+        this.selectedAuthorId = null;
     }
 }

@@ -61,7 +61,7 @@ export class BookService {
             searchUrl += '&publishingYear=' + encodeURIComponent(publishingYear);
         }
         if (authorId !== null) {
-            searchUrl += '&authorId=' + encodeURIComponent(authorId.toString());
+            searchUrl += '&authorId=' + authorId;
         }
         return this.http.get<Book[]>(searchUrl);
     }

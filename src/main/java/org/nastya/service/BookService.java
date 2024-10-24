@@ -5,7 +5,6 @@ import org.nastya.dao.AuthorToBookDao;
 import org.nastya.dao.BookDao;
 import org.nastya.dao.BookViewsDao;
 import org.nastya.dao.builder.SearchDetails;
-import org.nastya.dao.builder.SearchDetailsBuilder;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.dto.BookFormDTO;
 import org.nastya.dto.BookListItemDTO;
@@ -143,7 +142,7 @@ public class BookService {
     }
 
     public List<BookListItemDTO> findByGenreAndByTitleAndByPublishingYearAndByAuthor(Genre genre, String title, String publishingYear, Integer authorId) {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(genre)
                 .setTitle(title)
                 .setPublishingYear(publishingYear)

@@ -16,8 +16,8 @@
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Author</mat-label>
-      <mat-select [(ngModel)]="selectedAuthor">
-        <mat-option *ngFor="let author of authors" [value]="author">{{ author.name }}</mat-option>
+      <mat-select [(ngModel)]="selectedAuthorId">
+        <mat-option *ngFor="let author of authors" [value]="author.id">{{ author.name }}</mat-option>
       </mat-select>
     </mat-form-field>
     <button mat-raised-button color="primary" (click)="searchBooks()">Search</button>

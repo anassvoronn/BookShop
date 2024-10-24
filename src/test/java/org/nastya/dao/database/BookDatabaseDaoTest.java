@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nastya.dao.BookDao;
-import org.nastya.dao.builder.SearchDetailsBuilder;
 import org.nastya.dao.builder.SearchDetails;
 import org.nastya.entity.Book;
 import org.nastya.entity.Genre;
@@ -151,7 +150,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYear_case1() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(null)
                 .setTitle(null)
                 .setPublishingYear("1816-1882")
@@ -163,7 +162,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYear_case2() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(null)
                 .setTitle(null)
                 .setPublishingYear("1816-1882, 2008")
@@ -175,7 +174,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYear_case3() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(null)
                 .setTitle(null)
                 .setPublishingYear("1816-1882, 2008, 1961-1985")
@@ -188,7 +187,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYearAndGenre_case4() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.FANTASY)
                 .setTitle(null)
                 .setPublishingYear("1800-1900")
@@ -200,7 +199,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYearAndGenre_case4_withOverlapping() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.FANTASY)
                 .setTitle(null)
                 .setPublishingYear("1800-1875, 1825-1900")
@@ -212,7 +211,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYearAndGenre_case4_withMinimalOverlapping() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.FANTASY)
                 .setTitle(null)
                 .setPublishingYear("1800-1850, 1850-1900")
@@ -224,7 +223,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYearAndGenre_case4_withBigOverlapping() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.FANTASY)
                 .setTitle(null)
                 .setPublishingYear("1800-1850, 1800-1900")
@@ -236,7 +235,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYearAndGenre_case5() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.NOVEL)
                 .setTitle(null)
                 .setPublishingYear("1805-1885, 2010")
@@ -248,7 +247,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYearAndGenre_case6() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.FANTASY)
                 .setTitle(null)
                 .setPublishingYear("1810-1840, 1919, 1960-1990")
@@ -260,7 +259,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYearAndGenre_case7_withSpace() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.FANTASY)
                 .setTitle(null)
                 .setPublishingYear("1810  -  1840  , 1960 -  1990")
@@ -272,7 +271,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYearAndGenreAndTitle_case7() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.FANTASY)
                 .setTitle("р    ")
                 .setPublishingYear("1800-1900")
@@ -284,7 +283,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYearAndGenreAndTitle_case8() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.ADVENTURE)
                 .setTitle("   д")
                 .setPublishingYear("1830-1999, 2008")
@@ -296,7 +295,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYearAndTitle_case9() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(null)
                 .setTitle("   а   ")
                 .setPublishingYear("1810-1840, 1919, 1960-1990")
@@ -308,7 +307,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByPublishingYearAndTitle_case9_withSpace() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(null)
                 .setTitle("   а   ")
                 .setPublishingYear("  1810  -  1840 ,   1919 ,   1960 - 1990 ")
@@ -320,7 +319,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndByTitle_case1() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.HORROR)
                 .setTitle("и")
                 .setPublishingYear("1919")
@@ -332,7 +331,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndByTitle_case1_twoIdenticalDates() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.HORROR)
                 .setTitle("и")
                 .setPublishingYear(" 1919 ,  1919 ")
@@ -344,7 +343,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndByTitle_case2() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.NOVEL)
                 .setTitle("И")
                 .setPublishingYear(null)
@@ -356,7 +355,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndByTitle_case3() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.FANTASY)
                 .setTitle("аватар")
                 .setPublishingYear("1816")
@@ -368,7 +367,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndByTitle_case4() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.PSYCHOLOGY)
                 .setTitle("  на    краю  ")
                 .setPublishingYear(null)
@@ -380,7 +379,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndByTitle_case1_whenGenreIsNull() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(null)
                 .setTitle("и")
                 .setPublishingYear(null)
@@ -392,7 +391,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndByTitle_case2_whenGenreIsNull() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(null)
                 .setTitle("И")
                 .setPublishingYear("1842")
@@ -404,7 +403,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndByTitle_case3_whenGenreIsNull() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(null)
                 .setTitle("дорог")
                 .setPublishingYear(null)
@@ -416,7 +415,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndByTitle_case1_whenTitleIsNull() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.HORROR)
                 .setTitle(null)
                 .setPublishingYear("1919")
@@ -428,7 +427,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndByTitle_case2_whenTitleIsNull() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.NOVEL)
                 .setTitle(null)
                 .setPublishingYear("1882")
@@ -440,7 +439,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndByTitle_case3_whenTitleIsNull() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.NOVEL)
                 .setTitle(null)
                 .setPublishingYear(null)
@@ -452,7 +451,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndByTitle_whenAllNull() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(null)
                 .setTitle(null)
                 .setPublishingYear(null)
@@ -464,7 +463,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByGenreAndTitleThatDoesNotExist() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.NOVEL)
                 .setTitle("Киллер")
                 .setPublishingYear("1885")
@@ -476,7 +475,7 @@ class BookDatabaseDaoTest {
 
     @Test
     void findByTitleAndGenreThatDoesNotExist() {
-        SearchDetails searchDetails = new SearchDetailsBuilder()
+        SearchDetails searchDetails = new SearchDetails.Builder()
                 .setGenre(Genre.COMEDY)
                 .setTitle("")
                 .setPublishingYear("1825")
