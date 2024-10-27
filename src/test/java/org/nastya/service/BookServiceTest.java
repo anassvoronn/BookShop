@@ -16,6 +16,7 @@ import org.nastya.dao.database.BookDatabaseDao;
 import org.nastya.dao.database.BookViewsDatabaseDao;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.dto.BookFormDTO;
+import org.nastya.dto.BookListItemDTO;
 import org.nastya.entity.Country;
 import org.nastya.entity.Gender;
 import org.nastya.entity.Genre;
@@ -28,8 +29,10 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.nastya.entity.Country.ENGLAND;
 import static org.nastya.entity.Gender.FEMALE;
 import static org.nastya.entity.Gender.MALE;
@@ -154,5 +157,57 @@ public class BookServiceTest {
         assertEquals(ENGLAND, dto.getAuthors().get(2).getCountry());
         assertEquals(FEMALE, dto.getAuthors().get(2).getGender());
         assertEquals(73, dto.getAuthors().get(2).getAge());
+    }
+
+    @Test
+    void testFindByGenre() {
+        List<BookListItemDTO> books = bookService.findByGenreAndByTitleAndByPublishingYearAndByAuthor(
+                Genre.ADVENTURE, null, null, null);
+        assertEquals(1, books.size());
+        assertEquals("Властелин камня", books.get(0).getTitle());
+    }
+
+    @Test
+    void testFindByTitle() {
+        List<BookListItemDTO> books = bookService.findByGenreAndByTitleAndByPublishingYearAndByAuthor(
+                null, "Властелин камня", null, null);
+        assertEquals(1, books.size());
+        assertEquals(Genre.ADVENTURE, books.get(0).getGenre());
+    }
+
+    @Test
+    void testFindByPublishingYear() {
+        List<BookListItemDTO> books = bookService.findByGenreAndByTitleAndByPublishingYearAndByAuthor(
+                null, null, "1985", null);
+
+        assertEquals(1, books.size());
+        assertEquals("Властелин камня", books.get(0).getTitle());
+    }
+
+    @Test
+    void testFindByAuthorId() {
+        int authorId = authorDao.findAll().get(0).getId();
+        List<BookListItemDTO> books = bookService.findByGenreAndByTitleAndByPublishingYearAndByAuthor(
+                null, null, null, authorId);
+
+        assertEquals(1, books.size());
+        assertEquals("Властелин камня", books.get(0).getTitle());
+    }
+
+    @Test
+    void testFindByMultipleCriteria() {
+        int authorId = authorDao.findAll().get(0).getId();
+        List<BookListItemDTO> books = bookService.findByGenreAndByTitleAndByPublishingYearAndByAuthor(
+                Genre.ADVENTURE, "Властелин камня", "1985", authorId);
+
+        assertEquals(1, books.size());
+        assertEquals("Властелин камня", books.get(0).getTitle());
+    }
+
+    @Test
+    void testFindNothing() {
+        List<BookListItemDTO> books = bookService.findByGenreAndByTitleAndByPublishingYearAndByAuthor(
+                Genre.FANTASY, "Неизвестная книга", "2000", 999);
+        assertTrue(books.isEmpty());
     }
 }
