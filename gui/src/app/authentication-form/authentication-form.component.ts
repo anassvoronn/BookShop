@@ -2,17 +2,21 @@ import {Component, OnInit} from '@angular/core';
 import {AuthenticationResponse} from "../entity/authenticationResponse.model";
 import {AuthenticatorService} from "../service/authenticator.service";
 import {Status} from "../entity/status.model";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
     selector: 'app-authentication-form',
-    templateUrl: './authentication-form.component.html'
+    templateUrl: './authentication-form.component.html',
+    styleUrls: ['./authentication-form.component.css']
 })
 export class AuthenticationComponent {
     username: string = '';
     password: string = '';
 
     constructor(
-        private authenticatorService: AuthenticatorService) {
+        private authenticatorService: AuthenticatorService,
+        private snackBar: MatSnackBar) {
     }
 
     login() {
@@ -20,13 +24,26 @@ export class AuthenticationComponent {
             next: (response: AuthenticationResponse) => {
                 if (response.status === "SUCCESS") {
                     console.log('Login successful! Session ID:', response.sessionId);
-                } else {
-                    console.error('Login failed:', response.status);
+                } else if (response.status === "USER_NOT_FOUND") {
+                    this.snackBar.open('User not found. Please check your details.', 'Close', {
+                        duration: 15000,
+                    });
+                } else if (response.status === "INVALID_PASSWORD") {
+                    this.snackBar.open('Invalid password. Try again.', 'Close', {
+                        duration: 15000,
+                    });
                 }
             },
             error: (error) => {
-                console.error('Error during login:', error);
+                this.snackBar.open('Login error: ' + error.message, 'Close', {
+                    duration: 15000,
+                });
             }
         });
+    }
+
+    resetForm(): void {
+        this.username = '';
+        this.password = '';
     }
 }
