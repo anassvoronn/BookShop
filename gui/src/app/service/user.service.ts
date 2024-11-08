@@ -25,6 +25,15 @@ export class UserService {
             responseType: 'text' as 'json',
             headers: { 'Content-Type': 'application/json' }
         };
+        if (user.id == 0) {
+            return this.http.post<string>(this.apiUrl, user.toJsonString(),
+                requestParams
+            );
+        } else {
+            return this.http.put<string>(this.apiUrl, user.toJsonString(),
+                requestParams
+            );
+        }
     }
 
     deleteUser(userId: number): Observable<string> {
