@@ -13,7 +13,12 @@ export class AuthenticatorService {
     constructor(private http: HttpClient) {}
 
     login(username: string, password: string): Observable<AuthenticationResponse> {
+        const requestParams = {
+            headers: { 'Content-Type': 'application/json' }
+        };
         const authenticatorRequest = new AuthenticatorRequest(username, password);
-        return this.http.post<AuthenticationResponse>(this.apiUrl, authenticatorRequest);
+        return this.http.post<AuthenticationResponse>(this.apiUrl, authenticatorRequest.toJsonString(),
+            requestParams
+        );
     }
 }

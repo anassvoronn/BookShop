@@ -20,10 +20,12 @@ export class AuthenticationComponent {
     }
 
     login() {
-        this.authenticatorService.login(this.username, this.password).subscribe({
-            next: (response: AuthenticationResponse) => {
+        this.authenticatorService.login(this.username, this.password).subscribe(
+            response => {
                 if (response.status === "SUCCESS") {
-                    console.log('Login successful! Session ID:', response.sessionId);
+                    this.snackBar.open('Login successful! Session ID: ' + response.sessionId, 'Close', {
+                        duration: 15000,
+                    });
                 } else if (response.status === "USER_NOT_FOUND") {
                     this.snackBar.open('User not found. Please check your details.', 'Close', {
                         duration: 15000,
@@ -34,12 +36,12 @@ export class AuthenticationComponent {
                     });
                 }
             },
-            error: (error) => {
+            error => {
                 this.snackBar.open('Login error: ' + error.message, 'Close', {
                     duration: 15000,
                 });
             }
-        });
+        );
     }
 
     resetForm(): void {

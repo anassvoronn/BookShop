@@ -31,15 +31,15 @@ username: string = '';
     const newUser: User = new User(0, this.username, this.password);
 
     // Проверка существования имени пользователя
-    this.userService.existsByUsername(this.username).subscribe(exists => {
-      if (exists) {
+    this.userService.existsByUsername(this.username).subscribe(oldUser => {
+      if (oldUser) {
         this.errorMessage = 'Имя пользователя уже существует!';
       } else {
         // Сохранение нового пользователя
         this.userService.saveUser(newUser).subscribe(
           response => {
             this.successMessage = 'Пользователь успешно зарегистрирован!';
-            this.router.navigate(['/login']); // Перенаправление на страницу входа
+            this.router.navigate(['/authentication-form']); // Перенаправление на страницу входа
           },
           error => {
             this.errorMessage = 'Произошла ошибка при регистрации.';
