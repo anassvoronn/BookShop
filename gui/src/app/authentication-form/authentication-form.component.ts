@@ -4,6 +4,7 @@ import {AuthenticatorService} from "../service/authenticator.service";
 import {Status} from "../entity/status.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-authentication-form',
@@ -16,7 +17,8 @@ export class AuthenticationComponent {
 
     constructor(
         private authenticatorService: AuthenticatorService,
-        private snackBar: MatSnackBar) {
+        private snackBar: MatSnackBar,
+        private router: Router) {
     }
 
     login() {
@@ -26,6 +28,7 @@ export class AuthenticationComponent {
                     this.snackBar.open('Login successful! Session ID: ' + response.sessionId, 'Close', {
                         duration: 15000,
                     });
+                    this.router.navigate(['/book-list']);
                 } else if (response.status === "USER_NOT_FOUND") {
                     this.snackBar.open('User not found. Please check your details.', 'Close', {
                         duration: 15000,
