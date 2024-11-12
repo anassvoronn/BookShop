@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {MatSnackBar} from "@angular/material/snack-bar";
 import { UserService } from '../service/user.service';
 import { User } from '../entity/user.model';
 import { Router } from '@angular/router';
@@ -9,53 +10,50 @@ import { Router } from '@angular/router';
   styleUrls: ['./registration-form.component.css']
 })
 export class RegistrationComponent {
-username: string = '';
-  password: string = '';
-  confirmPassword: string = '';
-  errorMessage: string = '';
-  successMessage: string = '';
+    username: string = '';
+    password: string = '';
+    confirmPassword: string = '';
 
-  constructor(
-    private userService: UserService,
-    private router: Router
-  ) {}
-
-  register() {
-    // Проверка на совпадение паролей
-    if (this.password !== this.confirmPassword) {
-      this.errorMessage = 'Пароли не совпадают!';
-      return;
+    constructor(
+        private userService: UserService,
+        private router: Router,
+        private snackBar: MatSnackBar) {
     }
 
-    // Создание нового пользователя
-    const newUser: User = new User(0, this.username, this.password);
+    register() {
+        if (this.password !== this.confirmPassword) {
+            this.snackBar.open('Passwords do not match!', 'Close', {
+                duration: 15000,
+            });
+            return;
+        }
+        const newUser: User = new User(0, this.username, this.password);
+        this.userService.existsByUsername(this.username).subscribe(oldUser => {
+            if (oldUser) {
+                this.snackBar.open('Username already exists!', 'Close', {
+                    duration: 15000,
+                });
+            } else {
+                this.userService.saveUser(newUser).subscribe(
+                response => {
+                    this.snackBar.open('The user has been successfully registered!', 'Close', {
+                        duration: 15000,
+                    });
+                    this.router.navigate(['/authentication-form']);
+                },
+                error => {
+                    this.snackBar.open('An error occurred during registration.' +  error.message, 'Close', {
+                        duration: 15000,
+                    });
+                    console.error(error);
+                });
+            }
+        });
+    }
 
-    // Проверка существования имени пользователя
-    this.userService.existsByUsername(this.username).subscribe(oldUser => {
-      if (oldUser) {
-        this.errorMessage = 'Имя пользователя уже существует!';
-      } else {
-        // Сохранение нового пользователя
-        this.userService.saveUser(newUser).subscribe(
-          response => {
-            this.successMessage = 'Пользователь успешно зарегистрирован!';
-            this.router.navigate(['/authentication-form']); // Перенаправление на страницу входа
-          },
-          error => {
-            this.errorMessage = 'Произошла ошибка при регистрации.';
-            console.error(error);
-          }
-        );
-      }
-    });
-  }
-
-  resetForm() {
-    // Сброс формы
-    this.username = '';
-    this.password = '';
-    this.confirmPassword = '';
-    this.errorMessage = '';
-    this.successMessage = '';
-  }
+    resetForm() {
+        this.username = '';
+        this.password = '';
+        this.confirmPassword = '';
+    }
 }
