@@ -16,22 +16,6 @@ export class SessionService {
         return this.http.get<Session | null>(this.apiUrl + "/" + sessionId);
     }
 
-    saveSession(session: Session): Observable<string> {
-        const requestParams = {
-            responseType: 'text' as 'json',
-            headers: { 'Content-Type': 'application/json' }
-        };
-        if (session.id == 0) {
-            return this.http.post<string>(this.apiUrl, session.toJsonString(),
-                requestParams
-            );
-        } else {
-            return this.http.put<string>(this.apiUrl, session.toJsonString(),
-                requestParams
-            );
-        }
-    }
-
     deleteSession(sessionId: number): Observable<string> {
         return this.http.delete<string>(this.apiUrl + "/" + sessionId,
             { responseType: 'text' as 'json' }
