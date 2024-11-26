@@ -5,6 +5,7 @@ import org.nastya.dto.BookListItemDTO;
 import org.nastya.entity.Genre;
 import org.nastya.service.BookService;
 import org.nastya.service.exception.BookNotFoundException;
+import org.nastya.service.exception.UserClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/book")
@@ -46,12 +46,12 @@ public class BookController {
         log.info("Deleting book by id '{}'", id);
         try {
             bookService.deleteBook(id);
+            log.info("Book '{}' deleted successfully", id);
+            return ResponseEntity.ok("Book deleted successfully");
         } catch (BookNotFoundException e) {
             log.error("No book found with ID: {}", id, e);
-            return ResponseEntity.ok("Book not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
         }
-        log.info("Book '{}' deleted successfully", id);
-        return ResponseEntity.ok("Book deleted successfully");
     }
 
     @PutMapping
@@ -60,12 +60,11 @@ public class BookController {
         try {
             bookService.updateBook(bookFormDTO);
             log.info("Book '{}' updated successfully", bookFormDTO.getId());
+            return ResponseEntity.ok("Book updated successfully");
         } catch (BookNotFoundException e) {
             log.error("No book found with ID: {}", bookFormDTO.getId(), e);
-            return ResponseEntity.ok("book not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
         }
-        log.info("Book '{}' updated", bookFormDTO.getId());
-        return ResponseEntity.ok("Book updated");
     }
 
     @PostMapping
