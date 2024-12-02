@@ -20,15 +20,12 @@ import org.nastya.dto.BookListItemDTO;
 import org.nastya.entity.Country;
 import org.nastya.entity.Gender;
 import org.nastya.entity.Genre;
-import org.nastya.service.UserClient.UserClient;
-import org.nastya.service.UserClient.UserContext;
 import org.nastya.service.exception.BookNotFoundException;
 import org.nastya.service.mapper.AuthorMapperImpl;
 import org.nastya.service.mapper.BookMapperImpl;
 import org.nastya.utils.DataSourceFactory;
 import org.nastya.utils.ObjectCreator;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -56,7 +53,6 @@ public class BookServiceTest {
         factory.readingFromFile();
         dataSource = factory.getDataSource();
         NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        RestTemplate restTemplate = new RestTemplate();
         authorDao = new AuthorDatabaseDao(jdbcTemplate);
         bookDao = new BookDatabaseDao(jdbcTemplate);
         authorToBookDao = new AuthorToBookDatabaseDao(jdbcTemplate);
@@ -67,9 +63,7 @@ public class BookServiceTest {
                 authorDao,
                 authorToBookDao,
                 new AuthorMapperImpl(),
-                bookViewsDao,
-                new UserClient(restTemplate),
-                new UserContext()
+                bookViewsDao
         );
     }
 

@@ -9,10 +9,7 @@ import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.dto.BookFormDTO;
 import org.nastya.dto.BookListItemDTO;
 import org.nastya.entity.*;
-import org.nastya.service.UserClient.UserContext;
-import org.nastya.service.UserClient.UserClient;
 import org.nastya.service.exception.BookNotFoundException;
-import org.nastya.service.exception.UserClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -33,8 +30,6 @@ public class BookService {
     private final AuthorToBookDao authorToBookDao;
     private final AuthorMapper authorMapper;
     private final BookViewsDao bookViewsDao;
-    private final UserClient userClient;
-    private final UserContext userContext;
     private static final int FIRST_VIEW = 1;
 
     public BookService(final BookDao bookDao,
@@ -42,17 +37,13 @@ public class BookService {
                        final AuthorDao authorDao,
                        final AuthorToBookDao authorToBookDao,
                        final AuthorMapper authorMapper,
-                       final BookViewsDao bookViewsDao,
-                       final UserClient userClient,
-                       final UserContext userContext) {
+                       final BookViewsDao bookViewsDao) {
         this.bookDao = bookDao;
         this.bookMapper = bookMapper;
         this.authorDao = authorDao;
         this.authorToBookDao = authorToBookDao;
         this.authorMapper = authorMapper;
         this.bookViewsDao = bookViewsDao;
-        this.userClient = userClient;
-        this.userContext = userContext;
     }
 
     public List<BookListItemDTO> findAll() {
@@ -102,10 +93,6 @@ public class BookService {
     }
 
     public void deleteBook(int bookId) throws BookNotFoundException {
-        String userSession = userContext.getCurrentUserSession();
-        if (!userClient.isUserAuthorized(userSession)) {
-            throw new UserClientException("User is not authorized to perform this action");
-        }
         Book book = bookDao.findById(bookId);
         if (book == null) {
             log.info("Book with id '{}' was not found", bookId);
@@ -116,20 +103,12 @@ public class BookService {
     }
 
     public void addBook(BookFormDTO bookFormDTO) {
-        String userSession = userContext.getCurrentUserSession();
-        if (!userClient.isUserAuthorized(userSession)) {
-            throw new UserClientException("User is not authorized to perform this action");
-        }
         Book book = bookMapper.mapToBook(bookFormDTO);
         bookDao.insert(book);
         log.info("Added book '{}' with id '{}'", book.getTitle(), book.getId());
     }
 
     public void updateBook(BookFormDTO bookFormDTO) throws BookNotFoundException {
-        String userSession = userContext.getCurrentUserSession();
-        if (!userClient.isUserAuthorized(userSession)) {
-            throw new UserClientException("User is not authorized to perform this action");
-        }
         Book bookEntity = bookMapper.mapToBook(bookFormDTO);
         if (bookEntity == null) {
             log.info("Book with id '{}' was not found", bookFormDTO.getId());

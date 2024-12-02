@@ -9,10 +9,7 @@ import org.nastya.dto.BookListItemDTO;
 import org.nastya.entity.Author;
 import org.nastya.entity.AuthorToBook;
 import org.nastya.entity.Book;
-import org.nastya.service.UserClient.UserContext;
-import org.nastya.service.UserClient.UserClient;
 import org.nastya.service.exception.AuthorNotFoundException;
-import org.nastya.service.exception.UserClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,23 +27,17 @@ public class AuthorService {
     private final AuthorToBookDao authorToBookDao;
     private final BookMapper bookMapper;
     private final AuthorMapper authorMapper;
-    private final UserClient userClient;
-    private final UserContext userContext;
 
     public AuthorService(final AuthorDao authorDao,
                          final AuthorToBookDao authorToBookDao,
                          final AuthorMapper authorMapper,
                          final BookDao bookDao,
-                         final BookMapper bookMapper,
-                         final UserClient userClient,
-                         final UserContext userContext) {
+                         final BookMapper bookMapper) {
         this.authorDao = authorDao;
         this.authorToBookDao = authorToBookDao;
         this.authorMapper = authorMapper;
         this.bookDao = bookDao;
         this.bookMapper = bookMapper;
-        this.userClient = userClient;
-        this.userContext = userContext;
     }
 
     public List<AuthorListItemDTO> findAll() {
@@ -105,10 +96,6 @@ public class AuthorService {
     }
 
     public void deleteAuthor(int authorId) throws AuthorNotFoundException {
-        String userSession = userContext.getCurrentUserSession();
-        if (!userClient.isUserAuthorized(userSession)) {
-            throw new UserClientException("User is not authorized to perform this action");
-        }
         Author author = authorDao.findById(authorId);
         if (author == null) {
             log.info("Author with id '{}' was not found", authorId);
@@ -119,10 +106,6 @@ public class AuthorService {
     }
 
     public void updateAuthor(AuthorFormDTO authorFormDTO) throws AuthorNotFoundException {
-        String userSession = userContext.getCurrentUserSession();
-        if (!userClient.isUserAuthorized(userSession)) {
-            throw new UserClientException("User is not authorized to perform this action");
-        }
         Author existingAuthor = authorDao.findById(authorFormDTO.getId());
         if (existingAuthor == null) {
             log.info("Author with id '{}' was not found for update", authorFormDTO.getId());
@@ -134,10 +117,6 @@ public class AuthorService {
     }
 
     public void addAuthor(AuthorFormDTO authorFormDTO) {
-        String userSession = userContext.getCurrentUserSession();
-        if (!userClient.isUserAuthorized(userSession)) {
-            throw new UserClientException("User is not authorized to perform this action");
-        }
         Author author = authorMapper.mapToAuthor(authorFormDTO);
         authorDao.insert(author);
         log.info("Added author '{}' with id '{}'", author.getName(), author.getId());

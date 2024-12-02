@@ -4,9 +4,10 @@ import org.nastya.dto.BookFormDTO;
 import org.nastya.dto.BookListItemDTO;
 import org.nastya.entity.Genre;
 import org.nastya.service.BookService;
-import org.nastya.service.UserClient.UserClient;
-import org.nastya.service.UserClient.UserContext;
+import org.nastya.service.UserClient.AuthorizationValidator;
+import org.nastya.service.UserClient.HeaderConstants;
 import org.nastya.service.exception.BookNotFoundException;
+import org.nastya.service.exception.UserAuthorizationValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -20,13 +21,11 @@ import java.util.List;
 public class BookController {
     private static final Logger log = LoggerFactory.getLogger(BookController.class);
     private final BookService bookService;
-    private final UserClient userClient;
-    private final UserContext userContext;
+    private final AuthorizationValidator authorizationValidator;
 
-    public BookController(BookService bookService, UserClient userClient, UserContext userContext) {
+    public BookController(BookService bookService, AuthorizationValidator authorizationValidator) {
         this.bookService = bookService;
-        this.userClient = userClient;
-        this.userContext = userContext;
+        this.authorizationValidator = authorizationValidator;
     }
 
     @GetMapping
@@ -47,43 +46,37 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBook(@PathVariable int id, @RequestHeader("sessionId") String sessionId) {
+    public ResponseEntity<String> deleteBook(@PathVariable int id, @RequestHeader(HeaderConstants.SESSION_ID) String sessionId) throws BookNotFoundException, UserAuthorizationValidationException {
         log.info("Deleting book by id '{}'", id);
-        if (!userClient.isUserAuthorized(userContext.getCurrentUserSession())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is not authorized to perform this action");
-        }
+        authorizationValidator.validateUserAuthorization(sessionId);
         try {
             bookService.deleteBook(id);
             log.info("Book '{}' deleted successfully", id);
             return ResponseEntity.ok("Book deleted successfully");
         } catch (BookNotFoundException e) {
             log.error("No book found with ID: {}", id, e);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+            throw e;
         }
     }
 
     @PutMapping
-    public ResponseEntity<String> updateBook(@RequestBody BookFormDTO bookFormDTO, @RequestHeader("sessionId") String sessionId) {
+    public ResponseEntity<String> updateBook(@RequestBody BookFormDTO bookFormDTO, @RequestHeader(HeaderConstants.SESSION_ID) String sessionId) throws BookNotFoundException, UserAuthorizationValidationException {
         log.info("Updating book with id '{}'", bookFormDTO.getId());
-        if (!userClient.isUserAuthorized(userContext.getCurrentUserSession())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is not authorized to perform this action");
-        }
+        authorizationValidator.validateUserAuthorization(sessionId);
         try {
             bookService.updateBook(bookFormDTO);
             log.info("Book '{}' updated successfully", bookFormDTO.getId());
             return ResponseEntity.ok("Book updated successfully");
         } catch (BookNotFoundException e) {
             log.error("No book found with ID: {}", bookFormDTO.getId(), e);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+            throw e;
         }
     }
 
     @PostMapping
-    public ResponseEntity<String> addBook(@RequestBody BookFormDTO bookFormDTO, @RequestHeader("sessionId") String sessionId) {
+    public ResponseEntity<String> addBook(@RequestBody BookFormDTO bookFormDTO, @RequestHeader(HeaderConstants.SESSION_ID) String sessionId) throws UserAuthorizationValidationException {
         log.info("Adding a new book");
-        if (!userClient.isUserAuthorized(userContext.getCurrentUserSession())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is not authorized to perform this action");
-        }
+        authorizationValidator.validateUserAuthorization(sessionId);
         try {
             bookService.addBook(bookFormDTO);
             log.info("Book '{}' added successfully", bookFormDTO.getId());
