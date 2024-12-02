@@ -21,6 +21,8 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {BookListComponent} from "./book-list/book-list.component";
 import {BookDetailComponent} from './book-detail/book-detail.component';
 import {BookFormComponent} from './book-form/book-form.component';
+import {AuthenticationComponent} from "./authentication-form/authentication-form.component";
+import {RegistrationComponent} from "./registration-form/registration-form.component";
 
 @NgModule({
     declarations: [
@@ -31,6 +33,8 @@ import {BookFormComponent} from './book-form/book-form.component';
         BookDetailComponent,
         AuthorFormComponent,
         BookFormComponent,
+        AuthenticationComponent,
+        RegistrationComponent,
     ],
     imports: [
         BrowserModule,

@@ -1,0 +1,4 @@
+Run "docker-compose down --volumes" to remove and clean up all old containers.
+Run "docker-compose up --force-recreate" to create and start all the containers from scratch.
+
+http://localhost:180/browser/ - to open the DB in the browser
