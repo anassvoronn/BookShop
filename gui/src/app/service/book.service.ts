@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Book} from "../entity/book.model";
 import {Genre} from "../entity/genre.model";
-import {HttpClient} from "@angular/common/http";
+import {SessionContainerService} from "../service/session-container.service";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -12,7 +13,8 @@ export class BookService {
     private apiUrlViews: string = "/book-shop/api/bookViews/";
     private apiUrlSearch: string = "/book-shop/api/book/search";
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,
+                private sessionContainerService: SessionContainerService) {
     }
 
     getAllBooks(): Observable<Book[]> {
@@ -27,9 +29,13 @@ export class BookService {
     }
 
     updateBook(updatedBook: Book): Observable<string> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'sessionId': this.sessionContainerService.getSession()
+        });
         const requestParams = {
             responseType: 'text' as 'json',
-            headers: {'Content-Type': 'application/json'}
+            headers: headers
         };
         if (updatedBook.id == 0) {
             return this.http.post<string>(this.apiUrl, updatedBook.toJsonString(),
@@ -43,8 +49,11 @@ export class BookService {
     }
 
     deleteBook(bookId: number): Observable<string> {
+        const headers = new HttpHeaders({
+            'sessionId': this.sessionContainerService.getSession()
+        });
         return this.http.delete<string>(this.apiUrl + "/" + bookId,
-            {responseType: 'text' as 'json'}
+            {headers, responseType: 'text' as 'json'}
         );
     }
 
