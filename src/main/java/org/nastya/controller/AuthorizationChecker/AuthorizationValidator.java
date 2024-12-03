@@ -1,4 +1,4 @@
-package org.nastya.service.UserClient;
+package org.nastya.controller.AuthorizationChecker;
 
 import org.nastya.service.exception.UserAuthorizationValidationException;
 import org.springframework.stereotype.Component;
