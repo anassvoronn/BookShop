@@ -1,4 +1,4 @@
-package org.nastya.controller.AuthorizationChecker;
+package org.nastya.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +12,11 @@ import org.springframework.web.client.RestTemplate;
 public class UserAuthorizationChecker {
     private static final Logger log = LoggerFactory.getLogger(UserAuthorizationChecker.class);
     private final RestTemplate restTemplate;
-    @Value("${book-shop.authenticator}")
-    private String baseUrl;
+    private final String baseUrl;
 
-    public UserAuthorizationChecker(RestTemplate restTemplate) {
+    public UserAuthorizationChecker(RestTemplate restTemplate, @Value("${book-shop.authenticator}") String baseUrl) {
         this.restTemplate = restTemplate;
+        this.baseUrl = baseUrl;
     }
 
     public boolean isUserAuthorized(String sessionId) {

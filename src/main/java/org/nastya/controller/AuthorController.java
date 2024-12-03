@@ -3,8 +3,6 @@ package org.nastya.controller;
 import org.nastya.dto.AuthorFormDTO;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.service.AuthorService;
-import org.nastya.controller.AuthorizationChecker.AuthorizationValidator;
-import org.nastya.controller.AuthorizationChecker.HeaderConstants;
 import org.nastya.service.exception.AuthorNotFoundException;
 import org.nastya.service.exception.UserAuthorizationValidationException;
 import org.slf4j.Logger;
