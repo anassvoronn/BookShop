@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationResponse} from "../entity/authenticationResponse.model";
 import {AuthenticatorService} from "../service/authenticator.service";
+import {SessionContainerService} from "../service/session-container.service";
 import {Status} from "../entity/status.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -17,6 +18,7 @@ export class AuthenticationComponent {
 
     constructor(
         private authenticatorService: AuthenticatorService,
+        private sessionContainerService: SessionContainerService,
         private snackBar: MatSnackBar,
         private router: Router) {
     }
@@ -25,6 +27,7 @@ export class AuthenticationComponent {
         this.authenticatorService.login(this.username, this.password).subscribe(
             response => {
                 if (response.status === "SUCCESS") {
+                    this.sessionContainerService.setSession(response.sessionId);
                     this.snackBar.open('Login successful! Session ID: ' + response.sessionId, 'Close', {
                         duration: 15000,
                     });

@@ -18,8 +18,12 @@ export class AuthorListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.authorService.getAllAuthors().subscribe(authors => {
-            this.authors = authors;
+        this.loadAllAuthors();
+    }
+
+    loadAllAuthors(): void {
+        this.authorService.getAllAuthors().subscribe((author: Author[]) => {
+            this.authors = author;
         });
     }
 

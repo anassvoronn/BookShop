@@ -4,7 +4,10 @@ import org.nastya.dto.BookFormDTO;
 import org.nastya.dto.BookListItemDTO;
 import org.nastya.entity.Genre;
 import org.nastya.service.BookService;
+import org.nastya.controller.AuthorizationChecker.AuthorizationValidator;
+import org.nastya.controller.AuthorizationChecker.HeaderConstants;
 import org.nastya.service.exception.BookNotFoundException;
+import org.nastya.service.exception.UserAuthorizationValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,16 +15,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/book")
 public class BookController {
     private static final Logger log = LoggerFactory.getLogger(BookController.class);
     private final BookService bookService;
+    private final AuthorizationValidator authorizationValidator;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, AuthorizationValidator authorizationValidator) {
         this.bookService = bookService;
+        this.authorizationValidator = authorizationValidator;
     }
 
     @GetMapping
@@ -42,35 +46,37 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBook(@PathVariable int id) {
+    public ResponseEntity<String> deleteBook(@PathVariable int id, @RequestHeader(HeaderConstants.SESSION_ID) String sessionId) throws BookNotFoundException, UserAuthorizationValidationException {
         log.info("Deleting book by id '{}'", id);
+        authorizationValidator.validateUserAuthorization(sessionId);
         try {
             bookService.deleteBook(id);
+            log.info("Book '{}' deleted successfully", id);
+            return ResponseEntity.ok("Book deleted successfully");
         } catch (BookNotFoundException e) {
             log.error("No book found with ID: {}", id, e);
-            return ResponseEntity.ok("Book not found");
+            throw e;
         }
-        log.info("Book '{}' deleted successfully", id);
-        return ResponseEntity.ok("Book deleted successfully");
     }
 
     @PutMapping
-    public ResponseEntity<String> updateBook(@RequestBody BookFormDTO bookFormDTO) {
+    public ResponseEntity<String> updateBook(@RequestBody BookFormDTO bookFormDTO, @RequestHeader(HeaderConstants.SESSION_ID) String sessionId) throws BookNotFoundException, UserAuthorizationValidationException {
         log.info("Updating book with id '{}'", bookFormDTO.getId());
+        authorizationValidator.validateUserAuthorization(sessionId);
         try {
             bookService.updateBook(bookFormDTO);
             log.info("Book '{}' updated successfully", bookFormDTO.getId());
+            return ResponseEntity.ok("Book updated successfully");
         } catch (BookNotFoundException e) {
             log.error("No book found with ID: {}", bookFormDTO.getId(), e);
-            return ResponseEntity.ok("book not found");
+            throw e;
         }
-        log.info("Book '{}' updated", bookFormDTO.getId());
-        return ResponseEntity.ok("Book updated");
     }
 
     @PostMapping
-    public ResponseEntity<String> addBook(@RequestBody BookFormDTO bookFormDTO) {
+    public ResponseEntity<String> addBook(@RequestBody BookFormDTO bookFormDTO, @RequestHeader(HeaderConstants.SESSION_ID) String sessionId) throws UserAuthorizationValidationException {
         log.info("Adding a new book");
+        authorizationValidator.validateUserAuthorization(sessionId);
         try {
             bookService.addBook(bookFormDTO);
             log.info("Book '{}' added successfully", bookFormDTO.getId());

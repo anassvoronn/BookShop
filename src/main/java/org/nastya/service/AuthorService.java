@@ -106,13 +106,14 @@ public class AuthorService {
     }
 
     public void updateAuthor(AuthorFormDTO authorFormDTO) throws AuthorNotFoundException {
-        Author authorEntity = authorMapper.mapToAuthor(authorFormDTO);
-        if (authorEntity == null) {
-            log.info("Author with id '{}' was not found", authorFormDTO.getId());
-            throw new AuthorNotFoundException("There is no authorEntity with this id " + authorFormDTO.getId());
+        Author existingAuthor = authorDao.findById(authorFormDTO.getId());
+        if (existingAuthor == null) {
+            log.info("Author with id '{}' was not found for update", authorFormDTO.getId());
+            throw new AuthorNotFoundException("There is no author with this id " + authorFormDTO.getId());
         }
-        authorDao.save(authorEntity);
-        log.info("Updated authorEntity '{}' with id '{}'", authorEntity.getName(), authorEntity.getId());
+        Author updatedAuthor = authorMapper.mapToAuthor(authorFormDTO);
+        authorDao.save(updatedAuthor);
+        log.info("Updated author '{}' with id '{}'", updatedAuthor.getName(), updatedAuthor.getId());
     }
 
     public void addAuthor(AuthorFormDTO authorFormDTO) {

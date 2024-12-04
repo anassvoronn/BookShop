@@ -4,6 +4,7 @@ import org.nastya.dto.AuthorFormDTO;
 import org.nastya.dto.AuthorListItemDTO;
 import org.nastya.service.AuthorService;
 import org.nastya.service.exception.AuthorNotFoundException;
+import org.nastya.service.exception.UserAuthorizationValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,9 +22,12 @@ import java.util.List;
 public class AuthorController {
     private static final Logger log = LoggerFactory.getLogger(AuthorController.class);
     private final AuthorService authorService;
+    private final  AuthorizationValidator authorizationValidator;
 
-    public AuthorController(AuthorService authorService){
+
+    public AuthorController(AuthorService authorService, AuthorizationValidator authorizationValidator) {
         this.authorService = authorService;
+        this.authorizationValidator = authorizationValidator;
     }
 
     @GetMapping
@@ -44,39 +48,41 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAuthor(@PathVariable int id) {
+    public ResponseEntity<String> deleteAuthor(@PathVariable int id, @RequestHeader(HeaderConstants.SESSION_ID) String sessionId) throws AuthorNotFoundException, UserAuthorizationValidationException {
         log.info("Deleting author by id '{}'", id);
+        authorizationValidator.validateUserAuthorization(sessionId);
         try {
             authorService.deleteAuthor(id);
+            log.info("Author '{}' deleted successfully", id);
+            return ResponseEntity.ok("Author deleted successfully");
         } catch (AuthorNotFoundException e) {
             log.error("No author found with ID: {}", id, e);
-            return ResponseEntity.ok("Author not found");
+            throw e;
         }
-        log.info("Author '{}' deleted successfully", id);
-        return ResponseEntity.ok("Author deleted successfully");
     }
 
     @PutMapping
-    public ResponseEntity<String> updateAuthor(@RequestBody AuthorFormDTO authorFormDTO) {
+    public ResponseEntity<String> updateAuthor(@RequestBody AuthorFormDTO authorFormDTO, @RequestHeader(HeaderConstants.SESSION_ID) String sessionId) throws AuthorNotFoundException, UserAuthorizationValidationException {
         log.info("Updating author with id '{}'", authorFormDTO.getId());
+        authorizationValidator.validateUserAuthorization(sessionId);
         try {
             authorService.updateAuthor(authorFormDTO);
             log.info("Author '{}' updated successfully", authorFormDTO.getId());
+            return ResponseEntity.ok("Author updated successfully");
         } catch (AuthorNotFoundException e) {
             log.error("No author found with ID: {}", authorFormDTO.getId(), e);
-            return ResponseEntity.ok("Author not found");
+            throw e;
         }
-        log.info("Author '{}' updated", authorFormDTO.getId());
-        return ResponseEntity.ok("Author updated");
     }
 
     @PostMapping
-    public ResponseEntity<String> addAuthor(@RequestBody AuthorFormDTO authorFormDTO) {
+    public ResponseEntity<String> addAuthor(@RequestBody AuthorFormDTO authorFormDTO, @RequestHeader(HeaderConstants.SESSION_ID) String sessionId) throws UserAuthorizationValidationException {
         log.info("Adding a new author");
+        authorizationValidator.validateUserAuthorization(sessionId);
         try {
             authorService.addAuthor(authorFormDTO);
             log.info("Author '{}' added successfully", authorFormDTO.getId());
-            return ResponseEntity.ok("Author added successfully");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Author added successfully");
         } catch (Exception e) {
             log.error("Error occurred while adding the author", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while adding the author");
