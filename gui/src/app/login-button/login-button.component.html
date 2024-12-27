@@ -1,0 +1,8 @@
+<mat-card-title>
+  <ng-container *ngIf="!sessionId; else logoutBlock">
+    <button mat-stroked-button (click)="onLogin()" class="button-top-right">Login</button>
+  </ng-container>
+  <ng-template #logoutBlock>
+    <button mat-stroked-button (click)="onLogout()" class="button-top-right">Logout</button>
+  </ng-template>
+</mat-card-title>

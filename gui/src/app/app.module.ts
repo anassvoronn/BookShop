@@ -23,6 +23,7 @@ import {BookDetailComponent} from './book-detail/book-detail.component';
 import {BookFormComponent} from './book-form/book-form.component';
 import {AuthenticationComponent} from "./authentication-form/authentication-form.component";
 import {RegistrationComponent} from "./registration-form/registration-form.component";
+import {LoginButtonComponent} from './login-button/login-button.component';
 
 @NgModule({
     declarations: [
@@ -35,6 +36,7 @@ import {RegistrationComponent} from "./registration-form/registration-form.compo
         BookFormComponent,
         AuthenticationComponent,
         RegistrationComponent,
+        LoginButtonComponent,
     ],
     imports: [
         BrowserModule,
