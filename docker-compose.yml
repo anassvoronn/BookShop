@@ -14,11 +14,11 @@ services:
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "vampyrrr9712"
-      POSTGRES_DB: Shop
       PGDATA: "/data/postgres"
     volumes:
       - postgres:/data/postgres
-      - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+      - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker_postgres_multidb_init.sh:/docker-entrypoint-initdb.d/multidb_init.sh
     ports:
       - "15432:5432"
     restart: unless-stopped

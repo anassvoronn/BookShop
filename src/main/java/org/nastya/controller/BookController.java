@@ -4,8 +4,6 @@ import org.nastya.dto.BookFormDTO;
 import org.nastya.dto.BookListItemDTO;
 import org.nastya.entity.Genre;
 import org.nastya.service.BookService;
-import org.nastya.controller.AuthorizationChecker.AuthorizationValidator;
-import org.nastya.controller.AuthorizationChecker.HeaderConstants;
 import org.nastya.service.exception.BookNotFoundException;
 import org.nastya.service.exception.UserAuthorizationValidationException;
 import org.slf4j.Logger;
