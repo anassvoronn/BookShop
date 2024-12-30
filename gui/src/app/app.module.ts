@@ -23,7 +23,7 @@ import {BookDetailComponent} from './book-detail/book-detail.component';
 import {BookFormComponent} from './book-form/book-form.component';
 import {AuthenticationComponent} from "./authentication-form/authentication-form.component";
 import {RegistrationComponent} from "./registration-form/registration-form.component";
-import {LoginButtonComponent} from './login-button/login-button.component';
+import {LoginAndLogoutButtonComponent} from './login-logout-button/login-logout-button.component';
 
 @NgModule({
     declarations: [
@@ -36,7 +36,7 @@ import {LoginButtonComponent} from './login-button/login-button.component';
         BookFormComponent,
         AuthenticationComponent,
         RegistrationComponent,
-        LoginButtonComponent,
+        LoginAndLogoutButtonComponent,
     ],
     imports: [
         BrowserModule,

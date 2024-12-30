@@ -1,12 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {SessionContainerService} from "../service/session-container.service";
 import {AuthenticatorService} from "../service/authenticator.service";
 
 @Component({
-  selector: 'app-login-button',
-  templateUrl: './login-button.component.html',
-  styleUrls: ['./login-button.component.css']
+  selector: 'app-login-logout-button',
+  templateUrl: './login-logout-button.component.html',
+  styleUrls: ['./login-logout-button.component.css']
 })
 export class LoginAndLogoutButtonComponent implements OnInit {
     sessionId: string = '';
@@ -14,7 +13,6 @@ export class LoginAndLogoutButtonComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private sessionService: SessionContainerService,
         private authenticatorService: AuthenticatorService) {
     }
 
