@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthenticatorService} from "../service/authenticator.service";
+import {SessionContainerService} from "../service/session-container.service";
 
 @Component({
   selector: 'app-login-logout-button',
@@ -9,25 +9,23 @@ import {AuthenticatorService} from "../service/authenticator.service";
 })
 export class LoginAndLogoutButtonComponent implements OnInit {
     sessionId: string = '';
-    isLoggedIn = false;
 
     constructor(
         private router: Router,
-        private authenticatorService: AuthenticatorService) {
+        private sessionContainerService: SessionContainerService) {
     }
 
      ngOnInit() {
-         this.authenticatorService.loginStatus$.subscribe((status) => {
-             this.isLoggedIn = status;
+         this.sessionContainerService.sessionStatus$.subscribe((sessionId) => {
+             this.sessionId = sessionId;
          });
      }
 
     onLogin() {
-        this.authenticatorService.updateLoginStatus(true);
         this.router.navigate(['/authentication-form']);
     }
 
     onLogout() {
-        this.authenticatorService.updateLoginStatus(false);
+        this.sessionContainerService.setSession('');
     }
 }
