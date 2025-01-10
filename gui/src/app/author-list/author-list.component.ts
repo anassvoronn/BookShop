@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Author} from "../entity/author.model";
 import {AuthorService} from "../service/author.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {SessionContainerService} from "../service/session-container.service";
 
 @Component({
     selector: 'app-author-list',
@@ -11,14 +12,20 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class AuthorListComponent implements OnInit {
     authors: Author[] = [];
     displayedColumns: string[] = ['name', 'gender', 'birthDate', 'deathDate', 'country', 'age', 'actions'];
+    sessionId: string = '';
 
     constructor(
         private authorService: AuthorService,
-        private snackBar: MatSnackBar) {
+        private snackBar: MatSnackBar,
+        private sessionContainerService: SessionContainerService) {
     }
 
     ngOnInit(): void {
         this.loadAllAuthors();
+        this.sessionId = this.sessionContainerService.getSession();
+        this.sessionContainerService.sessionStatus$.subscribe((sessionId) => {
+             this.sessionId = sessionId;
+        })
     }
 
     loadAllAuthors(): void {

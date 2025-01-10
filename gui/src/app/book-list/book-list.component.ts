@@ -6,6 +6,7 @@ import {GenreService} from "../service/genre.service";
 import {Author} from "../entity/author.model";
 import {AuthorService} from "../service/author.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {SessionContainerService} from "../service/session-container.service";
 
 @Component({
     selector: 'app-book-list',
@@ -22,18 +23,24 @@ export class BookListComponent implements OnInit {
     publishingYear: string = '';
     totalBooks: number = 0;
     authors: Author[] = [];
+    sessionId: string = '';
 
     constructor(
         private bookService: BookService,
         private snackBar: MatSnackBar,
         private genreService: GenreService,
-        private authorService: AuthorService) {
+        private authorService: AuthorService,
+        private sessionContainerService: SessionContainerService) {
     }
 
     ngOnInit(): void {
         this.loadAllBooks();
         this.loadGenres();
         this.loadAuthors();
+        this.sessionId = this.sessionContainerService.getSession();
+        this.sessionContainerService.sessionStatus$.subscribe((sessionId) => {
+            this.sessionId = sessionId;
+        })
     }
 
     loadAllBooks(): void {
