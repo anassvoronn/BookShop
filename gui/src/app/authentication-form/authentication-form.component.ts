@@ -40,11 +40,6 @@ export class AuthenticationComponent {
                     this.snackBar.open('Invalid password. Try again.', 'Close', {
                         duration: 15000,
                     });
-                }else if (response.status === "SESSION_EXISTS") {
-                    this.sessionContainerService.setSession(response.sessionId);
-                    this.snackBar.open('Session updated! New Session ID: ' + response.sessionId, 'Close', {
-                        duration: 15000,
-                    });
                 }
             },
             error => {
