@@ -47,7 +47,7 @@
         <ng-container *ngIf="sessionId">
           <button mat-button color="primary" routerLink="/book-form/{{ book.id }}">Edit</button>
           <button mat-button color="primary" (click)="deleteBook(book.id)">Delete</button>
-          <button *ngIf="sessionId" mat-raised-button color="primary" (click)="buyBook(book)">Buy</button>
+          <button mat-raised-button color="primary" (click)="buyBook(book)">Buy</button>
         </ng-container>
       </td>
     </ng-container>
