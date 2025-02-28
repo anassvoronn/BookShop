@@ -17,9 +17,9 @@ export class OrderService {
         return this.http.get<Order[]>(this.apiUrl);
     }
 
-    addToCart(bookId: number, sessionId: string): Observable<string> {
+    addToCart(bookId: number, sessionId: string): Observable<void> {
         const body = { bookId };
-        return this.http.put<string>(this.apiUrl, body,
+        return this.http.put<void>(this.apiUrl, body,
         {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',

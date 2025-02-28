@@ -25,7 +25,6 @@ export class BookListComponent implements OnInit {
     totalBooks: number = 0;
     authors: Author[] = [];
     sessionId: string = '';
-    cart: Book[] = [];
 
     constructor(
         private bookService: BookService,
@@ -76,8 +75,7 @@ export class BookListComponent implements OnInit {
             return;
         }
         this.orderService.addToCart(book.id, this.sessionId).subscribe({
-            next: (response: string) => {
-                this.cart.push(book);
+            next: (response: void) => {
                 this.snackBar.open('Book added to cart!', 'Close', {
                     duration: 2000,
                 });
