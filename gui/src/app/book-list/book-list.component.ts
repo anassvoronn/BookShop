@@ -7,6 +7,7 @@ import {Author} from "../entity/author.model";
 import {AuthorService} from "../service/author.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {SessionContainerService} from "../service/session-container.service";
+import {OrderService} from "../service/order.service";
 
 @Component({
     selector: 'app-book-list',
@@ -24,13 +25,15 @@ export class BookListComponent implements OnInit {
     totalBooks: number = 0;
     authors: Author[] = [];
     sessionId: string = '';
+    cart: Book[] = [];
 
     constructor(
         private bookService: BookService,
         private snackBar: MatSnackBar,
         private genreService: GenreService,
         private authorService: AuthorService,
-        private sessionContainerService: SessionContainerService) {
+        private sessionContainerService: SessionContainerService,
+        private orderService: OrderService) {
     }
 
     ngOnInit(): void {
@@ -63,6 +66,29 @@ export class BookListComponent implements OnInit {
     }
 
     updateBook(id: number): void {
+    }
+
+    buyBook(book: Book): void {
+        if (!this.sessionId) {
+            this.snackBar.open('You must be logged in to purchase the book.', 'Close', {
+                duration: 5000,
+            });
+            return;
+        }
+        this.orderService.addToCart(book.id, this.sessionId).subscribe({
+            next: (response: string) => {
+                this.cart.push(book);
+                this.snackBar.open('Book added to cart!', 'Close', {
+                    duration: 2000,
+                });
+            },
+            error: (error) => {
+                this.snackBar.open('Error occurred while adding book to cart.', 'Close', {
+                    duration: 2000,
+                });
+                console.error('Error adding book to cart:', error);
+            }
+        });
     }
 
     deleteBook(id: number): void {
