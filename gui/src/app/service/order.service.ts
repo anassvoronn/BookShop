@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {map} from 'rxjs/operators';
-import {Book} from "../entity/book.model";
+import {catchError, map} from 'rxjs/operators';
+import {throwError} from 'rxjs';
 import {Order} from '../entity/order.model';
+import {OrderItem} from '../entity/orderItem.model';
 
 @Injectable({
     providedIn: 'root'
@@ -27,6 +28,22 @@ export class OrderService {
             })
         }).pipe(
             map(response => response)
+        );
+    }
+
+    getOrder(sessionId: string): Observable<Order> {
+        return this.http.get<Order>(this.apiUrl,
+        {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'sessionId': sessionId
+            })
+        }).pipe(
+            map(response => response),
+            catchError(error => {
+              console.error('Error fetching order', error);
+              return throwError(error);
+            })
         );
     }
 }

@@ -24,6 +24,8 @@ import {BookFormComponent} from './book-form/book-form.component';
 import {AuthenticationComponent} from "./authentication-form/authentication-form.component";
 import {RegistrationComponent} from "./registration-form/registration-form.component";
 import {LoginAndLogoutButtonComponent} from './login-logout-button/login-logout-button.component';
+import {OrderComponent} from "./order-cart/order-cart.component";
+import {CartButtonComponent} from './cart-button/cart-button.component';
 
 @NgModule({
     declarations: [
@@ -37,6 +39,8 @@ import {LoginAndLogoutButtonComponent} from './login-logout-button/login-logout-
         AuthenticationComponent,
         RegistrationComponent,
         LoginAndLogoutButtonComponent,
+        OrderComponent,
+        CartButtonComponent,
     ],
     imports: [
         BrowserModule,

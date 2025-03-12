@@ -8,6 +8,7 @@ import {AuthorDetailComponent} from "./author-detail/author-detail.component";
 import {BookDetailComponent} from "./book-detail/book-detail.component";
 import {AuthenticationComponent} from "./authentication-form/authentication-form.component";
 import {RegistrationComponent} from "./registration-form/registration-form.component";
+import {OrderComponent} from "./order-cart/order-cart.component";
 
 const routes: Routes = [
     {path: '', redirectTo: '/author-list', pathMatch: 'full'},
@@ -21,6 +22,7 @@ const routes: Routes = [
     {path: 'book-details/:id', component: BookDetailComponent},
     {path: 'authentication-form', component: AuthenticationComponent},
     {path: 'registration-form', component: RegistrationComponent},
+    {path: 'order-cart', component: OrderComponent},
     // Add other routes if needed
 ];
 
