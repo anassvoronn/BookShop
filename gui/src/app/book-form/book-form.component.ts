@@ -62,7 +62,8 @@ export class BookFormComponent implements OnInit {
                     this.bookForm.controls['title']!.value,
                     "0",
                     this.bookForm.controls['publishingYear']!.value,
-                    this.bookForm.controls['genre']!.value
+                    this.bookForm.controls['genre']!.value,
+                    10
                 )
             ).subscribe(
                (responseText: string) => {

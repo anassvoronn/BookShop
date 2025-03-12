@@ -45,3 +45,16 @@ th {
     border-radius: 4px;
     cursor: pointer;
 }
+.price-box {
+    display: inline-block; /* Позволяет задавать размеры */
+    min-width: 40px; /* Минимальная ширина */
+    min-height: 20px; /* Минимальная высота */
+    padding: 5px 10px; /* Внутренние отступы */
+    background-color: #f0f0f0; /* Цвет фона */
+    border: 1px solid #ccc; /* Цвет границы */
+    border-radius: 4px; /* Закругленные углы */
+    margin-right: 15px; /* Отступ слева */
+    font-weight: bold; /* Жирный шрифт */
+    text-align: center; /* Центрирование текста */
+}
+

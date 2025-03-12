@@ -1,0 +1,10 @@
+.button-top-right {
+    width: 40px;    /* Button width */
+    height: 40px;   /* Button height */
+    position: fixed; /* Stays in the same place even when scrolling */
+    top: 10px;      /* Distance from the top of the viewport */
+    right: 75px;    /* Distance from the right of the viewport */
+    padding: 10px 20px; /* Button padding */
+    cursor: pointer; /* Change cursor to pointer */
+    z-index: 1000; /* Ensures it's above other elements */
+}

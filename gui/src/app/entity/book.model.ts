@@ -4,13 +4,15 @@ export class Book {
     private readonly _views: string;
     private readonly _publishingYear: number;
     private readonly _genre: string;
+    private readonly _price: number = 10;
 
-    constructor(id: number, title: string, views: string, publishingYear: number, genre: string){
+    constructor(id: number, title: string, views: string, publishingYear: number, genre: string, price: number){
         this._id = id;
         this._title = title;
         this._views = views;
         this._publishingYear = publishingYear;
         this._genre = genre;
+        this._price = 10;
     }
 
     toJsonString(): string {
@@ -22,23 +24,27 @@ export class Book {
         return json;
     }
 
-     get id(): number {
-         return this._id;
-     }
+    get id(): number {
+        return this._id;
+    }
 
-     get title(): string {
-         return this._title;
-     }
+    get title(): string {
+        return this._title;
+    }
 
-     get views(): string {
-         return this._views;
-     }
+    get views(): string {
+        return this._views;
+    }
 
-     get publishingYear(): number {
-         return this._publishingYear;
-     }
+    get publishingYear(): number {
+        return this._publishingYear;
+    }
 
-     get genre(): string {
-         return this._genre;
-     }
+    get genre(): string {
+        return this._genre;
+    }
+
+    get price(): number {
+        return this._price;
+    }
 }
