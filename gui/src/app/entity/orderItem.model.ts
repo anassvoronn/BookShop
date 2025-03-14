@@ -1,9 +1,12 @@
+import {Book} from "../entity/book.model";
+
 export class OrderItem {
     private readonly _id: number;
     private readonly _bookId: number;
     private readonly _quantity: number;
     private readonly _price: number;
     private readonly _order: number;
+    private _book: Book | null;
 
     constructor(id: number, bookId: number, quantity: number, price: number, order: number){
         this._id = id;
@@ -11,6 +14,7 @@ export class OrderItem {
         this._quantity = quantity;
         this._price = price;
         this._order = order;
+        this._book = null;
     }
 
     toJsonString(): string {
@@ -40,6 +44,14 @@ export class OrderItem {
 
     get order(): number {
         return this._order;
+    }
+
+    get book(): Book | null {
+        return this._book;
+    }
+
+    set book(value: Book) {
+        this._book = value;
     }
 
 }
