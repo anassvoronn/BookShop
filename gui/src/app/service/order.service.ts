@@ -46,4 +46,18 @@ export class OrderService {
             })
         );
     }
+
+    updateBookQuantity(userId: number, bookId: number, quantity: number): Observable<void> {
+        let updateUrl = this.apiUrl + '/updateQuantity';
+            updateUrl += '?userId=' + userId;
+            updateUrl += '&bookId=' + bookId;
+            updateUrl += '&quantity=' + quantity;
+        return this.http.put<void>(updateUrl, null)
+            .pipe(
+                catchError(error => {
+                    console.error('Error updating book quantity', error);
+                    return throwError(error);
+                })
+            );
+    }
 }

@@ -76,4 +76,44 @@ export class OrderComponent implements OnInit{
             }
         });
     }
+
+    increaseQuantity(item: OrderItem): void {
+        item.quantity += 1;
+        if (this.cart) {
+            this.orderService.updateBookQuantity(this.cart.userId, item.bookId, 1).subscribe(
+                () => {
+                    console.log('Quantity increased successfully');
+                },
+                error => {
+                    console.error('Error increasing quantity', error);
+                    item.quantity -= 1;
+                }
+            );
+            this.calculateTotalPrice();
+        } else {
+            console.error('Cart is null or undefined');
+            item.quantity -= 1;
+        }
+    }
+
+    decreaseQuantity(item: OrderItem): void {
+        if (item.quantity > 0) {
+            item.quantity -= 1;
+            if (this.cart) {
+                this.orderService.updateBookQuantity(this.cart.userId, item.bookId, -1).subscribe(
+                    () => {
+                        console.log('Quantity decreased successfully');
+                    },
+                    error => {
+                        console.error('Error decreasing quantity', error);
+                        item.quantity += 1;
+                    }
+                );
+                this.calculateTotalPrice();
+            } else {
+                console.error('Cart is null or undefined');
+                item.quantity += 1;
+            }
+        }
+    }
 }
