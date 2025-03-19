@@ -3,6 +3,9 @@
 
   <div *ngIf="cart && cart.items && cart.items.length > 0">
     <h3>Your Orders</h3>
+    <div class="total-price">
+      <h4>Total Price: {{ totalPrice | currency }}</h4>
+    </div>
     <table mat-table [dataSource]="cart.items" class="mat-elevation-z8">
       <!-- Define the table columns -->
       <ng-container matColumnDef="bookTitle">

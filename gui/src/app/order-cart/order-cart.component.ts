@@ -15,6 +15,7 @@ import {BookService} from "../service/book.service";
 export class OrderComponent implements OnInit{
     cart: Order | null = null;
     sessionId: string = '';
+    totalPrice: number = 0;
 
     constructor(
         private orderService: OrderService,
@@ -33,6 +34,7 @@ export class OrderComponent implements OnInit{
             (order: Order) => {
              this.cart = order;
              this.loadBooksForOrderItems();
+             this.calculateTotalPrice();
         },
         error => {
             this.snackBar.open('Error loading order', 'Close', {
@@ -61,5 +63,17 @@ export class OrderComponent implements OnInit{
                 );
             });
         }
+    }
+
+    calculateTotalPrice(): void {
+        this.totalPrice = 0;
+        if (!this.cart || !this.cart.items) {
+            return;
+        }
+        this.cart.items.forEach(item => {
+            if (item.price !== undefined && item.quantity !== undefined) {
+                this.totalPrice += item.price * item.quantity;
+            }
+        });
     }
 }
