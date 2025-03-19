@@ -67,12 +67,13 @@ export class OrderComponent implements OnInit{
 
     calculateTotalPrice(): void {
         this.totalPrice = 0;
-        if (this.cart && this.cart.items) {
-            this.cart.items.forEach(item => {
-                if (item.price !== undefined && item.quantity !== undefined) {
-                    this.totalPrice += item.price * item.quantity;
-                }
-            });
+        if (!this.cart || !this.cart.items) {
+            return;
         }
+        this.cart.items.forEach(item => {
+            if (item.price !== undefined && item.quantity !== undefined) {
+                this.totalPrice += item.price * item.quantity;
+            }
+        });
     }
 }
