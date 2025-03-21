@@ -76,4 +76,24 @@ export class OrderComponent implements OnInit{
             }
         });
     }
+
+    increaseQuantity(item: OrderItem, amountToAdd: number): void {
+        this.orderService.updateBookQuantity(this.sessionId, item.bookId, amountToAdd).subscribe(
+            () => {
+                item.quantity += amountToAdd;
+                console.log('Quantity was increased successfully');
+                this.calculateTotalPrice();
+            },
+            error => {
+                console.error('Error increasing quantity', error);
+            }
+        );
+    }
+
+    decreaseQuantity(item: OrderItem, amountToAdd: number): void {
+        if (item.quantity <= 0) {
+            return;
+        }
+        this.increaseQuantity(item, amountToAdd);
+    }
 }
