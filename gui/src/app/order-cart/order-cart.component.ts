@@ -78,16 +78,16 @@ export class OrderComponent implements OnInit{
     }
 
     increaseQuantity(item: OrderItem): void {
-            this.orderService.updateBookQuantity(this.sessionId, item.bookId, 1).subscribe(
-                () => {
-                    item.quantity += 1;
-                    console.log('Quantity increased successfully');
-                    this.calculateTotalPrice();
-                },
-                error => {
-                    console.error('Error increasing quantity', error);
-                }
-            );
+        this.orderService.updateBookQuantity(this.sessionId, item.bookId, 1).subscribe(
+            () => {
+                item.quantity += 1;
+                console.log('Quantity increased successfully');
+                this.calculateTotalPrice();
+            },
+            error => {
+                console.error('Error increasing quantity', error);
+            }
+        );
     }
 
     decreaseQuantity(item: OrderItem): void {
