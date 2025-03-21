@@ -26,6 +26,7 @@ import {RegistrationComponent} from "./registration-form/registration-form.compo
 import {LoginAndLogoutButtonComponent} from './login-logout-button/login-logout-button.component';
 import {OrderComponent} from "./order-cart/order-cart.component";
 import {CartButtonComponent} from './cart-button/cart-button.component';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
     declarations: [
@@ -58,6 +59,7 @@ import {CartButtonComponent} from './cart-button/cart-button.component';
         MatNativeDateModule,
         MatButtonModule,
         MatSnackBarModule,
+        MatIconModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

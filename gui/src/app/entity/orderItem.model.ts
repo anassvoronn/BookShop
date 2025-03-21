@@ -3,7 +3,7 @@ import {Book} from "../entity/book.model";
 export class OrderItem {
     private readonly _id: number;
     private readonly _bookId: number;
-    private readonly _quantity: number;
+    private _quantity: number;
     private readonly _price: number;
     private readonly _order: number;
     private _book: Book | null;
@@ -36,6 +36,10 @@ export class OrderItem {
 
     get quantity(): number {
         return this._quantity;
+    }
+
+    set quantity(value: number) {
+        this._quantity = value;
     }
 
     get price(): number {

@@ -46,4 +46,20 @@ export class OrderService {
             })
         );
     }
+
+    updateBookQuantity(sessionId: string, bookId: number, amountToAdd: number): Observable<void> {
+        const body = { bookId, amountToAdd };
+        return this.http.put<void>(this.apiUrl + '/updateQuantity', body,
+        {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'sessionId': sessionId
+            })
+        }).pipe(
+        catchError(error => {
+                console.error('Error updating book quantity', error);
+                return throwError(error);
+            })
+        );
+    }
 }
