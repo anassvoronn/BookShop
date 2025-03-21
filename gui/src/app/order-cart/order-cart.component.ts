@@ -77,11 +77,11 @@ export class OrderComponent implements OnInit{
         });
     }
 
-    increaseQuantity(item: OrderItem): void {
-        this.orderService.updateBookQuantity(this.sessionId, item.bookId, 1).subscribe(
+    increaseQuantity(item: OrderItem, amountToAdd: number): void {
+        this.orderService.updateBookQuantity(this.sessionId, item.bookId, amountToAdd).subscribe(
             () => {
-                item.quantity += 1;
-                console.log('Quantity increased successfully');
+                item.quantity += amountToAdd;
+                console.log('Quantity was increased successfully');
                 this.calculateTotalPrice();
             },
             error => {
@@ -90,19 +90,10 @@ export class OrderComponent implements OnInit{
         );
     }
 
-    decreaseQuantity(item: OrderItem): void {
+    decreaseQuantity(item: OrderItem, amountToSubtract: number): void {
         if (item.quantity <= 0) {
             return;
         }
-        this.orderService.updateBookQuantity(this.sessionId, item.bookId, -1).subscribe(
-            () => {
-                item.quantity -= 1;
-                console.log('Quantity decreased successfully');
-                this.calculateTotalPrice();
-            },
-            error => {
-                console.error('Error decreasing quantity', error);
-            }
-        );
+        this.increaseQuantity(item, amountToSubtract);
     }
 }
