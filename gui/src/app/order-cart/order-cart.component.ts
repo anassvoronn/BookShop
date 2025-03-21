@@ -78,42 +78,38 @@ export class OrderComponent implements OnInit{
     }
 
     increaseQuantity(item: OrderItem): void {
-        item.quantity += 1;
-        if (this.cart) {
-            this.orderService.updateBookQuantity(this.cart.userId, item.bookId, 1).subscribe(
+        if (this.cart && this.cart.userId) {
+            this.orderService.updateBookQuantity(this.sessionId, item.bookId, 1).subscribe(
                 () => {
+                    item.quantity += 1;
                     console.log('Quantity increased successfully');
+                    this.calculateTotalPrice();
                 },
                 error => {
                     console.error('Error increasing quantity', error);
-                    item.quantity -= 1;
                 }
             );
-            this.calculateTotalPrice();
         } else {
-            console.error('Cart is null or undefined');
-            item.quantity -= 1;
+            console.error('Cart is null or undefined or userId is missing');
         }
     }
 
     decreaseQuantity(item: OrderItem): void {
-        if (item.quantity > 0) {
-            item.quantity -= 1;
-            if (this.cart) {
-                this.orderService.updateBookQuantity(this.cart.userId, item.bookId, -1).subscribe(
-                    () => {
-                        console.log('Quantity decreased successfully');
-                    },
-                    error => {
-                        console.error('Error decreasing quantity', error);
-                        item.quantity += 1;
-                    }
-                );
-                this.calculateTotalPrice();
-            } else {
-                console.error('Cart is null or undefined');
-                item.quantity += 1;
-            }
+        if (item.quantity > 0 && this.cart) {
+            this.orderService.updateBookQuantity(this.sessionId, item.bookId, -1).subscribe(
+                () => {
+                    item.quantity -= 1;
+                    console.log('Quantity decreased successfully');
+                    this.calculateTotalPrice();
+                },
+                error => {
+                    console.error('Error decreasing quantity', error);
+                }
+            );
+        } else if (item.quantity <= 0) {
+            console.warn('Cannot decrease quantity below zero');
+        } else {
+            console.error('Cart is null or undefined');
         }
     }
 }
