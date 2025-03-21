@@ -90,10 +90,10 @@ export class OrderComponent implements OnInit{
         );
     }
 
-    decreaseQuantity(item: OrderItem, amountToSubtract: number): void {
+    decreaseQuantity(item: OrderItem, amountToAdd: number): void {
         if (item.quantity <= 0) {
             return;
         }
-        this.increaseQuantity(item, amountToSubtract);
+        this.increaseQuantity(item, amountToAdd);
     }
 }
