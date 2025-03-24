@@ -62,4 +62,18 @@ export class OrderService {
             })
         );
     }
+
+    deleteOrderItem(sessionId: string): Observable<void> {
+        return this.http.delete<void>(this.apiUrl + '/delete', {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'sessionId': sessionId
+            })
+        }).pipe(
+            catchError(error => {
+                console.error('Error clearing order', error);
+                return throwError(error);
+            })
+        );
+    }
 }

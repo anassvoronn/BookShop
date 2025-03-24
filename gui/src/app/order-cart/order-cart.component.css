@@ -7,3 +7,19 @@
 .mat-icon-button mat-icon {
   font-size: 20px; /* Измените размер иконки */
 }
+
+.button-top-left {
+    background-color: #f44336; /* Красный цвет для кнопки, чтобы выделить её */
+    color: white; /* Белый текст для лучшей читаемости */
+    border: none; /* Убираем рамку */
+    border-radius: 4px; /* Закругляем углы */
+    padding: 10px 20px; /* Добавляем отступы для увеличения размера кнопки */
+    font-size: 16px; /* Размер шрифта */
+    cursor: pointer; /* Изменяем курсор на указатель */
+    transition: background-color 0.3s ease; /* Плавный переход цвета фона */
+}
+
+.button-top-left:hover {
+    background-color: #d32f2f; /* Темнее при наведении */
+}
+
