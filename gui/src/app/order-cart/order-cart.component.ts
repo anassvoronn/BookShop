@@ -96,4 +96,35 @@ export class OrderComponent implements OnInit{
         }
         this.increaseQuantity(item, amountToAdd);
     }
+
+    clearCart(): void {
+        this.orderService.deleteOrderItems(this.sessionId).subscribe({
+            next: () => {
+                this.snackBar.open('All items have been successfully removed from the cart.', 'Close', { duration: 2000 });
+                this.loadOrder();
+            },
+            error: (error) => {
+                console.error('Error clearing cart', error);
+                this.snackBar.open('Error clearing cart', 'Close', { duration: 2000 });
+            }
+        });
+    }
+
+    deleteItem(id: number) {
+        this.orderService.deleteOrderItem(id, this.sessionId).subscribe(
+            () => {
+                console.log('Item deleted successfully');
+                this.snackBar.open('Item deleted successfully', 'Close', {
+                    duration: 2000,
+                });
+                this.loadOrder();
+            },
+            error => {
+                console.error('Error deleting item', error);
+                this.snackBar.open('Error deleting item', 'Close', {
+                    duration: 2000,
+                });
+            }
+        );
+    }
 }

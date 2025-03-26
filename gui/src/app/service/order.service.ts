@@ -20,24 +20,16 @@ export class OrderService {
 
     addToCart(bookId: number, sessionId: string): Observable<void> {
         const body = { bookId };
-        return this.http.put<void>(this.apiUrl, body,
-        {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                'sessionId': sessionId
-            })
+        return this.http.put<void>(this.apiUrl, body, {
+            headers: this.getHttpHeaders(sessionId)
         }).pipe(
             map(response => response)
         );
     }
 
     getOrder(sessionId: string): Observable<Order> {
-        return this.http.get<Order>(this.apiUrl,
-        {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                'sessionId': sessionId
-            })
+        return this.http.get<Order>(this.apiUrl, {
+            headers: this.getHttpHeaders(sessionId)
         }).pipe(
             map(response => response),
             catchError(error => {
@@ -49,12 +41,8 @@ export class OrderService {
 
     updateBookQuantity(sessionId: string, bookId: number, amountToAdd: number): Observable<void> {
         const body = { bookId, amountToAdd };
-        return this.http.put<void>(this.apiUrl + '/updateQuantity', body,
-        {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                'sessionId': sessionId
-            })
+        return this.http.put<void>(this.apiUrl + '/updateQuantity', body, {
+            headers: this.getHttpHeaders(sessionId)
         }).pipe(
         catchError(error => {
                 console.error('Error updating book quantity', error);
@@ -62,4 +50,34 @@ export class OrderService {
             })
         );
     }
+
+    deleteOrderItems(sessionId: string): Observable<void> {
+        return this.http.delete<void>(this.apiUrl + '/delete', {
+            headers: this.getHttpHeaders(sessionId)
+        }).pipe(
+            catchError(error => {
+                console.error('Error clearing order', error);
+                return throwError(error);
+            })
+        );
+    }
+
+    deleteOrderItem(itemId: number, sessionId: string): Observable<void> {
+        return this.http.delete<void>(this.apiUrl + "/delete/" + itemId, {
+            headers: this.getHttpHeaders(sessionId)
+        }).pipe(
+            catchError(error => {
+                console.error('Error deleting order item', error);
+                return throwError(error);
+            })
+        );
+    }
+
+    getHttpHeaders(sessionId: string): HttpHeaders {
+        return new HttpHeaders({
+            'Content-Type': 'application/json',
+            'sessionId': sessionId
+        });
+    }
+
 }
