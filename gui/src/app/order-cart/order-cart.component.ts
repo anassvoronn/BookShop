@@ -98,7 +98,7 @@ export class OrderComponent implements OnInit{
     }
 
     clearCart(): void {
-        this.orderService.deleteOrderItem(this.sessionId).subscribe({
+        this.orderService.deleteOrderItems(this.sessionId).subscribe({
             next: () => {
                 this.cart = new Order(0, 0, '', []);
                 this.calculateTotalPrice();
@@ -109,5 +109,23 @@ export class OrderComponent implements OnInit{
                 this.snackBar.open('Error clearing cart', 'Close', { duration: 2000 });
             }
         });
+    }
+
+    deleteItem(id: number) {
+        this.orderService.deleteOrderItem(id, this.sessionId).subscribe(
+            () => {
+                console.log('Item deleted successfully');
+                this.snackBar.open('Item deleted successfully', 'Close', {
+                    duration: 2000,
+                });
+                this.loadOrder();
+            },
+            error => {
+                console.error('Error deleting item', error);
+                this.snackBar.open('Error deleting item', 'Close', {
+                    duration: 2000,
+                });
+            }
+        );
     }
 }

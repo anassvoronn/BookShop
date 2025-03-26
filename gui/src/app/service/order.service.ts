@@ -63,7 +63,7 @@ export class OrderService {
         );
     }
 
-    deleteOrderItem(sessionId: string): Observable<void> {
+    deleteOrderItems(sessionId: string): Observable<void> {
         return this.http.delete<void>(this.apiUrl + '/delete', {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
@@ -72,6 +72,20 @@ export class OrderService {
         }).pipe(
             catchError(error => {
                 console.error('Error clearing order', error);
+                return throwError(error);
+            })
+        );
+    }
+
+    deleteOrderItem(itemId: number, sessionId: string): Observable<void> {
+        return this.http.delete<void>(this.apiUrl + "/delete/" + itemId, {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'sessionId': sessionId
+            })
+        }).pipe(
+            catchError(error => {
+                console.error('Error deleting order item', error);
                 return throwError(error);
             })
         );
