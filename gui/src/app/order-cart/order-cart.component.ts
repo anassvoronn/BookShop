@@ -100,9 +100,8 @@ export class OrderComponent implements OnInit{
     clearCart(): void {
         this.orderService.deleteOrderItems(this.sessionId).subscribe({
             next: () => {
-                this.cart = new Order(0, 0, '', []);
-                this.calculateTotalPrice();
                 this.snackBar.open('All items have been successfully removed from the cart.', 'Close', { duration: 2000 });
+                this.loadOrder();
             },
             error: (error) => {
                 console.error('Error clearing cart', error);
