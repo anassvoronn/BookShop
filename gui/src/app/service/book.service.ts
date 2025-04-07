@@ -9,9 +9,9 @@ import {Observable} from "rxjs";
     providedIn: 'root'
 })
 export class BookService {
-    private apiUrl: string = "/book-shop/api/book";
-    private apiUrlViews: string = "/book-shop/api/bookViews/";
-    private apiUrlSearch: string = "/book-shop/api/book/search";
+    private readonly apiUrl: string = "/book-shop/api/book";
+    private readonly apiUrlViews: string = "/book-shop/api/bookViews/";
+    private readonly apiUrlSearch: string = "/book-shop/api/book/search";
 
     constructor(private http: HttpClient,
                 private sessionContainerService: SessionContainerService) {
