@@ -73,6 +73,17 @@ export class OrderService {
         );
     }
 
+    completeOrder(sessionId: string): Observable<void> {
+        return this.http.put<void>(this.apiUrl + "/complete", {}, {
+            headers: this.getHttpHeaders(sessionId)
+        }).pipe(
+            catchError(error => {
+                console.error('Error completing order', error);
+                return throwError(error);
+            })
+        );
+    }
+
     getHttpHeaders(sessionId: string): HttpHeaders {
         return new HttpHeaders({
             'Content-Type': 'application/json',

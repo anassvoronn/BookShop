@@ -32,6 +32,9 @@ export class OrderComponent implements OnInit{
     loadOrder(): void {
         this.orderService.getOrder(this.sessionId).subscribe(
             (order: Order) => {
+             if(order === null){
+                 order = new Order(0, 0, "NEW", []);
+             }
              this.cart = order;
              this.loadBooksForOrderItems();
              this.calculateTotalPrice();
@@ -126,5 +129,20 @@ export class OrderComponent implements OnInit{
                 });
             }
         );
+    }
+
+    completeOrder(sessionId: string) {
+        this.orderService.completeOrder(sessionId).subscribe({
+            next: () => {
+                console.log('Order completed successfully');
+                this.snackBar.open('Order completed', 'Close', {
+                    duration: 2000,
+                });
+                this.loadOrder();
+            },
+            error: (error) => {
+                console.error('Error completing order', error);
+            }
+        });
     }
 }
