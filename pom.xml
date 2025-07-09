@@ -40,6 +40,11 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>2.0.0-alpha1</version>
         </dependency>
+        <dependency>
+            <groupId>org.nastya</groupId>
+            <artifactId>user-auth-library</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

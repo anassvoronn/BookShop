@@ -2,9 +2,10 @@ package org.nastya.controller;
 
 import org.nastya.dto.AuthorFormDTO;
 import org.nastya.dto.AuthorListItemDTO;
+import org.nastya.lib.auth.AuthorizationValidator;
+import org.nastya.lib.auth.exception.UserAuthorizationValidationException;
 import org.nastya.service.AuthorService;
 import org.nastya.service.exception.AuthorNotFoundException;
-import org.nastya.service.exception.UserAuthorizationValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ import java.util.List;
 public class AuthorController {
     private static final Logger log = LoggerFactory.getLogger(AuthorController.class);
     private final AuthorService authorService;
-    private final  AuthorizationValidator authorizationValidator;
+    private final AuthorizationValidator authorizationValidator;
 
 
     public AuthorController(AuthorService authorService, AuthorizationValidator authorizationValidator) {
