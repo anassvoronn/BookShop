@@ -82,9 +82,9 @@
                             <version>1.18.38</version>
                         </path>
                     </annotationProcessorPaths>
-                    <parameters>true</parameters>  <!-- Ключевая настройка -->
+                    <parameters>true</parameters>
                     <compilerArgs>
-                        <arg>-parameters</arg>  <!-- Для Java 8+ -->
+                        <arg>-parameters</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>
